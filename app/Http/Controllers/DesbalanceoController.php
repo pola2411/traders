@@ -20,6 +20,7 @@ class DesbalanceoController extends Controller
         $operacionesMadre = DB::table('operacion')
         ->join('traders', 'traders.id', '=', 'operacion.trader_id')
         ->select(DB::raw("traders.id AS traderIDMadre, traders.nombre AS nombreTraderMadre, operacion.no_operacion AS no_operacionMadre"))
+        ->orderBy('traders.id', 'ASC')
         ->get();
 
         $data = array();
