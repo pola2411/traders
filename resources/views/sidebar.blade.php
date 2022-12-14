@@ -1,10 +1,10 @@
 @php
     $traders = DB::table("traders")
         ->where("id", 2)
-        ->orWhere("id", 22)
         ->orWhere("id", 4)
         ->orWhere("id", 5)
         ->orWhere("id", 9)
+        ->orWhere("id", 22)
         ->orderByDesc(DB::raw('FIELD(id, 99998, 99999)'))->get();
         
     $traders_data = DB::table('traders_data')->get();
@@ -53,7 +53,7 @@
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="{{ url('/admin/logout') }}">
                             <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar sesi®Æn</span>
+                            <span>Cerrar sesi√≥n</span>
                         </a>
                     </li>
 
@@ -68,7 +68,7 @@
 <div class="sidebar-nav sidebar offcanvas offcanvas-start activee" tabindex="-1" id="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
 
-        <li class="nav-heading">Men®≤</li>
+        <li class="nav-heading">Men√∫</li>
 
         <li class="nav-item">
             <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/dashboard') }}">
@@ -90,21 +90,21 @@
                 <span>Operaciones</span>
             </a>
         </li>
-        {{--
+        
         <li class="nav-item">
             <a class="@if (request()->is('/admin/boxes')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/boxes') }}">
                 <i class="bi bi-boxes"></i>
                 <span>Boxes</span>
             </a>
         </li>
-
+        {{--
         <li class="nav-item">
             <a class="@if (request()->is('/admin/boxes2')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/boxes2') }}">
                 <i class="bi bi-box-seam"></i>
                 <span>Boxes 2</span>
             </a>
-        </li>--}}
-
+        </li>
+        --}}
         <li class="nav-item">
             <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/indexUSD') }}">
                 <i class="bi bi-currency-exchange"></i>
@@ -140,11 +140,13 @@
             </a>
             <ul id="tradersdata-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders_data as $trader)
-                <li>
-                    <a class="ps-2" href="/admin/traders-data/{{$trader->id}}">
-                        <i class="bi bi-circle"></i><span>Trader {{$trader->id}}</span>
-                    </a>
-                </li>
+                    @if(strlen($trader->Signal) > 0)
+                        <li>
+                            <a class="ps-2" href="/admin/traders-data/{{$trader->id}}">
+                                <i class="bi bi-circle"></i><span>{{$trader->Signal}}</span>
+                            </a>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         </li>
@@ -206,7 +208,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ url('/admin/logout') }}">
                 <i class="bi bi-box-arrow-in-right"></i>
-                <span>Cerrar sesi®Æn</span>
+                <span>Cerrar sesi√≥n</span>
             </a>
         </li>
 
