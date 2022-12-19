@@ -94,3 +94,8 @@ Route::get('/admin/showBoxes2', [App\Http\Controllers\Boxes2Controller::class, '
 //Traders Data
 Route::get('/admin/traders-data/{id}', [App\Http\Controllers\TradersDataController::class, 'index'])->middleware('auth');
 Route::get('/admin/getInfo', [App\Http\Controllers\TradersDataController::class, 'getInfo'])->middleware('auth');
+
+//Traders
+Route::get('/admin/traders/{id}', [App\Http\Controllers\TraderController::class, 'index'])->middleware('auth');
+Route::get('/admin/showTraders', [App\Http\Controllers\TraderController::class, 'getTraders'])->middleware('auth');
+Route::get('/admin/editStatus', [App\Http\Controllers\TraderController::class, 'editStatus'])->middleware('auth');

@@ -120,13 +120,13 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#equitybalance-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-bar-chart-line"></i><span>Equity/Balance</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link collapsed" data-bs-target="#traders-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-person-workspace"></i><span>Traders</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="equitybalance-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <ul id="traders-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders as $trader)
                 <li>
-                    <a class="ps-2" href="/admin/equityBalance/{{$trader->id}}">
+                    <a class="ps-2" href="/admin/traders/{{$trader->id}}">
                         <i class="bi bi-circle"></i><span>{{$trader->nombre}}</span>
                     </a>
                 </li>
@@ -136,7 +136,7 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-bar-chart-line"></i><span>Traders Data</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-table"></i><span>Traders Data</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="tradersdata-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders_data as $trader)
@@ -150,6 +150,21 @@
                 @endforeach
             </ul>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#equitybalance-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-bar-chart-line"></i><span>Equity/Balance</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="equitybalance-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @foreach ($traders as $trader)
+                <li>
+                    <a class="ps-2" href="/admin/equityBalance/{{$trader->id}}">
+                        <i class="bi bi-circle"></i><span>{{$trader->nombre}}</span>
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+        </li>        
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#margen-nav" data-bs-toggle="collapse" href="#">
