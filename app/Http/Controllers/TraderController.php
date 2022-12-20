@@ -10,11 +10,17 @@ use Illuminate\Support\Facades\DB;
 
 class TraderController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $trader = DB::table('traders')->where('id', $request->id)->first();
+        $traders = DB::table("traders")
+        ->where("id", 2)
+        ->orWhere("id", 4)
+        ->orWhere("id", 5)
+        ->orWhere("id", 9)
+        ->orWhere("id", 22)
+        ->orderByDesc(DB::raw('FIELD(id, 99998, 99999)'))->get();
 
-        return view('traders.show', compact('trader'));
+        return view('traders.show', compact('traders'));
     }
 
     public function editStatus(Request $request)
@@ -67,14 +73,14 @@ class TraderController extends Controller
             $solicitud->save();
         }
 
-        $data = array(
-            "id" => $trader->id,
-            "modificable" => $trader->modificable,
-            "activado" => $trader->activado,
-            "sl" => $trader->sl,
-            "tp" => $trader->tp
-        );
+        $traders = DB::table("traders")
+        ->where("id", 2)
+        ->orWhere("id", 4)
+        ->orWhere("id", 5)
+        ->orWhere("id", 9)
+        ->orWhere("id", 22)
+        ->orderByDesc(DB::raw('FIELD(id, 99998, 99999)'))->get();
 
-        return response()->view('traders.buttons', $data, 200);
+        return response()->view('traders.buttons', compact('traders'));
     }
 }

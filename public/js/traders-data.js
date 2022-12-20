@@ -2,6 +2,55 @@ var url = window.location + "";
 var separador = url.split("/");
 var traderID = separador[separador.length - 1];
 
+let hoy = new Date();
+
+let inicio = new Date(hoy.getFullYear(), 0, 1);
+
+let fechaInicio_inicio =
+    inicio.getFullYear() +
+    "-0" +
+    (inicio.getMonth() + 1) +
+    "-0" +
+    inicio.getDate() +
+    " 0" +
+    inicio.getHours() +
+    ":0" +
+    inicio.getMinutes() +
+    ":0" +
+    inicio.getSeconds();
+
+let fechaFin_inicio =
+    hoy.getFullYear() +
+    "-" +
+    (hoy.getMonth() + 1) +
+    "-" +
+    hoy.getDate() +
+    " " +
+    hoy.getHours() +
+    ":" +
+    hoy.getMinutes() +
+    ":" +
+    hoy.getSeconds();
+
+$("#fechaDesdeInput").val(fechaInicio_inicio);
+$("#fechaHastaInput").val(fechaFin_inicio);
+
+$.get({
+    url: "/admin/getInfo",
+    data: {
+        id: traderID,
+        fecha_inicio: fechaInicio_inicio,
+        fecha_fin: fechaFin_inicio,
+    },
+    success: function (response) {
+        $("#contTable").empty();
+        $("#contTable").html(response);
+    },
+    error: function (error) {
+        console.log(error);
+    },
+});
+
 $(document).on("click", "#obtenerRegistros", () => {
     let fecha_inicio = $("#fechaDesdeInput").val();
     let fecha_fin = $("#fechaHastaInput").val();

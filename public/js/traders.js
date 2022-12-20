@@ -5,8 +5,8 @@ $(document).ready(function () {
         },
     });
 
-    $(document).on("click", "#editarStatusMod", () => {
-        let id = $("#editarStatusMod").data("id");
+    $(document).on("click", ".editarStatusMod", function () {
+        let id = $(this).data("id");
         $.get({
             url: "/admin/editStatus",
             data: {
@@ -23,9 +23,8 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("click", "#editarStatusAct", () => {
-        let id = $("#editarStatusAct").data("id");
-
+    $(document).on("click", ".editarStatusAct", function () {
+        let id = $(this).data("id");
         $.get({
             url: "/admin/editStatus",
             data: {
@@ -42,8 +41,8 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("click", "#editarStatusSL", () => {
-        let id = $("#editarStatusSL").data("id");
+    $(document).on("click", ".editarStatusSL", function () {
+        let id = $(this).data("id");
 
         $.get({
             url: "/admin/editStatus",
@@ -61,8 +60,8 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("click", "#editarStatusTP", () => {
-        let id = $("#editarStatusTP").data("id");
+    $(document).on("click", ".editarStatusTP", function () {
+        let id = $(this).data("id");
 
         $.get({
             url: "/admin/editStatus",

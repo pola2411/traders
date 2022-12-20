@@ -120,18 +120,10 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#traders-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-person-workspace"></i><span>Traders</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="@if (request()->is('/admin/traders')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/traders') }}">
+                <i class="bi bi-person-workspace"></i>
+                <span>Traders</span>
             </a>
-            <ul id="traders-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                @foreach ($traders as $trader)
-                <li>
-                    <a class="ps-2" href="/admin/traders/{{$trader->id}}">
-                        <i class="bi bi-circle"></i><span>{{$trader->nombre}}</span>
-                    </a>
-                </li>
-                @endforeach
-            </ul>
         </li>
 
         <li class="nav-item">

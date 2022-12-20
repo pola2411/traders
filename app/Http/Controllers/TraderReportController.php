@@ -45,7 +45,6 @@ class TraderReportController extends Controller
 
     public function getReportResult(Request $request)
     {
-        return redirect('/admin/dashboard');
         $fromDate = $request->input('from');
         $toDate = $request->input('to');
         $traderID = $request->input('trader_id');

@@ -40,7 +40,7 @@
                                 <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar información</button>
                             </div>
                         </div>
-                        <div id="contTable"></div>
+                        <div id="contTable" style="overflow-x: auto;"></div>
                     </div>
                 </div>
 

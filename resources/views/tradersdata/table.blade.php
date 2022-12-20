@@ -1,5 +1,15 @@
-<table class="table table-striped table-bordered nowrap" style="width: 100% !important; margin-left: -16px !important">
-    <thead class="text-center sticky-top" style="z-index: 999; background-color:white; top:3.5rem;">
+@php
+    $profTotal = DB::table('operaciones_traders')
+                    ->select(DB::raw('SUM(profit) as profit'))
+                    ->where('trader', $tradersNombre->id)
+                    ->where('advance', '!=', 999999)
+                    ->where('retracement', '!=', 999999)
+                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
+                    ->first();
+@endphp
+
+<table class="table table-striped table-bordered nowrap" style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;">
+    <thead class="text-center sticky-top" style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
             <th data-priority="0" scope="col" colspan="4">{{ $tradersNombre->Signal }}</th>
             <th data-priority="0" scope="col" colspan="3">Lotes</th>
@@ -7,6 +17,7 @@
             <th data-priority="0" scope="col" colspan="3">Retracement</th>
             <th data-priority="0" scope="col" colspan="4">PIP</th>
             <th data-priority="0" scope="col" colspan="3">Minutes</th>
+            <th data-priority="0" scope="col">Total: {{ number_format($profTotal->profit, 2) }}</th>
         </tr>
         <tr>
             <th data-priority="0" scope="col">PAIR</th>
@@ -29,9 +40,10 @@
             <th data-priority="0" scope="col">AVG</th>
             <th data-priority="0" scope="col">STP</th>
             <th data-priority="0" scope="col">MAX</th>
+            <th data-priority="0" scope="col">PROFIT</th>
         </tr>
     </thead>
-    <tbody class="text-center" style="vertical-align: middle;">
+    <tbody style="vertical-align: middle !important; text-align: center !important; padding: 5px !important">
         @foreach ($monedas as $moneda)
             @php
                 $registros = DB::table('operaciones_traders')
@@ -198,6 +210,15 @@
                     ->where('retracement', '!=', 999999)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
+
+                $profsum = DB::table('operaciones_traders')
+                    ->select(DB::raw('SUM(profit) as profit'))
+                    ->where('symbol', $moneda->moneda)
+                    ->where('trader', $tradersNombre->id)
+                    ->where('advance', '!=', 999999)
+                    ->where('retracement', '!=', 999999)
+                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
+                    ->first();
                 
             @endphp
          
@@ -228,6 +249,8 @@
                     <td>{{ number_format($minavg, 0) }}</td>
                     <td>{{ number_format($minstd[0]->std, 0) }}</td>
                     <td>{{ number_format($minmax[0]->max, 0) }}</td>
+
+                    <td>{{ number_format($profsum->profit, 2) }}</td>
                 </tr>
             @endif
             

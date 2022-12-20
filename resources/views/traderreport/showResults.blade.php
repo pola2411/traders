@@ -44,7 +44,7 @@ Trader Report
                         </div>
                         <div class="cont-form">
                             <h3 class="mt-2">Ver datos históricos</h3>
-                            <form id="formFilter" action="{{ url('/admin/traderReport') }}" method="POST">
+                            <form id="formFilter" action="{{ url('/admin/showTraderReport') }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <input type="hidden" name="trader_id" val="1">

@@ -222,19 +222,18 @@
         selector: ".portfolio-lightbox",
     });
 
-  new Swiper(".swiperHero", {
-    speed: 1000,
-    loop: true,
-    autoplay: {
-      delay: 2000,
-      disableOnInteraction: false,
-    },
-    slidesPerView: "auto",
-    pagination: {
-      el: ".swiper-pagination",
-      type: "bullets",
-      clickable: true,
-    },
-  });
-
+    new Swiper(".swiperHero", {
+        speed: 1000,
+        loop: true,
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: false,
+        },
+        slidesPerView: "auto",
+        pagination: {
+            el: ".swiper-pagination",
+            type: "bullets",
+            clickable: true,
+        },
+    });
 })();
