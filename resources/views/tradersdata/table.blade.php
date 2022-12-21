@@ -246,9 +246,9 @@
                     <td>{{ number_format($pipmax[0]->max, 1) }}</td>
                     <td>{{ number_format($pipmin[0]->min, 1) }}</td>
 
-                    <td>{{ number_format($minavg, 0) }}</td>
-                    <td>{{ number_format($minstd[0]->std, 0) }}</td>
-                    <td>{{ number_format($minmax[0]->max, 0) }}</td>
+                    <td>{{ number_format(($minavg)/60, 0) }}</td>
+                    <td>{{ number_format(($minstd[0]->std)/60, 0) }}</td>
+                    <td>{{ number_format(($minmax[0]->max)/60, 0) }}</td>
 
                     <td>{{ number_format($profsum->profit, 2) }}</td>
                 </tr>
