@@ -135,7 +135,7 @@
                     @if(strlen($trader->Signal) > 0)
                         <li>
                             <a class="ps-2" href="/admin/traders-data/{{$trader->id}}">
-                                <i class="bi bi-circle"></i><span>{{$trader->Signal}}</span>
+                                <i class="bi bi-circle"></i><span>Trader {{ $trader->id }} ({{$trader->Signal}})</span>
                             </a>
                         </li>
                     @endif

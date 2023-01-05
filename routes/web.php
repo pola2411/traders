@@ -98,3 +98,7 @@ Route::get('/admin/getInfo', [App\Http\Controllers\TradersDataController::class,
 //Traders
 Route::get('/admin/traders', [App\Http\Controllers\TraderController::class, 'index'])->middleware('auth');
 Route::get('/admin/editStatus', [App\Http\Controllers\TraderController::class, 'editStatus'])->middleware('auth');
+
+//consultar momento
+Route::get('/admin/momento/{id}', [App\Http\Controllers\MomentoController::class, 'index'])->name('momento')->middleware('auth');
+Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class, 'getMomento'])->middleware('auth');

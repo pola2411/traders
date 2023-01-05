@@ -560,18 +560,14 @@ h6 {
 }
 
 .l-bg-bad {
-    background-image: linear-gradient(
-        109.6deg,
-        rgba(231, 76, 60, 1) 11.2%,
-        rgba(203, 67, 53, 1) 91.1%
-    );
+    background-image: linear-gradient(109.6deg, #b73e3e 11.2%, #dd5353 91.1%);
     color: #fff;
 }
 
 .l-bg-middle {
     background-image: radial-gradient(
         circle 957px at 8.7% 50.5%,
-        rgba(246, 191, 13, 1) 0%,
+        #ffb200 0%,
         rgba(249, 47, 47, 1) 90%
     );
     color: #fff;
@@ -580,9 +576,26 @@ h6 {
 .l-bg-good {
     background-image: linear-gradient(
         73.1deg,
-        rgba(34, 126, 34, 1) 8%,
-        rgba(99, 162, 17, 1) 86.9%
+        #82cd47 2%,
+        #54b435 8%,
+        #379237 90%
     );
+    color: #fff;
+}
+
+.l-bg-blue {
+    background: linear-gradient(to right, #0066ff, #3c8aff) !important;
+    color: #fff;
+}
+
+.l-bg-blue-bal {
+    background: linear-gradient(
+        to right,
+        #0a2647,
+        #144272,
+        #205295,
+        #2c74b3
+    ) !important;
     color: #fff;
 }
 
@@ -591,11 +604,16 @@ h6 {
     color: #fff;
 }
 
+.l-bg-up {
+    background: linear-gradient(to right, #00D7FF, #00D7FF, #72FFFF) !important;
+    color: #000;
+}
+
 .card .card-statistic-3 .card-icon-large .fas,
 .card .card-statistic-3 .card-icon-large .far,
 .card .card-statistic-3 .card-icon-large .fab,
 .card .card-statistic-3 .card-icon-large .fal {
-    font-size: 95px;
+    font-size: 70px;
 }
 
 .card .card-statistic-3 .card-icon {

@@ -128,7 +128,7 @@ am5.ready(function () {
                     data.push({
                         date: unix,
                         close: trader.equity,
-                        // open: trader.balance,
+                        open: trader.balance,
                     });
                 });
 

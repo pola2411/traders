@@ -59,8 +59,15 @@
                         @endphp
 
                         <div class="row">
-                            <div class="pagetitle">
+                            <div class="pagetitle d-flex align-items-center">
                                 <h1>{{ $trader->nombre }}</h1>
+                                <div class="ms-5">
+                                    @if ($trader->cleo == true)                                        
+                                        <button class="btn btn-success">Cleo vivo <i class="bi bi-emoji-smile"></i></button>
+                                    @else
+                                        <button class="btn btn-danger">Cleo apagado <i class="bi bi-emoji-frown"></i></button>                                        
+                                    @endif
+                                </div>
                             </div>
                             <hr class="m-0 p-0 mb-2">
                         </div>

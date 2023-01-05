@@ -3,6 +3,14 @@
 @section('css')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
+
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 500px;
+        max-width: 100%
+    }
+</style>
 @endsection
 
 @section('title') Traders Data @endsection
@@ -37,7 +45,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3 col-12">
-                                <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar información</button>
+                                <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar informaci贸n</button>
                             </div>
                         </div>
                         <div id="contTable" style="overflow-x: auto;"></div>
@@ -45,8 +53,12 @@
                 </div>
 
             </div>
+
         </div>
+
     </section>
+ 
+    
 @endsection
 
 @section('preloader')
@@ -74,5 +86,9 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <script src="{{ asset('/js/traders-data.js') }}"></script>
 @endsection
