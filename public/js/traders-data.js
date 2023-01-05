@@ -3,89 +3,67 @@ am5.ready(function () {
     var separador = url.split("/");
     var traderID = separador[separador.length - 1];
 
-    // Create root element
-    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-    // var root = am5.Root.new("chartdiv");
-
-    // // Set themes
-    // // https://www.amcharts.com/docs/v5/concepts/themes/
-    // root.setThemes([am5themes_Animated.new(root)]);
-
-    // // Create chart
-    // // https://www.amcharts.com/docs/v5/charts/xy-chart/
-    // var chart = root.container.children.push(
-    //     am5xy.XYChart.new(root, {
-    //         panX: true,
-    //         panY: true,
-    //         panZ: true,
-    //         wheelX: "panX",
-    //         wheelY: "zoomX",
-    //         pinchZoomX: true,
-    //     })
-    // );
-
-    // // Add cursor
-    // // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
-    // var cursor = chart.set(
-    //     "cursor",
-    //     am5xy.XYCursor.new(root, {
-    //         behavior: "none",
-    //     })
-    // );
-    // cursor.lineY.set("visible", false);
-
-    // // Create axes
-    // // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-    // var xAxis = chart.xAxes.push(
-    //     am5xy.DateAxis.new(root, {
-    //         maxDeviation: 0,
-    //         baseInterval: {
-    //             timeUnit: "minute",
-    //             count: 15,
-    //         },
-    //         renderer: am5xy.AxisRendererX.new(root, {}),
-    //         tooltip: am5.Tooltip.new(root, {}),
-    //     })
-    // );
-
-    // var zAxis = chart.yAxes.push(
-    //     am5xy.ValueAxis.new(root, {
-    //         renderer: am5xy.AxisRendererY.new(root, {}),
-    //     })
-    // );
-
-    // var yAxis = chart.yAxes.push(
-    //     am5xy.ValueAxis.new(root, {
-    //         renderer: am5xy.AxisRendererY.new(root, {}),
-    //     })
-    // );
-
-    // // Add series
-    // // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-    // var series = chart.series.push(
-    //     am5xy.LineSeries.new(root, {
-    //         name: "Series",
-    //         xAxis: xAxis,
-    //         yAxis: yAxis,
-    //         zAxis: zAxis,
-    //         valueYField: "value",
-    //         valueXField: "date",
-    //         valueZField: "moment",
-    //         tooltip: am5.Tooltip.new(root, {
-    //             labelText:
-    //                 "Total de registros: {valueY} \nFecha: {valueX.formatDate('dd/MM/yyyy HH:mm')}",
-    //         }),
-    //     })
-    // );
-
-    // // Add scrollbar
-    // // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
-    // chart.set(
-    //     "scrollbarX",
-    //     am5.Scrollbar.new(root, {
-    //         orientation: "horizontal",
-    //     })
-    // );
+    var root = am5.Root.new("chartdiv");
+    root.setThemes([am5themes_Animated.new(root)]);
+    var chart = root.container.children.push(
+        am5xy.XYChart.new(root, {
+            panX: true,
+            panY: true,
+            panZ: true,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            pinchZoomX: true,
+        })
+    );
+    var cursor = chart.set(
+        "cursor",
+        am5xy.XYCursor.new(root, {
+            behavior: "none",
+        })
+    );
+    cursor.lineY.set("visible", false);
+    var xAxis = chart.xAxes.push(
+        am5xy.DateAxis.new(root, {
+            maxDeviation: 0,
+            baseInterval: {
+                timeUnit: "minute",
+                count: 15,
+            },
+            renderer: am5xy.AxisRendererX.new(root, {}),
+            tooltip: am5.Tooltip.new(root, {}),
+        })
+    );
+    var zAxis = chart.yAxes.push(
+        am5xy.ValueAxis.new(root, {
+            renderer: am5xy.AxisRendererY.new(root, {}),
+        })
+    );
+    var yAxis = chart.yAxes.push(
+        am5xy.ValueAxis.new(root, {
+            renderer: am5xy.AxisRendererY.new(root, {}),
+        })
+    );
+    var series = chart.series.push(
+        am5xy.LineSeries.new(root, {
+            name: "Series",
+            xAxis: xAxis,
+            yAxis: yAxis,
+            zAxis: zAxis,
+            valueYField: "value",
+            valueXField: "date",
+            valueZField: "moment",
+            tooltip: am5.Tooltip.new(root, {
+                labelText:
+                    "Total de registros: {valueY} \nFecha: {valueX.formatDate('dd/MM/yyyy HH:mm')}",
+            }),
+        })
+    );
+    chart.set(
+        "scrollbarX",
+        am5.Scrollbar.new(root, {
+            orientation: "horizontal",
+        })
+    );
 
     let hoy = new Date();
 
@@ -143,6 +121,30 @@ am5.ready(function () {
     $("#fechaDesdeInput").val(fechaInicio_inicio);
     $("#fechaHastaInput").val(fechaFin_inicio);
 
+    const grafica = (id, inicio, fin) => {
+        console.log(id, inicio, fin);
+        $.get({
+            url: "/admin/showMomento",
+            data: { id: id, fecha_inicio: inicio, fecha_fin: fin },
+            success: function (response) {
+                var data = [];
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        value: trader.count,
+                        moment: trader.momento,
+                    });
+                    series.data.setAll(data);
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    };
+
+    grafica(traderID, fechaInicio_inicio, fechaFin_inicio);
+
     $.get({
         url: "/admin/getInfo",
         data: {
@@ -158,30 +160,6 @@ am5.ready(function () {
             console.log(error);
         },
     });
-
-    // $.get({
-    //     url: "/admin/showMomento",
-    //     data: {
-    //         id: traderID,
-    //         fecha_inicio: fechaInicio_inicio,
-    //         fecha_fin: fechaFin_inicio,
-    //     },
-    //     success: function (response) {
-    //         var data = [];
-    //         $("#numeroTrader").text(response.tradersNombre[0].nombre);
-    //         response.traders.map(function (trader) {
-    //             data.push({
-    //                 date: new Date(trader.fecha).getTime(),
-    //                 value: trader.count,
-    //                 moment: trader.momento,
-    //             });
-    //             series.data.setAll(data);
-    //         });
-    //     },
-    //     error: function (error) {
-    //         console.log(error);
-    //     },
-    // });
 
     $(document).on("click", "#obtenerRegistros", () => {
         let fecha_inicio = $("#fechaDesdeInput").val();
@@ -200,6 +178,8 @@ am5.ready(function () {
                     confirmButtonColor: "#01bbcc",
                 });
             } else {
+                grafica(traderID, fecha_inicio, fecha_fin);
+
                 $.get({
                     url: "/admin/getInfo",
                     data: {
@@ -215,32 +195,6 @@ am5.ready(function () {
                         console.log(error);
                     },
                 });
-
-                // $.get({
-                //     url: "/admin/showMomento",
-                //     data: {
-                //         id: traderID,
-                //         fecha_inicio: fechaInicio_inicio,
-                //         fecha_fin: fechaFin_inicio,
-                //     },
-                //     success: function (response) {
-                //         var data = [];
-                //         $("#numeroTrader").text(
-                //             response.tradersNombre[0].nombre
-                //         );
-                //         response.traders.map(function (trader) {
-                //             data.push({
-                //                 date: new Date(trader.fecha).getTime(),
-                //                 value: trader.count,
-                //                 moment: trader.momento,
-                //             });
-                //             series.data.setAll(data);
-                //         });
-                //     },
-                //     error: function (error) {
-                //         console.log(error);
-                //     },
-                // });
             }
         } else {
             $("#contTable").empty();
@@ -257,6 +211,6 @@ am5.ready(function () {
 
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
-    // series.appear(1000);
-    // chart.appear(1000, 100);
+    series.appear(1000);
+    chart.appear(1000, 100);
 }); // end am5.ready()

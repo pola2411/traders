@@ -45,10 +45,13 @@
                                 </div>
                             </div>
                             <div class="col-md-3 col-12">
-                                <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar informaci贸n</button>
+                                <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar información</button>
                             </div>
                         </div>
                         <div id="contTable" style="overflow-x: auto;"></div>
+                        <div class="col-12 mt-5">
+                            <div id="chartdiv"></div>
+                        </div>
                     </div>
                 </div>
 

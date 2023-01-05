@@ -18,11 +18,11 @@ class MomentoController extends Controller
     public function getMomento(Request $request)
     {
         
-        $fin = Carbon::parse("2022-11-11 12:00:00");
+        $fin = Carbon::parse($request->fecha_fin);
 
         // $traders = array();
         $i = 1;        
-        for ($inicio = Carbon::parse("2022-11-11 00:00:00"); $inicio <= $fin; $inicio->addMinutes(15)) { 
+        for ($inicio = Carbon::parse($request->fecha_inicio); $inicio <= $fin; $inicio->addMinutes(15)) { 
             $traders_consulta = DB::table('analized_profit')
                 ->select()
                 ->where('date', $inicio->format('Y-m-d H:i:s'))

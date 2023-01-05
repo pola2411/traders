@@ -13,17 +13,22 @@
     <thead class="text-center sticky-top"
         style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
-            <th data-priority="0" scope="col" colspan="4">{{ $tradersNombre->Signal }}</th>
+            <th data-priority="0" scope="col" colspan="6">{{ $tradersNombre->Signal }}</th>
             <th data-priority="0" scope="col" colspan="3">Lotes</th>
             <th data-priority="0" scope="col" colspan="3">Advance</th>
             <th data-priority="0" scope="col" colspan="3">Retracement</th>
             <th data-priority="0" scope="col" colspan="4">PIP</th>
-            <th data-priority="0" scope="col" colspan="3">Minutes</th>
-            <th data-priority="0" scope="col"><p>Total: {{ number_format($profTotal->profit, 2) }}</p> <p>Balance: {{ number_format($tradersNombre->Balance, 2) }}</p> </th>
+            <th data-priority="0" scope="col" colspan="3">Hours</th>
+            <th data-priority="0" scope="col">
+                <p>Total: {{ number_format($profTotal->profit, 2) }}</p>
+                <p>Balance: {{ number_format($tradersNombre->Balance, 2) }}</p>
+            </th>
         </tr>
         <tr>
             <th data-priority="0" scope="col">PAIR</th>
             <th data-priority="0" scope="col">Registros</th>
+            <th data-priority="0" scope="col">SUM PIP +</th>
+            <th data-priority="0" scope="col">SUM PIP - </th>
             <th data-priority="0" scope="col">Buy</th>
             <th data-priority="0" scope="col">Sell</th>
             <th data-priority="0" scope="col">AVG</th>
@@ -37,8 +42,8 @@
             <th data-priority="0" scope="col">MAX</th>
             <th data-priority="0" scope="col">AVG</th>
             <th data-priority="0" scope="col">STP</th>
-            <th data-priority="0" scope="col">MAX</th>
             <th data-priority="0" scope="col">MIN</th>
+            <th data-priority="0" scope="col">MAX</th>
             <th data-priority="0" scope="col">AVG</th>
             <th data-priority="0" scope="col">STP</th>
             <th data-priority="0" scope="col">MAX</th>
@@ -55,6 +60,26 @@
                     ->where('retracement', '!=', 999999)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
+                
+                $pipsump = DB::table('operaciones_traders')
+                    ->select(DB::raw('SUM(pips) as sumpip'))
+                    ->where('symbol', $moneda->moneda)
+                    ->where('trader', $tradersNombre->id)
+                    ->where('advance', '!=', 999999)
+                    ->where('retracement', '!=', 999999)
+                    ->where('pips', '>', 0)
+                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
+                    ->get();
+                
+                $pipsumn = DB::table('operaciones_traders')
+                    ->select(DB::raw('SUM(pips) as sumpip'))
+                    ->where('symbol', $moneda->moneda)
+                    ->where('trader', $tradersNombre->id)
+                    ->where('advance', '!=', 999999)
+                    ->where('retracement', '!=', 999999)
+                    ->where('pips', '<', 0)
+                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
+                    ->get();
                 
                 $buy = DB::table('operaciones_traders')
                     ->where('symbol', $moneda->moneda)
@@ -228,6 +253,8 @@
                 <tr>
                     <td>{{ $moneda->moneda }}</td>
                     <td>{{ $registros }}</td>
+                    <td>{{ number_format($pipsump[0]->sumpip, 2) }}</td>
+                    <td>{{ number_format($pipsumn[0]->sumpip * -1, 2) }}</td>
                     <td>{{ $buy }}</td>
                     <td>{{ $sell }}</td>
 
@@ -245,8 +272,8 @@
 
                     <td>{{ number_format($pipavg, 1) }}</td>
                     <td>{{ number_format($pipstd[0]->std, 1) }}</td>
-                    <td>{{ number_format($pipmax[0]->max, 1) }}</td>
                     <td>{{ number_format($pipmin[0]->min, 1) }}</td>
+                    <td>{{ number_format($pipmax[0]->max, 1) }}</td>
 
                     <td>{{ number_format($minavg / 60, 0) }}</td>
                     <td>{{ number_format($minstd[0]->std / 60, 0) }}</td>
@@ -272,23 +299,23 @@
         style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
             <th data-priority="0" scope="col" colspan="2">{{ $tradersNombre->Signal }}</th>
-            <th data-priority="0" scope="col" colspan="5">Lotes</th>
+            <th data-priority="0" scope="col" colspan="3">Lotes</th>
             <th data-priority="0" scope="col" colspan="3">Advance</th>
             <th data-priority="0" scope="col" colspan="3">Retracement</th>
-            <th data-priority="0" scope="col" colspan="5">PIP</th>
-            <th data-priority="0" scope="col" colspan="5">Minutes</th>
+            <th data-priority="0" scope="col" colspan="4">PIP</th>
+            <th data-priority="0" scope="col" colspan="5">Hours</th>
         </tr>
         <tr>
             <th data-priority="0" scope="col">PAIR</th>
             <th data-priority="0" scope="col">Registros</th>
 
-            <th data-priority="0" scope="col" colspan="5">RANGES</th>
-
             <th data-priority="0" scope="col" colspan="3">RANGES</th>
 
             <th data-priority="0" scope="col" colspan="3">RANGES</th>
 
-            <th data-priority="0" scope="col" colspan="5">RANGES</th>
+            <th data-priority="0" scope="col" colspan="3">RANGES</th>
+
+            <th data-priority="0" scope="col" colspan="4">RANGES</th>
 
             <th data-priority="0" scope="col" colspan="5">RANGES</th>
 
@@ -325,9 +352,7 @@
                 
                 $volmin = floatval($volumemin[0]->min);
                 $volmax = floatval($volumemax[0]->max);
-                $vol2min = $volmin * 1.5;
-                $mitadvol = $volmax / 3;
-                $mitad2vol = $mitadvol * 2;
+                $mitadvol = $volmax / 1.2;
                 
                 $countv = DB::table('operaciones_traders')
                     ->where('symbol', $moneda->moneda)
@@ -346,7 +371,7 @@
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
                     ->where('volume', '>=', $volmin)
-                    ->where('volume', '<', $vol2min)
+                    ->where('volume', '<', $mitadvol)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -355,30 +380,12 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
-                    ->where('volume', '>=', $vol2min)
-                    ->where('volume', '<', $mitadvol)
-                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
-                    ->count();
-                
-                $countv4 = DB::table('operaciones_traders')
-                    ->where('symbol', $moneda->moneda)
-                    ->where('trader', $tradersNombre->id)
-                    ->where('advance', '!=', 999999)
-                    ->where('retracement', '!=', 999999)
                     ->where('volume', '>=', $mitadvol)
-                    ->where('volume', '<', $mitad2vol)
-                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
-                    ->count();
-                
-                $countv5 = DB::table('operaciones_traders')
-                    ->where('symbol', $moneda->moneda)
-                    ->where('trader', $tradersNombre->id)
-                    ->where('advance', '!=', 999999)
-                    ->where('retracement', '!=', 999999)
-                    ->where('volume', '>=', $mitad2vol)
                     ->where('volume', '<=', $volmax)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
+                
+        
                 
                 $advmax = DB::table('operaciones_traders')
                     ->select(DB::raw('MAX(advance) as max'))
@@ -528,17 +535,16 @@
                 
                 $pipsmin = floatval($pipmin[0]->min);
                 $pipmaximo = floatval($pipmax[0]->max);
-                $pip2min = $pipsmin +($pipmax[0]->max)*5 ;
                 $mitadpip = $pipmax[0]->max / 3;
                 $mitad2pip = $mitadpip * 2;
-
+                
                 $countp = DB::table('operaciones_traders')
                     ->where('symbol', $moneda->moneda)
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
                     ->where('pips', '>=', $pipsmin)
-                    ->where('pips', '<', $pip2min)
+                    ->where('pips', '<', 0)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->orderBy('pips', 'asc')
                     ->count();
@@ -548,22 +554,12 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
-                    ->where('pips', '>=', $pip2min)
-                    ->where('pips', '<', 0)
-                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
-                    ->count();
-                
-                $countp3 = DB::table('operaciones_traders')
-                    ->where('symbol', $moneda->moneda)
-                    ->where('trader', $tradersNombre->id)
-                    ->where('advance', '!=', 999999)
-                    ->where('retracement', '!=', 999999)
                     ->where('pips', '>=', 0)
                     ->where('pips', '<', $mitadpip)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
-                $countp4 = DB::table('operaciones_traders')
+                $countp3 = DB::table('operaciones_traders')
                     ->where('symbol', $moneda->moneda)
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
@@ -573,7 +569,7 @@
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
-                $countp5 = DB::table('operaciones_traders')
+                $countp4 = DB::table('operaciones_traders')
                     ->where('symbol', $moneda->moneda)
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
@@ -583,7 +579,6 @@
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
-
                 $minmax = DB::table('operaciones_traders')
                     ->select(DB::raw('MAX(minutes) as max'))
                     ->where('symbol', $moneda->moneda)
@@ -604,10 +599,9 @@
                 
                 $minmin = floatval($minumin[0]->min);
                 $maxmin = floatval($minmax[0]->max);
-                $min2min = $minmin * 1.5;
                 $mitadmin = $minmax[0]->max / 3;
                 $mitad2min = $mitadmin * 2;
-
+                
                 $countm = DB::table('operaciones_traders')
                     ->where('symbol', $moneda->moneda)
                     ->where('trader', $tradersNombre->id)
@@ -625,21 +619,11 @@
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
                     ->where('minutes', '>=', $minmin)
-                    ->where('minutes', '<', $min2min)
-                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
-                    ->count();
-                
-                $countm3 = DB::table('operaciones_traders')
-                    ->where('symbol', $moneda->moneda)
-                    ->where('trader', $tradersNombre->id)
-                    ->where('advance', '!=', 999999)
-                    ->where('retracement', '!=', 999999)
-                    ->where('minutes', '>=', $min2min)
                     ->where('minutes', '<', $mitadmin)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
-                $countm4 = DB::table('operaciones_traders')
+                $countm3 = DB::table('operaciones_traders')
                     ->where('symbol', $moneda->moneda)
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
@@ -649,7 +633,7 @@
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
-                $countm5 = DB::table('operaciones_traders')
+                $countm4 = DB::table('operaciones_traders')
                     ->where('symbol', $moneda->moneda)
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
@@ -658,7 +642,6 @@
                     ->where('minutes', '<=', $maxmin)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
-                
                 
             @endphp
 
@@ -669,68 +652,62 @@
 
 
                     <td data-priority="0" scope="col">{{ $countv }} <p style="font-size:12px">
-                            {{number_format($volmin, 2)  }}</p>
+                            {{ number_format($volmin, 2) }}</p>
                     </td>
-                    <td data-priority="0" scope="col">{{$countv2  }} <p style="font-size:12px">
-                            {{ number_format($vol2min, 2) }}</p>
+                    <td data-priority="0" scope="col">{{ $countv2 }} <p style="font-size:12px">
+                            {{ number_format($mitadvol, 2) }}</p>
                     </td>
-                    <td data-priority="0" scope="col">{{ $countv3}} <p
-                            style="font-size:12px">{{ number_format($mitadvol, 2)  }}</p>
+                    <td data-priority="0" scope="col">{{ $countv3 }} <p style="font-size:12px">
+                            {{ number_format($volmax, 2) }}</p>
                     </td>
-                    <td data-priority="0" scope="col">{{ $countv4 }} <p
-                            style="font-size:12px">{{ number_format($mitad2vol, 2) }}</p>
-                    </td>
-                    <td data-priority="0" scope="col">{{$countv5 }} <p style="font-size:12px">
-                            {{ number_format($volmax, 2)  }}</p>
-                    </td>
+            
 
-               
-                    <td data-priority="0" scope="col">{{ $countadv2 }} <p
-                            style="font-size:12px">
-                            {{ number_format($mitadadv, 2)  }}</p>
+                    <td data-priority="0" scope="col">{{ $countadv2 }} <p style="font-size:12px">
+                            {{ number_format($mitadadv, 2) }}</p>
                     </td>
-                    <td data-priority="0" scope="col">{{ $countadv3  }} <p
-                            style="font-size:12px">
-                            {{ number_format($mitad2adv, 2)}}</p>
+                    <td data-priority="0" scope="col">{{ $countadv3 }} <p style="font-size:12px">
+                            {{ number_format($mitad2adv, 2) }}</p>
                     </td>
-                    <td data-priority="0" scope="col">{{  $countadv4 }}<p style="font-size:12px">
+                    <td data-priority="0" scope="col">{{ $countadv4 }}<p style="font-size:12px">
                             {{ number_format($advamax, 2) }}</p>
                     </td>
 
-            
-                    <td data-priority="0" scope="col">{{ $countret2 }} <p
-                            style="font-size:12px">
-                            {{ number_format($mitadret, 2)  }}</p>
+
+                    <td data-priority="0" scope="col">{{ $countret2 }} <p style="font-size:12px">
+                            {{ number_format($mitadret, 2) }}</p>
                     </td>
-                    <td data-priority="0" scope="col">{{ $countret3 }} <p
-                            style="font-size:12px">
+                    <td data-priority="0" scope="col">{{ $countret3 }} <p style="font-size:12px">
                             {{ number_format($mitad2ret, 2) }}</p>
                     </td>
-                    <td data-priority="0" scope="col">{{ $countret4  }} <p style="font-size:12px">
-                            {{ number_format($retrmax, 2)}}</p>
+                    <td data-priority="0" scope="col">{{ $countret4 }} <p style="font-size:12px">
+                            {{ number_format($retrmax, 2) }}</p>
                     </td>
 
                     <td data-priority="0" scope="col">{{ $countp }} <p style="font-size:12px">
-                            {{number_format($pipsmin, 2)  }}</p></td>
-                    <td data-priority="0" scope="col">{{  $countp2 }}  <p style="font-size:12px">
-                            {{number_format($pip2min, 2) }}</p></td>
-                    <td data-priority="0" scope="col">{{$countp3  }} <p style="font-size:12px">
-                            {{ number_format($mitadpip, 2) }}</p></td>
-                    <td data-priority="0" scope="col">{{$countp4  }} <p style="font-size:12px">
-                            {{ number_format($mitad2pip, 2)}}</p></td>
-                    <td data-priority="0" scope="col">{{  $countp5}} <p style="font-size:12px">
-                            {{ number_format($pipmaximo, 2) }}</p></td>
+                            {{ number_format($pipsmin, 2) }}</p>
+                    </td>
+                    <td data-priority="0" scope="col">{{ $countp2 }} <p style="font-size:12px">
+                            {{ number_format($mitadpip, 2) }}</p>
+                    </td>
+                    <td data-priority="0" scope="col">{{ $countp3 }} <p style="font-size:12px">
+                            {{ number_format($mitad2pip, 2) }}</p>
+                    </td>
+                    <td data-priority="0" scope="col">{{ $countp4 }} <p style="font-size:12px">
+                            {{ number_format($pipmaximo, 2) }}</p>
+                    </td>
 
                     <td data-priority="0" scope="col">{{ $countm }} <p style="font-size:12px">
-                            {{ number_format($minmin / 60, 0)  }}</p></td>
+                            {{ number_format($minmin / 60, 0) }}</p>
+                    </td>
                     <td data-priority="0" scope="col">{{ $countm2 }} <p style="font-size:12px">
-                            {{ number_format($min2min / 60, 0) }}</p></td>
-                    <td data-priority="0" scope="col">{{ $countm3}} <p style="font-size:12px">
-                            {{ number_format($mitadmin / 60, 0)  }}</p></td>
-                    <td data-priority="0" scope="col">{{  $countm4  }} <p style="font-size:12px">
-                            {{ number_format($mitad2min / 60, 0)}}</p></td>
-                    <td data-priority="0" scope="col">{{$countm5 }} <p style="font-size:12px">
-                            {{ number_format($maxmin / 60, 0)}}</p></td>
+                            {{ number_format($mitadmin / 60, 0) }}</p>
+                    </td>
+                    <td data-priority="0" scope="col">{{ $countm3 }} <p style="font-size:12px">
+                            {{ number_format($mitad2min / 60, 0) }}</p>
+                    </td>
+                    <td data-priority="0" scope="col">{{ $countm4 }} <p style="font-size:12px">
+                            {{ number_format($maxmin / 60, 0) }}</p>
+                    </td>
 
                 </tr>
             @endif
