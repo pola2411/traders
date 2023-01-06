@@ -54,7 +54,7 @@ am5.ready(function () {
             valueZField: "moment",
             tooltip: am5.Tooltip.new(root, {
                 labelText:
-                    "Total de registros: {valueY} \nFecha: {valueX.formatDate('dd/MM/yyyy HH:mm')}",
+                    "Total de profit: {valueY} \nFecha: {valueX.formatDate('dd/MM/yyyy HH:mm')}",
             }),
         })
     );
@@ -122,16 +122,22 @@ am5.ready(function () {
     $("#fechaHastaInput").val(fechaFin_inicio);
 
     const grafica = (id, inicio, fin) => {
-        console.log(id, inicio, fin);
         $.get({
             url: "/admin/showMomento",
             data: { id: id, fecha_inicio: inicio, fecha_fin: fin },
             success: function (response) {
                 var data = [];
+                let valor = 0;
                 response.traders.map(function (trader) {
+                    if (trader.count == null) {
+                        valor = 0;
+                    } else {
+                        valor = trader.count;
+                    }
+
                     data.push({
                         date: new Date(trader.fecha).getTime(),
-                        value: trader.count,
+                        value: valor,
                         moment: trader.momento,
                     });
                     series.data.setAll(data);

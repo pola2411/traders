@@ -21,17 +21,19 @@ class MomentoController extends Controller
         $fin = Carbon::parse($request->fecha_fin);
 
         // $traders = array();
-        $i = 1;        
+        $i = 1;
+        $j = 0;
         for ($inicio = Carbon::parse($request->fecha_inicio); $inicio <= $fin; $inicio->addMinutes(15)) { 
             $traders_consulta = DB::table('analized_profit')
-                ->select()
+                ->select(DB::raw('SUM(profit) as profit'))
                 ->where('date', $inicio->format('Y-m-d H:i:s'))
                 ->where('trader_id', $request->id)
-                ->count();
+                ->first();
 
+            $j = $j + $traders_consulta->profit;
             $traders[] = array(
                 'fecha' => $inicio->format('Y-m-d H:i:s'),
-                'count' => $traders_consulta,
+                'count' => $j,
                 'momento' => $i
             );
             
