@@ -13,11 +13,14 @@ class TraderController extends Controller
     public function index()
     {
         $traders = DB::table("traders")
-        ->where("id", 2)
-        ->orWhere("id", 4)
-        ->orWhere("id", 5)
-        ->orWhere("id", 9)
-        ->orWhere("id", 22)
+        ->where("id", "!=", 998)
+        ->where("id", "!=", 999)
+        ->where("id", "!=", 1000)
+        ->where("id", "!=", 100000)
+        // ->orWhere("id", 4)
+        // ->orWhere("id", 5)
+        // ->orWhere("id", 9)
+        // ->orWhere("id", 22)
         ->orderByDesc(DB::raw('FIELD(id, 99998, 99999)'))->get();
 
         return view('traders.show', compact('traders'));
@@ -74,11 +77,14 @@ class TraderController extends Controller
         }
 
         $traders = DB::table("traders")
-        ->where("id", 2)
-        ->orWhere("id", 4)
-        ->orWhere("id", 5)
-        ->orWhere("id", 9)
-        ->orWhere("id", 22)
+        ->where("id", "!=", 998)
+        ->where("id", "!=", 999)
+        ->where("id", "!=", 1000)
+        ->where("id", "!=", 100000)
+        // ->orWhere("id", 4)
+        // ->orWhere("id", 5)
+        // ->orWhere("id", 9)
+        // ->orWhere("id", 22)
         ->orderByDesc(DB::raw('FIELD(id, 99998, 99999)'))->get();
 
         return response()->view('traders.buttons', compact('traders'));
