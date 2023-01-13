@@ -94,6 +94,7 @@ Route::get('/admin/showBoxes2', [App\Http\Controllers\Boxes2Controller::class, '
 //Traders Data
 Route::get('/admin/traders-data/{id}', [App\Http\Controllers\TradersDataController::class, 'index'])->middleware('auth');
 Route::get('/admin/getInfo', [App\Http\Controllers\TradersDataController::class, 'getInfo'])->middleware('auth');
+Route::get('/admin/traders-analysis/{id}', [App\Http\Controllers\TradersDataController::class, 'getPDF'])->middleware('auth');
 
 //Traders
 Route::get('/admin/traders', [App\Http\Controllers\TraderController::class, 'index'])->middleware('auth');
@@ -101,4 +102,5 @@ Route::get('/admin/editStatus', [App\Http\Controllers\TraderController::class, '
 
 //consultar momento
 Route::get('/admin/momento/{id}', [App\Http\Controllers\MomentoController::class, 'index'])->name('momento')->middleware('auth');
+Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class, 'getMomento'])->middleware('auth');
 Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class, 'getMomento'])->middleware('auth');

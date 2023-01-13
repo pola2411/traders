@@ -2,72 +2,10 @@ am5.ready(function () {
     var url = window.location + "";
     var separador = url.split("/");
     var traderID = separador[separador.length - 1];
-
-    var root = am5.Root.new("chartdiv");
-    root.setThemes([am5themes_Animated.new(root)]);
-    var chart = root.container.children.push(
-        am5xy.XYChart.new(root, {
-            panX: true,
-            panY: true,
-            panZ: true,
-            wheelX: "panX",
-            wheelY: "zoomX",
-            pinchZoomX: true,
-        })
-    );
-    var cursor = chart.set(
-        "cursor",
-        am5xy.XYCursor.new(root, {
-            behavior: "none",
-        })
-    );
-    cursor.lineY.set("visible", false);
-    var xAxis = chart.xAxes.push(
-        am5xy.DateAxis.new(root, {
-            maxDeviation: 0,
-            baseInterval: {
-                timeUnit: "minute",
-                count: 15,
-            },
-            renderer: am5xy.AxisRendererX.new(root, {}),
-            tooltip: am5.Tooltip.new(root, {}),
-        })
-    );
-    var zAxis = chart.yAxes.push(
-        am5xy.ValueAxis.new(root, {
-            renderer: am5xy.AxisRendererY.new(root, {}),
-        })
-    );
-    var yAxis = chart.yAxes.push(
-        am5xy.ValueAxis.new(root, {
-            renderer: am5xy.AxisRendererY.new(root, {}),
-        })
-    );
-    var series = chart.series.push(
-        am5xy.LineSeries.new(root, {
-            name: "Series",
-            xAxis: xAxis,
-            yAxis: yAxis,
-            zAxis: zAxis,
-            valueYField: "value",
-            valueXField: "date",
-            valueZField: "moment",
-            tooltip: am5.Tooltip.new(root, {
-                labelText:
-                    "Total de profit: {valueY} \nFecha: {valueX.formatDate('dd/MM/yyyy HH:mm')}",
-            }),
-        })
-    );
-    chart.set(
-        "scrollbarX",
-        am5.Scrollbar.new(root, {
-            orientation: "horizontal",
-        })
-    );
-
+    
     let hoy = new Date();
-
     let inicio = new Date(hoy.getFullYear(), 0, 1);
+
 
     let fechaInicio_inicio =
         inicio.getFullYear() +
@@ -88,7 +26,7 @@ am5.ready(function () {
     let minutos = "";
     let segundos = "";
 
-    if (hoy.getMonth().toString().length == 1) {
+       if (hoy.getMonth().toString().length == 1) {
         mes = "-0" + (hoy.getMonth() + 1);
     } else {
         mes = "-" + (hoy.getMonth() + 1);
@@ -116,40 +54,35 @@ am5.ready(function () {
     }
 
     let fechaFin_inicio =
-        hoy.getFullYear() + mes + dia + " " + horas + minutos + segundos;
+        hoy.getFullYear() + mes + dia + " " + "23" + ":59" + ":00";
 
     $("#fechaDesdeInput").val(fechaInicio_inicio);
     $("#fechaHastaInput").val(fechaFin_inicio);
+        
 
-    const grafica = (id, inicio, fin) => {
-        $.get({
-            url: "/admin/showMomento",
-            data: { id: id, fecha_inicio: inicio, fecha_fin: fin },
-            success: function (response) {
-                var data = [];
-                let valor = 0;
-                response.traders.map(function (trader) {
-                    if (trader.count == null) {
-                        valor = 0;
-                    } else {
-                        valor = trader.count;
-                    }
+    // const grafica = (id, inicio, fin) => {
+    //     console.log(id, inicio, fin);
+    //     $.get({
+    //         url: "/admin/showMomento",
+    //         data: { id: id, fecha_inicio: inicio, fecha_fin: fin },
+    //         success: function (response) {
+    //             var data = [];
+    //             response.traders.map(function (trader) {
+    //                 data.push({
+    //                     date: new Date(trader.fecha).getTime(),
+    //                     value: trader.count,
+    //                     moment: trader.momento,
+    //                 });
+    //                 series.data.setAll(data);
+    //             });
+    //         },
+    //         error: function (error) {
+    //             console.log(error);
+    //         },
+    //     });
+    // };
 
-                    data.push({
-                        date: new Date(trader.fecha).getTime(),
-                        value: valor,
-                        moment: trader.momento,
-                    });
-                    series.data.setAll(data);
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            },
-        });
-    };
-
-    grafica(traderID, fechaInicio_inicio, fechaFin_inicio);
+    // grafica(traderID, fechaInicio_inicio, fechaFin_inicio);
 
     $.get({
         url: "/admin/getInfo",
@@ -184,7 +117,7 @@ am5.ready(function () {
                     confirmButtonColor: "#01bbcc",
                 });
             } else {
-                grafica(traderID, fecha_inicio, fecha_fin);
+                // grafica(traderID, fecha_inicio, fecha_fin);
 
                 $.get({
                     url: "/admin/getInfo",
@@ -215,8 +148,19 @@ am5.ready(function () {
         }
     });
 
-    // Make stuff animate on load
-    // https://www.amcharts.com/docs/v5/concepts/animations/
-    series.appear(1000);
-    chart.appear(1000, 100);
-}); // end am5.ready()
+
+    $(document).on("click", "#imprimirAnalisis", function () {
+        let id = $(this).data("id");
+        let moneda = $(this).data("moneda");
+        let fecha_inicio =  $(this).data("fechaini");
+        let fecha_fin = $(this).data("fechafin");
+        
+
+        window.open(`/admin/traders-analysis/${id}?moneda=${moneda}&fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`, "_blank");
+    });
+
+    $(document).on("click", ".verOficina", function () {
+        oficinaID = $(this).data("id");
+    });
+    
+}); 

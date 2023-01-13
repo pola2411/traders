@@ -13,7 +13,7 @@
     <thead class="text-center sticky-top"
         style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
-            <th data-priority="0" scope="col" colspan="6">{{ $tradersNombre->Signal }}</th>
+            <th data-priority="0" scope="col" colspan="7">{{ $tradersNombre->Signal }}</th>
             <th data-priority="0" scope="col" colspan="3">Lotes</th>
             <th data-priority="0" scope="col" colspan="3">Advance</th>
             <th data-priority="0" scope="col" colspan="3">Retracement</th>
@@ -27,8 +27,9 @@
         <tr>
             <th data-priority="0" scope="col">PAIR</th>
             <th data-priority="0" scope="col">Registros</th>
-            <th data-priority="0" scope="col">SUM PIP +</th>
-            <th data-priority="0" scope="col">SUM PIP - </th>
+            <th data-priority="0" scope="col">PIP +</th>
+            <th data-priority="0" scope="col">PIP - </th>
+            <th data-priority="0" scope="col">PIP SUM </th>
             <th data-priority="0" scope="col">Buy</th>
             <th data-priority="0" scope="col">Sell</th>
             <th data-priority="0" scope="col">AVG</th>
@@ -78,6 +79,15 @@
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
                     ->where('pips', '<', 0)
+                    ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
+                    ->get();
+                
+                $pipsumtotal = DB::table('operaciones_traders')
+                    ->select(DB::raw('SUM(pips) as sumpip'))
+                    ->where('symbol', $moneda->moneda)
+                    ->where('trader', $tradersNombre->id)
+                    ->where('advance', '!=', 999999)
+                    ->where('retracement', '!=', 999999)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -255,6 +265,7 @@
                     <td>{{ $registros }}</td>
                     <td>{{ number_format($pipsump[0]->sumpip, 2) }}</td>
                     <td>{{ number_format($pipsumn[0]->sumpip * -1, 2) }}</td>
+                    <td>{{ number_format($pipsumtotal[0]->sumpip, 2) }}</td>
                     <td>{{ $buy }}</td>
                     <td>{{ $sell }}</td>
 
@@ -384,8 +395,6 @@
                     ->where('volume', '<=', $volmax)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
-                
-        
                 
                 $advmax = DB::table('operaciones_traders')
                     ->select(DB::raw('MAX(advance) as max'))
@@ -660,7 +669,7 @@
                     <td data-priority="0" scope="col">{{ $countv3 }} <p style="font-size:12px">
                             {{ number_format($volmax, 2) }}</p>
                     </td>
-            
+
 
                     <td data-priority="0" scope="col">{{ $countadv2 }} <p style="font-size:12px">
                             {{ number_format($mitadadv, 2) }}</p>
@@ -710,10 +719,15 @@
                     </td>
 
                 </tr>
-            @endif
-        @endforeach
+@endif
+@endforeach
     </tbody>
 </table>
+
+<div class="text-center">
+    <a class="btn principal-button mb-3 new" data-id="{{ $tradersNombre->id }}" data-moneda="{{  $monedas }}" data-fechaini="{{ $fecha_inicio }}" data-fechafin="{{ $fecha_fin }}" id="imprimirAnalisis"><i
+            class="bi bi-printer-fill me-1"></i>Imprimir PDF</a>
+</div>
 
 {{-- <div class="col-12 mt-5">
     <div id="chartdiv"></div>

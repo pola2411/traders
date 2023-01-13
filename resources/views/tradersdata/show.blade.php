@@ -49,15 +49,16 @@
                             </div>
                         </div>
                         <div id="contTable" style="overflow-x: auto;"></div>
-                        <div class="col-12 mt-5">
-                            <div id="chartdiv"></div>
-                        </div>
+                        <!--<div class="col-12 mt-5">-->
+                        <!--    <div id="chartdiv"></div>-->
+                        <!--</div>-->
                     </div>
                 </div>
 
             </div>
 
         </div>
+
 
     </section>
  
