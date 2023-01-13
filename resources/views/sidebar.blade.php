@@ -71,18 +71,18 @@
         <li class="nav-heading">Menú</li>
 
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/dashboard') }}">
-                <i class="bi bi-grid"></i>
-                <span>Panel de control</span>
-            </a>
-        </li>
-
-        <li class="nav-item">
             <a class="@if (request()->is('admin/perfil')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/perfil') }}">
                 <i class="bi bi-person"></i>
                 <span>Mi cuenta</span>
             </a>
         </li>
+        
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/dashboard') }}">
+                <i class="bi bi-grid"></i>
+                <span>Panel de control</span>
+            </a>
+        </li>        
 
         <li class="nav-item">
             <a class="@if (request()->is('/admin/operacion')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/operacion') }}">

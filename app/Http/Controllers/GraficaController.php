@@ -17,7 +17,10 @@ class GraficaController extends Controller
 
     public function getTrader(Request $request)
     {
-        $traders = General::select()->where('trader_id', $request->id)->get();
+        $traders = General::select()
+            ->where('trader_id', $request->id)
+            ->whereBetween('fecha', [$request->inicio, $request->fin])
+            ->get();
         $tradersNombre = Trader::select()->where('id', $request->id)->get();
         return response(['traders' => $traders, 'tradersNombre' => $tradersNombre]);
     }

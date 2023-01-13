@@ -38,6 +38,23 @@ Gráfica Balance/Equity
                         </div>
                         <hr class="m-0 p-0 mb-2">
                     </div>
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-4 col-12">
+                            <div class="form-floating mb-3 me-3">
+                                <input type="datetime-local" class="form-control" id="fechaDesdeInput" required>
+                                <label for="fechaDesdeInput">A partir de:</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="form-floating mb-3 me-3">
+                                <input type="datetime-local" class="form-control" id="fechaHastaInput" required>
+                                <label for="fechaHastaInput">Hasta:</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-12">
+                            <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar información</button>
+                        </div>
+                    </div>
                     <div id="balanceEquity"></div>
                 </div>
             </div>
@@ -70,5 +87,7 @@ Gráfica Balance/Equity
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
 <script src="{{ asset('js/graficaBalanceEquity.js') }}"></script>
 @endsection
