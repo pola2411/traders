@@ -1,11 +1,19 @@
 @php
     $traders = DB::table("traders")
-        ->where("id", 2)
+        ->where("id", 22)
+        ->orWhere("id", 1)
+        ->orWhere("id", 2)
+        ->orWhere("id", 3)
         ->orWhere("id", 4)
         ->orWhere("id", 5)
+        ->orWhere("id", 6)
+        ->orWhere("id", 7)
+        ->orWhere("id", 8)
         ->orWhere("id", 9)
-        ->orWhere("id", 22)
-        ->orderByDesc(DB::raw('FIELD(id, 99998, 99999)'))->get();
+        ->orWhere("id", 10)
+        ->orWhere("id", 11)
+        ->orWhere("id", 12)
+        ->orderByDesc(DB::raw('FIELD(id, 99998, 99999, 22)'))->get();
         
     $traders_data = DB::table('traders_data')->get();
 @endphp        
@@ -53,7 +61,7 @@
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="{{ url('/admin/logout') }}">
                             <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar sesión</span>
+                            <span>Cerrar sesi贸n</span>
                         </a>
                     </li>
 
@@ -68,7 +76,7 @@
 <div class="sidebar-nav sidebar offcanvas offcanvas-start activee" tabindex="-1" id="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
 
-        <li class="nav-heading">Menú</li>
+        <li class="nav-heading">Men煤</li>
 
         <li class="nav-item">
             <a class="@if (request()->is('admin/perfil')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/perfil') }}">
@@ -232,7 +240,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ url('/admin/logout') }}">
                 <i class="bi bi-box-arrow-in-right"></i>
-                <span>Cerrar sesión</span>
+                <span>Cerrar sesi贸n</span>
             </a>
         </li>
 
