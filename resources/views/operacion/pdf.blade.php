@@ -58,6 +58,7 @@
                     <th data-priority="0" scope="col">Trader</th>
                     <th data-priority="0" scope="col">Último registro</th>
                     <th data-priority="0" scope="col">Operación madre</th>
+                    <th data-priority="0" scope="col">Trader madre</th>
                 </tr>
               </thead>
               <tbody>
@@ -68,6 +69,7 @@
                       <td>{{ $huerfana->nombreTrader }}</td>
                       <td>{{ $huerfana->fecha }} ({{ ucfirst(\Carbon\Carbon::parse($huerfana->fecha)->diffForHumans()) }})</td>
                       <td>{{ $huerfana->operacion_id }}</td>
+                      <td>{{ $huerfana->nombreTraderMadre }}</td>
                     </tr>
                 @endforeach
               </tbody>

@@ -83,7 +83,7 @@ class OperacionController extends Controller
             $operacionHijaMadre = DB::table('operacion_hija')
             ->join('operacion', 'operacion.no_operacion', '=', 'operacion_hija.operacion_id')
             ->join('traders', 'traders.id', '=', 'operacion_hija.trader_id')        
-            ->select(DB::raw("operacion_hija.id, operacion.status AS statusMadre, operacion_hija.fecha, operacion_hija.no_operacion, operacion_hija.status, operacion_hija.operacion_id, traders.nombre AS nombreTrader"))
+            ->select(DB::raw("operacion_hija.id, operacion.status AS statusMadre, operacion_hija.fecha, operacion_hija.no_operacion, operacion_hija.status, operacion_hija.operacion_id, traders.nombre AS nombreTrader, operacion.trader_id AS nombreTraderMadre"))
             ->where("operacion.no_operacion", "=", $hija->operacion_id)
             ->first();
 
