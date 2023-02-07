@@ -61,7 +61,9 @@ am5.ready(function () {
 
     var yAxis = chart.yAxes.push(
         am5xy.ValueAxis.new(root, {
-            renderer: am5xy.AxisRendererY.new(root, {}),
+            renderer: am5xy.AxisRendererY.new(root, {
+                
+            }),
         })
     );
 
@@ -73,9 +75,33 @@ am5.ready(function () {
             xAxis: xAxis,
             yAxis: yAxis,
             valueYField: "value",
+            openValueYField: "valuefree",
             valueXField: "date",
+            stroke: "#00f",
+            fill: "#00f4",
             tooltip: am5.Tooltip.new(root, {
                 labelText: "Margin: {valueY}",
+            }),
+        })
+    );
+    
+     series.fills.template.setAll({
+        fillOpacity: 0.6,
+        visible: true,
+    });
+
+    
+        var series2 = chart.series.push(
+        am5xy.LineSeries.new(root, {
+            name: "Series",
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: "valuefree",
+            valueXField: "date",
+            stroke: "#6a972f",
+            fill: "#6a972f8e",
+            tooltip: am5.Tooltip.new(root, {
+                labelText: "Free Margin: {valueY}",
             }),
         })
     );
@@ -169,8 +195,10 @@ am5.ready(function () {
                     data.push({
                         date: new Date(trader.fecha).getTime(),
                         value: trader.margin,
+                        valuefree: trader.free_margin,
                     });
                     series.data.setAll(data);
+                    series2.data.setAll(data);
                 });
             },
             error: function (error) {
@@ -214,5 +242,6 @@ am5.ready(function () {
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
     series.appear(1000);
+    series2.appear(1000);
     chart.appear(1000, 100);
 }); // end am5.ready()

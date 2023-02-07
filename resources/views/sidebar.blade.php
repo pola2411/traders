@@ -1,7 +1,16 @@
 @php
     $traders = DB::table("traders")
-        ->where("id", 23)
+        ->where("id", 30)
+        ->orWhere("id", 29)
+        ->orWhere("id", 28)
+        ->orWhere("id", 27)
+        ->orWhere("id", 26)
+        ->orWhere("id", 25)
+        ->orWhere("id", 24)
+        ->orWhere("id", 23)
         ->orWhere("id", 22)
+        ->orWhere("id", 21)
+        ->orWhere("id", 20)
         ->orWhere("id", 1)
         ->orWhere("id", 2)
         ->orWhere("id", 3)
@@ -186,7 +195,7 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#margen-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-graph-up"></i><span>Margen</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-graph-up"></i><span>Margen/Margen Libre</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="margen-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders as $trader)
@@ -241,10 +250,8 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ url('/admin/logout') }}">
                 <i class="bi bi-box-arrow-in-right"></i>
-                <span>Cerrar sesi贸n</span>
+                <span>Cerrar sesión</span>
             </a>
         </li>
-
-
     </ul>
 </div>

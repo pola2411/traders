@@ -72,7 +72,7 @@ class DashboardController extends Controller
         // ->get();
         
         $traders = DB::table("traders")
-        ->whereIn('id', [23, 22, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 99998, 99999])
+        ->whereIn('id', [30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 99998, 99999])
         ->orderByRaw('FIELD(id, 99999, 99998) DESC')
         ->orderByRaw('FIELD(id, 22, 23) DESC')
         ->get();
