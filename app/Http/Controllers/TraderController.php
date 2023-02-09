@@ -89,4 +89,30 @@ class TraderController extends Controller
 
         return response()->view('traders.buttons', compact('traders'));
     }
+
+    public function addTrader(Request $request)
+    {
+        $trader = new Trader;
+        $trader->id = $request->numero;
+        $trader->nombre = "Trader ".$request->numero;
+        $trader->save();
+
+        return($trader);
+    }
+
+    public function getTrader(Request $request)
+    {
+        $traders = DB::table("traders")
+        ->where("id", "!=", 998)
+        ->where("id", "!=", 999)
+        ->where("id", "!=", 1000)
+        ->where("id", "!=", 100000)
+        // ->orWhere("id", 4)
+        // ->orWhere("id", 5)
+        // ->orWhere("id", 9)
+        // ->orWhere("id", 22)
+        ->orderByDesc(DB::raw('FIELD(id, 99998, 99999)'))->get();
+
+        return response()->view('traders.buttons', compact('traders'));
+    }
 }

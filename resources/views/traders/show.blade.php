@@ -20,6 +20,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
+                <a class="btn principal-button mb-3 new me-1" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo trader</a>
                 <div class="card-body mt-3" id="contBotones">
                     @foreach ($traders as $trader)
                         @php
@@ -103,6 +104,36 @@
         </div>
     </div>
 </section>
+
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Añadir trader</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="traderForm" method="post">
+                    @csrf
+                    <input type="hidden" name="id" id="idInput">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" placeholder="Ingresa el número de trader" id="numeroInput" name="numero" required>
+                                <label for="numeroInput">Número de trader</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="alertMessage"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn principal-button" id="btnSubmit">Añadir trader</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('preloader')

@@ -44,32 +44,29 @@ Trader Report
                         </div>
                         <div class="cont-form">
                             <h3 class="mt-2">Ver datos históricos</h3>
-                            <form id="formFilter" action="{{ url('/admin/showTraderReport') }}" method="POST">
-                                @csrf
-                                <div class="row">
-                                    <input type="hidden" name="trader_id" val="1">
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-floating mb-3">
-                                            <input type="datetime-local" class="form-control"
-                                                placeholder="Ingresa la fecha de inicio" id="fromInput" name="from"
-                                                required>
-                                            <label for="fromInput">Desde</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-floating mb-3">
-                                            <input type="datetime-local" class="form-control"
-                                                placeholder="Ingresa la fecha de fin" id="toInput" name="to" required>
-                                            <label for="toInput">Hasta</label>
-                                        </div>
+                            <div class="row">
+                                <input type="hidden" name="id" id="idInput">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="datetime-local" class="form-control"
+                                            placeholder="Ingresa la fecha de inicio" id="fromInput" name="from"
+                                            required>
+                                        <label for="fromInput">Desde</label>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button type="submit" class="btn principal-button">Filtrar resultados</button>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="datetime-local" class="form-control"
+                                            placeholder="Ingresa la fecha de fin" id="toInput" name="to" required>
+                                        <label for="toInput">Hasta</label>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn principal-button" id="filtrar">Filtrar resultados</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr class="mt-3 p-0 mb-2">
@@ -134,5 +131,5 @@ Trader Report
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-<script src="{{ asset('js/traderReport.js') }}"></script>
+<script src="{{ asset('js/traderreport.js') }}"></script>
 @endsection

@@ -37,9 +37,8 @@ Route::get('/admin/showMargen', [App\Http\Controllers\MargenController::class, '
 
 //trader report
 Route::get('/admin/traderReport/{id}', [App\Http\Controllers\TraderReportController::class, 'index'])->middleware('auth');
-Route::post('/admin/showTraderReport', [App\Http\Controllers\TraderReportController::class, 'getReportResult'])->middleware('auth');
+Route::get('/admin/showTraderReport', [App\Http\Controllers\TraderReportController::class, 'getReportResult'])->middleware('auth');
 Route::get('/admin/showReport', [App\Http\Controllers\TraderReportController::class, 'getReport'])->middleware('auth');
-Route::post('/admin/showReportResult', [App\Http\Controllers\TraderReportController::class, 'getReport'])->middleware('auth');
 
 //operaciones
 Route::get('/admin/operacion', [App\Http\Controllers\OperacionController::class, 'index'])->name('operacion')->middleware('auth');
@@ -98,6 +97,8 @@ Route::get('/admin/traders-analysis/{id}', [App\Http\Controllers\TradersDataCont
 
 //Traders
 Route::get('/admin/traders', [App\Http\Controllers\TraderController::class, 'index'])->middleware('auth');
+Route::get('/admin/showTraders', [App\Http\Controllers\TraderController::class, 'getTrader'])->middleware('auth');
+Route::post('/admin/addTrader', [App\Http\Controllers\TraderController::class, 'addTrader'])->middleware('auth');
 Route::get('/admin/editStatus', [App\Http\Controllers\TraderController::class, 'editStatus'])->middleware('auth');
 
 //consultar momento

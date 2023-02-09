@@ -39,8 +39,6 @@
 
     @include('sidebar')
 
-    @include('perfil.modal')
-
     <main id="main" class="main activee2">
         @yield('content')
     </main>
