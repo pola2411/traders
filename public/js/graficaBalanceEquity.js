@@ -189,7 +189,7 @@ am5.ready(function () {
                     data.push({
                         date: new Date(trader.fecha).getTime(),
                         close: trader.equity,
-                        open: trader.balance,
+                        // open: trader.balance,
                     });
                 });
 

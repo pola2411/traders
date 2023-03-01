@@ -1,6 +1,8 @@
 @php
     $traders = DB::table("traders")
-        ->where("id", 30)
+        ->where("id", 99999)
+        ->orWhere("id", 99998)
+        ->orWhere("id", 30)
         ->orWhere("id", 29)
         ->orWhere("id", 28)
         ->orWhere("id", 27)
@@ -23,7 +25,7 @@
         ->orWhere("id", 10)
         ->orWhere("id", 11)
         ->orWhere("id", 12)
-        ->orderByDesc(DB::raw('FIELD(id, 99998, 99999, 22, 23)'))->get();
+        ->orderByDesc(DB::raw('FIELD(id, 22, 23, 99998, 99999)'))->get();
         
     $traders_data = DB::table('traders_data')->get();
 @endphp        
