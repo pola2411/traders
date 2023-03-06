@@ -25,6 +25,7 @@ class IndexUSDController extends Controller
             ->orwhere('moneda', 'USDCHF')
             ->orwhere('moneda', 'USDJPY')
             ->orwhere('moneda', 'USDMXN')
+            // ->orderByDesc(DB::raw('FIELD(moneda, EURUSD, GBPUSD, AUDUSD, NZDUSD, USDCAD, USDCHF, USDJPY, USDMXN)'))
             ->get();
 
         return response(['monedas' => $monedas]);

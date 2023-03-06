@@ -1,19 +1,23 @@
 @extends('index')
 
 @section('css')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
+<style>
+    #indexUSD {
+        width: 100%;
+        height: 500px;
+    }
+</style>
 @endsection
 
-@section('title') INDEX @endsection
+@section('title') INDEX USD @endsection
 
 @section('content')
     <div class="pagetitle">
-        <h1>INDEX</h1>
+        <h1>INDEX USD</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Panel de control</a></li>
-                <li class="breadcrumb-item active">INDEX</li>
+                <li class="breadcrumb-item active">INDEX USD</li>
             </ol>
         </nav>
     </div>
@@ -23,7 +27,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body mt-3">
-                        <div class="row d-flex align-items-center">
+                        <form class="row d-flex align-items-center" id="fechasForm">
                             <div class="col-md-4 col-12">
                                 <div class="form-floating mb-3 me-3">
                                     <input type="datetime-local" class="form-control" id="fechaDesdeInput" required>
@@ -32,15 +36,15 @@
                             </div>
                             <div class="col-md-4 col-12">
                                 <div class="form-floating mb-3 me-3">
-                                    <input type="datetime-local" class="form-control" id="fechaHastaInput" required>
-                                    <label for="fechaHastaInput">Hasta:</label>
+                                    <input type="datetime-local" class="form-control" id="fechaEjeInput" required>
+                                    <label for="fechaEjeInput">Hasta:</label>
                                 </div>
                             </div>
                             <div class="col-md-3 col-12">
                                 <button class="btn btn-primary mb-3">Generar información</button>
                             </div>
-                        </div>
-                        <div id="contTable"></div>
+                        </form>
+                        <div id="indexUSD"></div>
                     </div>
                 </div>
 
@@ -69,10 +73,8 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="{{ asset('/js/traders-data.js') }}"></script>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script src="{{ asset('/js/indexUSD.js') }}"></script>
 @endsection
