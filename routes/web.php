@@ -105,3 +105,9 @@ Route::get('/admin/editStatus', [App\Http\Controllers\TraderController::class, '
 Route::get('/admin/momento/{id}', [App\Http\Controllers\MomentoController::class, 'index'])->name('momento')->middleware('auth');
 Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class, 'getMomento'])->middleware('auth');
 Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class, 'getMomento'])->middleware('auth');
+
+//consultar status
+Route::get('/admin/status-lot/{id}', [App\Http\Controllers\StatusLotController::class, 'index'])->name('lot')->middleware('auth');
+Route::get('/admin/status-profit/{id}', [App\Http\Controllers\StatusProfitController::class, 'index'])->name('profit')->middleware('auth');
+Route::get('/admin/status-risk/{id}', [App\Http\Controllers\StatusRiskController::class, 'index'])->name('risk')->middleware('auth');
+Route::get('/admin/status-swap/{id}', [App\Http\Controllers\StatusSwapController::class, 'index'])->name('swap')->middleware('auth');

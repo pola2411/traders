@@ -5,15 +5,15 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
 @endsection
 
-@section('title') Traders Data @endsection
+@section('title') INDEX @endsection
 
 @section('content')
     <div class="pagetitle">
-        <h1>Traders Data</h1>
+        <h1>INDEX</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Panel de control</a></li>
-                <li class="breadcrumb-item active">Traders Data</li>
+                <li class="breadcrumb-item active">INDEX</li>
             </ol>
         </nav>
     </div>
