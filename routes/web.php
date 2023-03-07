@@ -108,6 +108,13 @@ Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class,
 
 //consultar status
 Route::get('/admin/status-lot/{id}', [App\Http\Controllers\StatusLotController::class, 'index'])->name('lot')->middleware('auth');
+Route::get('/admin/showStatusLot', [App\Http\Controllers\StatusLotController::class, 'getDatos']);
+
 Route::get('/admin/status-profit/{id}', [App\Http\Controllers\StatusProfitController::class, 'index'])->name('profit')->middleware('auth');
+Route::get('/admin/showStatusProfit', [App\Http\Controllers\StatusProfitController::class, 'getDatos']);
+
 Route::get('/admin/status-risk/{id}', [App\Http\Controllers\StatusRiskController::class, 'index'])->name('risk')->middleware('auth');
+Route::get('/admin/showStatusRisk', [App\Http\Controllers\StatusRiskController::class, 'getDatos']);
+
 Route::get('/admin/status-swap/{id}', [App\Http\Controllers\StatusSwapController::class, 'index'])->name('swap')->middleware('auth');
+Route::get('/admin/showStatusSwap', [App\Http\Controllers\StatusSwapController::class, 'getDatos']);
