@@ -73,7 +73,7 @@
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="{{ url('/admin/logout') }}">
                             <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar sesi贸n</span>
+                            <span>Cerrar sesión</span>
                         </a>
                     </li>
 
@@ -88,7 +88,7 @@
 <div class="sidebar-nav sidebar offcanvas offcanvas-start activee" tabindex="-1" id="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
 
-        <li class="nav-heading">Men煤</li>
+        <li class="nav-heading">Menú</li>
 
         <li class="nav-item">
             <a class="@if (request()->is('admin/perfil')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/perfil') }}">
@@ -207,6 +207,24 @@
                     </a>
                 </li>
                 @endforeach
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#status-profit-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-kanban"></i><span>Status Profit</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="status-profit-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="ps-2" href="/admin/status-profit/99999">
+                        <i class="bi bi-circle"></i><span>MAM</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ps-2" href="/admin/status-profit/99998">
+                        <i class="bi bi-circle"></i><span>POOL</span>
+                    </a>
+                </li>
             </ul>
         </li>
 
