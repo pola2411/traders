@@ -16,11 +16,11 @@ class StatusController extends Controller
     public function getDatos(Request $request)
     {
         $status_profit = DB::table('status_profit')
-        ->join('traders', 'traders.id', '=', 'status_profit.trader_id')
-        ->select()
-        ->where("trader_id", $request->id)
-        ->orderBy('status_profit.fecha', 'DESC')
-        ->first();
+            ->join('traders', 'traders.id', '=', 'status_profit.trader_id')
+            ->select()
+            ->where("trader_id", $request->id)
+            ->orderBy('status_profit.fecha', 'DESC')
+            ->first();
 
         $status_lotes = DB::table('status_lot')
             ->join('traders', 'traders.id', '=', 'status_lot.trader_id')

@@ -11,11 +11,7 @@ class DashboardController extends Controller
     public function index()
     {
 
-        $traders = DB::table("traders")
-        ->where("id", 99999)
-        ->orWhere("id", 99998)
-        ->orWhere("id", 22)
-        ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();     
+        $traders = DB::table("traders")->where("activado", "activado")->orderBy("id", "DESC")->get();
 
         $generales = array();
 
@@ -43,11 +39,7 @@ class DashboardController extends Controller
 
     public function getPruebasVida()
     {
-        $traders = DB::table("traders")
-        ->where("id", 99999)
-        ->orWhere("id", 99998)
-        ->orWhere("id", 22)
-        ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();
+        $traders = DB::table("traders")->where("activado", "activado")->orderBy("id", "DESC")->get();
 
         $data = array(
             "traders" => $traders,

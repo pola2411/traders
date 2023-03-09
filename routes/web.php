@@ -109,3 +109,8 @@ Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class,
 //consultar status
 Route::get('/admin/status/{id}', [App\Http\Controllers\StatusController::class, 'index'])->name('status')->middleware('auth');
 Route::get('/admin/showStatus', [App\Http\Controllers\StatusController::class, 'getDatos']);
+
+//consultar status gráfica
+Route::get('/admin/status-grafica/{id}', [App\Http\Controllers\StatusGraficaController::class, 'index'])->name('statusgrafica')->middleware('auth');
+Route::get('/admin/getMonedasStatus', [App\Http\Controllers\StatusGraficaController::class, 'getMonedas']);
+Route::get('/admin/getStatusGraficaProfit', [App\Http\Controllers\StatusGraficaController::class, 'getGrafica']);

@@ -1,32 +1,5 @@
 @php
-    $traders = DB::table("traders")
-        ->where("id", 99999)
-        ->orWhere("id", 99998)
-        // ->orWhere("id", 30)
-        // ->orWhere("id", 29)
-        // ->orWhere("id", 28)
-        // ->orWhere("id", 27)
-        // ->orWhere("id", 26)
-        // ->orWhere("id", 25)
-        // ->orWhere("id", 24)
-        // ->orWhere("id", 23)
-        ->orWhere("id", 22)
-        // ->orWhere("id", 21)
-        // ->orWhere("id", 20)
-        // ->orWhere("id", 1)
-        // ->orWhere("id", 2)
-        // ->orWhere("id", 3)
-        // ->orWhere("id", 4)
-        // ->orWhere("id", 5)
-        // ->orWhere("id", 6)
-        // ->orWhere("id", 7)
-        // ->orWhere("id", 8)
-        // ->orWhere("id", 9)
-        // ->orWhere("id", 10)
-        // ->orWhere("id", 11)
-        // ->orWhere("id", 12)
-        ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();
-        
+    $traders = DB::table("traders")->where("activado", "activado")->orderBy("id", "DESC")->get();        
     $traders_data = DB::table('traders_data')->get();
 @endphp        
 
