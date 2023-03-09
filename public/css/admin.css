@@ -605,7 +605,7 @@ h6 {
 }
 
 .l-bg-up {
-    background: linear-gradient(to right, #00D7FF, #00D7FF, #72FFFF) !important;
+    background: linear-gradient(to right, #00d7ff, #00d7ff, #72ffff) !important;
     color: #000;
 }
 
@@ -2180,4 +2180,115 @@ a:hover {
 .remove-image:active {
     border: 0;
     transition: all 0.2s ease;
+}
+
+.btn_balance_equity {
+    border: 1px solid transparent;
+    background: transparent !important;
+    border-image: linear-gradient(110.3deg, #3acfd5 0%, #3a4ed5 100%) 1;
+    color: #3a4ed5;
+}
+
+.btn_balance_equity_active {
+    border-image: linear-gradient(110.3deg, #3acfd5 0%, #3a4ed5 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #3acfd5 0%,
+        #3a4ed5 100%
+    ) !important;
+    color: #fff;
+}
+
+.btn_balance_equity:hover {
+    border-image: linear-gradient(110.3deg, #3acfd5 0%, #3a4ed5 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #3acfd5 0%,
+        #3a4ed5 100%
+    ) !important;
+    color: #fff !important;
+}
+
+.btn_balance_equity:active {
+    border-image: linear-gradient(110.3deg, #3acfd5 0%, #3a4ed5 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #3acfd5 0%,
+        #3a4ed5 100%
+    ) !important;
+    color: #fff;
+}
+
+.btn_balance_margen_libre {
+    border: 1px solid transparent;
+    background: transparent !important;
+    border-image: linear-gradient(110.3deg, #f2df3a 0%, #e6b325 100%) 1;
+    color: #e6b325;
+}
+
+.btn_balance_margen_libre_active {
+    border-image: linear-gradient(110.3deg, #f2df3a 0%, #e6b325 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #f2df3a 0%,
+        #e6b325 100%
+    ) !important;
+    color: #fff;
+}
+
+.btn_balance_margen_libre:hover {
+    border-image: linear-gradient(110.3deg, #f2df3a 0%, #e6b325 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #f2df3a 0%,
+        #e6b325 100%
+    ) !important;
+    color: #fff !important;
+}
+
+.btn_balance_margen_libre:active {
+    border-image: linear-gradient(110.3deg, #f2df3a 0%, #e6b325 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #f2df3a 0%,
+        #e6b325 100%
+    ) !important;
+    color: #fff;
+}
+
+.btn_equity_margen_libre {
+    border: 1px solid transparent;
+    background: transparent !important;
+    border-image: linear-gradient(110.3deg, #5f8d4e 0%, #285430 100%) 1;
+    color: #285430;
+}
+
+.btn_equity_margen_libre_active {
+    border-image: linear-gradient(110.3deg, #5f8d4e 0%, #285430 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #5f8d4e 0%,
+        #285430 100%
+    ) !important;
+    color: #fff;
+}
+
+.btn_equity_margen_libre:hover {
+    border-image: linear-gradient(110.3deg, #5f8d4e 0%, #285430 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #5f8d4e 0%,
+        #285430 100%
+    ) !important;
+    color: #fff !important;
+}
+
+.btn_equity_margen_libre:active {
+    border-image: linear-gradient(110.3deg, #5f8d4e 0%, #285430 100%) 1;
+    background-image: linear-gradient(
+        110.3deg,
+        #5f8d4e 0%,
+        #285430 100%
+    ) !important;
+    color: #fff;
 }

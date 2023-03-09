@@ -3,14 +3,14 @@ var url = window.location + "";
 var separador = url.split("/");
 var traderID = separador[separador.length - 1];
 
-const tableProfit = () => {
+const tableStatus = () => {
     $.get({
-        url: `/admin/showStatusProfit?id=${traderID}`,
+        url: `/admin/showStatus?id=${traderID}`,
         success: function (response) {
             $("#contTabla").empty();
             $("#contTabla").html(response);
 
-            table = $("#status_profit").DataTable({
+            table = $("#status").DataTable({
                 language: {
                     processing: "Procesando...",
                     lengthMenu: "Mostrar _MENU_ pagos",
@@ -206,9 +206,9 @@ const tableProfit = () => {
     });
 };
 
-tableProfit();
+tableStatus();
 
 setInterval(function () {
     table.destroy();
-    tableProfit();
+    tableStatus();
 }, 40000);

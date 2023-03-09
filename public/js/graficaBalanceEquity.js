@@ -2,6 +2,7 @@
 var url = window.location + "";
 var separador = url.split("/");
 var traderID = separador[separador.length - 1];
+var boton_select = "";
 
 am5.ready(function () {
     // Create root element
@@ -55,8 +56,6 @@ am5.ready(function () {
         })
     );
 
-    // Add series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
     var series1 = chart.series.push(
         am5xy.LineSeries.new(root, {
             name: "Series",
@@ -73,17 +72,12 @@ am5.ready(function () {
         })
     );
 
-    series1.fills.template.setAll({
-        fillOpacity: 0.6,
-        visible: true,
-    });
-
     var series2 = chart.series.push(
         am5xy.LineSeries.new(root, {
             name: "Series",
             xAxis: xAxis,
             yAxis: yAxis,
-            valueYField: "close",
+            valueYField: "medium",
             valueXField: "date",
             stroke: "#6a972f",
             fill: "#6a972f8e",
@@ -93,11 +87,21 @@ am5.ready(function () {
         })
     );
 
-    //series1.strokes.template.set("strokeWidth", 2);
-    //series2.strokes.template.set("strokeWidth", 2);
+    var series3 = chart.series.push(
+        am5xy.LineSeries.new(root, {
+            name: "Series",
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: "close",
+            valueXField: "date",
+            stroke: "#F7C04A",
+            fill: "#E7B10A",
+            tooltip: am5.Tooltip.new(root, {
+                labelText: "Free Margin: {valueY}",
+            }),
+        })
+    );
 
-    // Add scrollbar
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
     chart.set(
         "scrollbarX",
         am5.Scrollbar.new(root, {
@@ -107,26 +111,9 @@ am5.ready(function () {
 
     let hoy = new Date();
 
-    let inicio = new Date(hoy.getFullYear(), 0, 1);
-
-    let fechaInicio_inicio =
-        inicio.getFullYear() +
-        "-0" +
-        (inicio.getMonth() + 1) +
-        "-0" +
-        inicio.getDate() +
-        " 0" +
-        inicio.getHours() +
-        ":0" +
-        inicio.getMinutes() +
-        ":0" +
-        inicio.getSeconds();
-
     let mes = "";
     let dia = "";
     let horas = "";
-    let minutos = "";
-    let segundos = "";
 
     if (hoy.getMonth().toString().length == 1) {
         mes = "-0" + (hoy.getMonth() + 1);
@@ -154,9 +141,6 @@ am5.ready(function () {
     } else {
         minutos = ":" + hoy.getMinutes();
     }
-
-    let fechaFin_inicio =
-        hoy.getFullYear() + mes + dia + " " + "23" + ":59" + ":00";
 
     let semana = moment(hoy.getFullYear() + mes + dia, "YYYYMMDD").isoWeek();
     let inicio_semana = moment()
@@ -188,13 +172,15 @@ am5.ready(function () {
                 response.traders.map(function (trader) {
                     data.push({
                         date: new Date(trader.fecha).getTime(),
-                        close: trader.equity,
-                        // open: trader.balance,
+                        close: trader.free_margin,
+                        medium: trader.equity,
+                        open: trader.balance,
                     });
                 });
 
                 series1.data.setAll(data);
                 series2.data.setAll(data);
+                series3.data.setAll(data);
             },
             error: function (error) {
                 console.log(error);
@@ -203,6 +189,192 @@ am5.ready(function () {
     }
 
     setData(traderID, inicio_semana, fin_semana);
+
+    function setDataBalanceEquity(traderID, inicio, fin) {
+        $.get({
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
+            success: function (response) {
+                var data = [];
+                $("#numeroTrader").text(response.tradersNombre[0].nombre);
+
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        // close: trader.free_margin,
+                        medium: trader.equity,
+                        open: trader.balance,
+                    });
+                });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
+                series3.data.setAll(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
+    function setDataBalanceMargenLibre(traderID, inicio, fin) {
+        $.get({
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
+            success: function (response) {
+                var data = [];
+                $("#numeroTrader").text(response.tradersNombre[0].nombre);
+
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        close: trader.free_margin,
+                        // medium: trader.equity,
+                        open: trader.balance,
+                    });
+                });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
+                series3.data.setAll(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
+    function setDataEquityMargenLibre(traderID, inicio, fin) {
+        $.get({
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
+            success: function (response) {
+                var data = [];
+                $("#numeroTrader").text(response.tradersNombre[0].nombre);
+
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        close: trader.free_margin,
+                        medium: trader.equity,
+                        // open: trader.balance,
+                    });
+                });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
+                series3.data.setAll(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
+    function setDataBalance(traderID, inicio, fin) {
+        $.get({
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
+            success: function (response) {
+                var data = [];
+                $("#numeroTrader").text(response.tradersNombre[0].nombre);
+
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        // close: trader.free_margin,
+                        // medium: trader.equity,
+                        open: trader.balance,
+                    });
+                });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
+                series3.data.setAll(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
+    function setDataEquity(traderID, inicio, fin) {
+        $.get({
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
+            success: function (response) {
+                var data = [];
+                $("#numeroTrader").text(response.tradersNombre[0].nombre);
+
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        // close: trader.free_margin,
+                        medium: trader.equity,
+                        // open: trader.balance,
+                    });
+                });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
+                series3.data.setAll(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
+    function setDataMargenLibre(traderID, inicio, fin) {
+        $.get({
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
+            success: function (response) {
+                var data = [];
+                $("#numeroTrader").text(response.tradersNombre[0].nombre);
+
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        close: trader.free_margin,
+                        // medium: trader.equity,
+                        // open: trader.balance,
+                    });
+                });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
+                series3.data.setAll(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
 
     // create ranges
     var i = 0;
@@ -213,12 +385,14 @@ am5.ready(function () {
     am5.array.each(series1.dataItems, function (s1DataItem) {
         var s1PreviousDataItem;
         var s2PreviousDataItem;
+        var s3PreviousDataItem;
 
         var s2DataItem = series2.dataItems[i];
 
         if (i > 0) {
             s1PreviousDataItem = series1.dataItems[i - 1];
             s2PreviousDataItem = series2.dataItems[i - 1];
+            s3PreviousDataItem = series3.dataItems[i - 1];
         }
 
         var startTime = am5.time
@@ -311,6 +485,7 @@ am5.ready(function () {
     // https://www.amcharts.com/docs/v5/concepts/animations/
     series1.appear(1000);
     series2.appear(1000);
+    series3.appear(1000);
     chart.appear(1000, 100);
 
     function getLineIntersection(pointA1, pointA2, pointB1, pointB2) {
@@ -351,7 +526,27 @@ am5.ready(function () {
                     confirmButtonColor: "#01bbcc",
                 });
             } else {
-                setData(traderID, fecha_inicio, fecha_fin);
+                if (boton_select == "todo") {
+                    setData(traderID, fecha_inicio, fecha_fin);
+                } else if (boton_select == "balance_equity") {
+                    setDataBalanceEquity(traderID, fecha_inicio, fecha_fin);
+                } else if (boton_select == "balance_margen_libre") {
+                    setDataBalanceMargenLibre(
+                        traderID,
+                        fecha_inicio,
+                        fecha_fin
+                    );
+                } else if (boton_select == "equity_margen_libre") {
+                    setDataEquityMargenLibre(traderID, fecha_inicio, fecha_fin);
+                } else if (boton_select == "balance") {
+                    setDataBalance(traderID, fecha_inicio, fecha_fin);
+                } else if (boton_select == "equity") {
+                    setDataEquity(traderID, fecha_inicio, fecha_fin);
+                } else if (boton_select == "margen_libre") {
+                    setDataMargenLibre(traderID, fecha_inicio, fecha_fin);
+                } else {
+                    setData(traderID, fecha_inicio, fecha_fin);
+                }
             }
         } else {
             Swal.fire({
@@ -363,5 +558,236 @@ am5.ready(function () {
                 confirmButtonColor: "#01bbcc",
             });
         }
+    });
+
+    $(document).on("click", "#mostrarTodo", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "todo";
+
+        $("#mostrarTodo").addClass("btn-dark");
+        $("#mostrarTodo").removeClass("btn-outline-dark");
+
+        $("#mostrarBlanceEquity").addClass("btn_balance_equity");
+        $("#mostrarBlanceEquity").removeClass("btn_balance_equity_active");
+
+        $("#mostrarEquityMargenLibre").addClass("btn_equity_margen_libre");
+        $("#mostrarEquityMargenLibre").removeClass(
+            "btn_equity_margen_libre_active"
+        );
+
+        $("#mostrarBalanceMargenLibre").addClass("btn_balance_margen_libre");
+        $("#mostrarBalanceMargenLibre").removeClass(
+            "btn_balance_margen_libre_active"
+        );
+
+        $("#mostrarBalance").addClass("btn-outline-primary");
+        $("#mostrarBalance").removeClass("btn-primary");
+
+        $("#mostrarEquity").addClass("btn-outline-success");
+        $("#mostrarEquity").removeClass("btn-success");
+
+        $("#mostrarMargenLibre").addClass("btn-outline-warning");
+        $("#mostrarMargenLibre").removeClass("btn-warning");
+
+        setData(traderID, fecha_inicio, fecha_fin);
+    });
+
+    $(document).on("click", "#mostrarBlanceEquity", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "balance_equity";
+
+        $("#mostrarBlanceEquity").addClass("btn_balance_equity_active");
+        $("#mostrarBlanceEquity").removeClass("btn_balance_equity");
+
+        $("#mostrarTodo").addClass("btn-outline-dark");
+        $("#mostrarTodo").removeClass("btn-dark");
+
+        $("#mostrarEquityMargenLibre").addClass("btn_equity_margen_libre");
+        $("#mostrarEquityMargenLibre").removeClass(
+            "btn_equity_margen_libre_active"
+        );
+
+        $("#mostrarBalanceMargenLibre").addClass("btn_balance_margen_libre");
+        $("#mostrarBalanceMargenLibre").removeClass(
+            "btn_balance_margen_libre_active"
+        );
+
+        $("#mostrarBalance").addClass("btn-outline-primary");
+        $("#mostrarBalance").removeClass("btn-primary");
+
+        $("#mostrarEquity").addClass("btn-outline-success");
+        $("#mostrarEquity").removeClass("btn-success");
+
+        $("#mostrarMargenLibre").addClass("btn-outline-warning");
+        $("#mostrarMargenLibre").removeClass("btn-warning");
+
+        setDataBalanceEquity(traderID, fecha_inicio, fecha_fin);
+    });
+
+    $(document).on("click", "#mostrarBalanceMargenLibre", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "balance_margen_libre";
+
+        $("#mostrarBalanceMargenLibre").addClass(
+            "btn_balance_margen_libre_active"
+        );
+        $("#mostrarBalanceMargenLibre").removeClass("btn_balance_margen_libre");
+
+        $("#mostrarBlanceEquity").addClass("btn_balance_equity");
+        $("#mostrarBlanceEquity").removeClass("btn_balance_equity_active");
+
+        $("#mostrarTodo").addClass("btn-outline-dark");
+        $("#mostrarTodo").removeClass("btn-dark");
+
+        $("#mostrarEquityMargenLibre").addClass("btn_equity_margen_libre");
+        $("#mostrarEquityMargenLibre").removeClass(
+            "btn_equity_margen_libre_active"
+        );
+
+        $("#mostrarBalance").addClass("btn-outline-primary");
+        $("#mostrarBalance").removeClass("btn-primary");
+
+        $("#mostrarEquity").addClass("btn-outline-success");
+        $("#mostrarEquity").removeClass("btn-success");
+
+        $("#mostrarMargenLibre").addClass("btn-outline-warning");
+        $("#mostrarMargenLibre").removeClass("btn-warning");
+
+        setDataBalanceMargenLibre(traderID, fecha_inicio, fecha_fin);
+    });
+
+    $(document).on("click", "#mostrarEquityMargenLibre", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "equity_margen_libre";
+
+        $("#mostrarEquityMargenLibre").addClass(
+            "btn_equity_margen_libre_active"
+        );
+        $("#mostrarEquityMargenLibre").removeClass("btn_equity_margen_libre");
+
+        $("#mostrarBlanceEquity").addClass("btn_balance_equity");
+        $("#mostrarBlanceEquity").removeClass("btn_balance_equity_active");
+
+        $("#mostrarBalanceMargenLibre").addClass("btn_balance_margen_libre");
+        $("#mostrarBalanceMargenLibre").removeClass(
+            "btn_balance_margen_libre_active"
+        );
+
+        $("#mostrarTodo").addClass("btn-outline-dark");
+        $("#mostrarTodo").removeClass("btn-dark");
+
+        $("#mostrarBalance").addClass("btn-outline-primary");
+        $("#mostrarBalance").removeClass("btn-primary");
+
+        $("#mostrarEquity").addClass("btn-outline-success");
+        $("#mostrarEquity").removeClass("btn-success");
+
+        $("#mostrarMargenLibre").addClass("btn-outline-warning");
+        $("#mostrarMargenLibre").removeClass("btn-warning");
+
+        setDataEquityMargenLibre(traderID, fecha_inicio, fecha_fin);
+    });
+
+    $(document).on("click", "#mostrarBalance", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "balance";
+
+        $("#mostrarBalance").addClass("btn-primary");
+        $("#mostrarBalance").removeClass("btn-outline-primary");
+
+        $("#mostrarBlanceEquity").addClass("btn_balance_equity");
+        $("#mostrarBlanceEquity").removeClass("btn_balance_equity_active");
+
+        $("#mostrarEquityMargenLibre").addClass("btn_equity_margen_libre");
+        $("#mostrarEquityMargenLibre").removeClass(
+            "btn_equity_margen_libre_active"
+        );
+
+        $("#mostrarBalanceMargenLibre").addClass("btn_balance_margen_libre");
+        $("#mostrarBalanceMargenLibre").removeClass(
+            "btn_balance_margen_libre_active"
+        );
+
+        $("#mostrarTodo").addClass("btn-outline-dark");
+        $("#mostrarTodo").removeClass("btn-dark");
+
+        $("#mostrarEquity").addClass("btn-outline-success");
+        $("#mostrarEquity").removeClass("btn-success");
+
+        $("#mostrarMargenLibre").addClass("btn-outline-warning");
+        $("#mostrarMargenLibre").removeClass("btn-warning");
+
+        setDataBalance(traderID, fecha_inicio, fecha_fin);
+    });
+
+    $(document).on("click", "#mostrarEquity", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "equity";
+
+        $("#mostrarEquity").addClass("btn-success");
+        $("#mostrarEquity").removeClass("btn-outline-success");
+
+        $("#mostrarBlanceEquity").addClass("btn_balance_equity");
+        $("#mostrarBlanceEquity").removeClass("btn_balance_equity_active");
+
+        $("#mostrarBalanceMargenLibre").addClass("btn_balance_margen_libre");
+        $("#mostrarBalanceMargenLibre").removeClass(
+            "btn_balance_margen_libre_active"
+        );
+
+        $("#mostrarEquityMargenLibre").addClass("btn_equity_margen_libre");
+        $("#mostrarEquityMargenLibre").removeClass(
+            "btn_equity_margen_libre_active"
+        );
+
+        $("#mostrarBalance").addClass("btn-outline-primary");
+        $("#mostrarBalance").removeClass("btn-primary");
+
+        $("#mostrarTodo").addClass("btn-outline-dark");
+        $("#mostrarTodo").removeClass("btn-dark");
+
+        $("#mostrarMargenLibre").addClass("btn-outline-warning");
+        $("#mostrarMargenLibre").removeClass("btn-warning");
+
+        setDataEquity(traderID, fecha_inicio, fecha_fin);
+    });
+
+    $(document).on("click", "#mostrarMargenLibre", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "margen_libre";
+
+        $("#mostrarMargenLibre").addClass("btn-warning");
+        $("#mostrarMargenLibre").removeClass("btn-outline-warning");
+
+        $("#mostrarBlanceEquity").addClass("btn_balance_equity");
+        $("#mostrarBlanceEquity").removeClass("btn_balance_equity_active");
+
+        $("#mostrarEquityMargenLibre").addClass("btn_equity_margen_libre");
+        $("#mostrarEquityMargenLibre").removeClass(
+            "btn_equity_margen_libre_active"
+        );
+
+        $("#mostrarBalanceMargenLibre").addClass("btn_balance_margen_libre");
+        $("#mostrarBalanceMargenLibre").removeClass(
+            "btn_balance_margen_libre_active"
+        );
+
+        $("#mostrarBalance").addClass("btn-outline-primary");
+        $("#mostrarBalance").removeClass("btn-primary");
+
+        $("#mostrarEquity").addClass("btn-outline-success");
+        $("#mostrarEquity").removeClass("btn-success");
+
+        $("#mostrarTodo").addClass("btn-outline-dark");
+        $("#mostrarTodo").removeClass("btn-dark");
+
+        setDataMargenLibre(traderID, fecha_inicio, fecha_fin);
     });
 }); // end am5.ready()

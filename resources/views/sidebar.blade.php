@@ -2,30 +2,30 @@
     $traders = DB::table("traders")
         ->where("id", 99999)
         ->orWhere("id", 99998)
-        ->orWhere("id", 30)
-        ->orWhere("id", 29)
-        ->orWhere("id", 28)
-        ->orWhere("id", 27)
-        ->orWhere("id", 26)
-        ->orWhere("id", 25)
-        ->orWhere("id", 24)
-        ->orWhere("id", 23)
+        // ->orWhere("id", 30)
+        // ->orWhere("id", 29)
+        // ->orWhere("id", 28)
+        // ->orWhere("id", 27)
+        // ->orWhere("id", 26)
+        // ->orWhere("id", 25)
+        // ->orWhere("id", 24)
+        // ->orWhere("id", 23)
         ->orWhere("id", 22)
-        ->orWhere("id", 21)
-        ->orWhere("id", 20)
-        ->orWhere("id", 1)
-        ->orWhere("id", 2)
-        ->orWhere("id", 3)
-        ->orWhere("id", 4)
-        ->orWhere("id", 5)
-        ->orWhere("id", 6)
-        ->orWhere("id", 7)
-        ->orWhere("id", 8)
-        ->orWhere("id", 9)
-        ->orWhere("id", 10)
-        ->orWhere("id", 11)
-        ->orWhere("id", 12)
-        ->orderByDesc(DB::raw('FIELD(id, 22, 23, 99998, 99999)'))->get();
+        // ->orWhere("id", 21)
+        // ->orWhere("id", 20)
+        // ->orWhere("id", 1)
+        // ->orWhere("id", 2)
+        // ->orWhere("id", 3)
+        // ->orWhere("id", 4)
+        // ->orWhere("id", 5)
+        // ->orWhere("id", 6)
+        // ->orWhere("id", 7)
+        // ->orWhere("id", 8)
+        // ->orWhere("id", 9)
+        // ->orWhere("id", 10)
+        // ->orWhere("id", 11)
+        // ->orWhere("id", 12)
+        ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();
         
     $traders_data = DB::table('traders_data')->get();
 @endphp        
@@ -104,12 +104,12 @@
             </a>
         </li>        
 
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/operacion')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/operacion') }}">
                 <i class="bi bi-arrow-repeat"></i>
                 <span>Operaciones</span>
             </a>
-        </li>
+        </li> --}}
         
         <li class="nav-item">
             <a class="@if (request()->is('/admin/boxes')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/boxes') }}">
@@ -132,12 +132,12 @@
             </a>
         </li>
 
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/desbalanceo')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/desbalanceo') }}">
                 <i class="bi bi-activity"></i>
                 <span>Desbalanceo de cuentas</span>
             </a>
-        </li>
+        </li> --}}
 
         <li class="nav-item">
             <a class="@if (request()->is('/admin/traders')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/traders') }}">
@@ -211,17 +211,17 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#status-profit-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-kanban"></i><span>Status Profit</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link collapsed" data-bs-target="#status-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-kanban"></i><span>Status</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="status-profit-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <ul id="status-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a class="ps-2" href="/admin/status-profit/99999">
+                    <a class="ps-2" href="/admin/status/99999">
                         <i class="bi bi-circle"></i><span>MAM</span>
                     </a>
                 </li>
                 <li>
-                    <a class="ps-2" href="/admin/status-profit/99998">
+                    <a class="ps-2" href="/admin/status/99998">
                         <i class="bi bi-circle"></i><span>POOL</span>
                     </a>
                 </li>

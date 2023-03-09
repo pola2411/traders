@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Status Profit')
+@section('title', 'Status')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
@@ -9,11 +9,11 @@
 
 @section('content')
     <div class="pagetitle">
-        <h1>Status Profit</h1>
+        <h1>Status</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
-                <li class="breadcrumb-item active">Status Profit</li>
+                <li class="breadcrumb-item active">Status</li>
             </ol>
         </nav>
     </div>
@@ -57,5 +57,5 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-    <script src="{{ asset('js/statusprofit.js') }}"></script>
+    <script src="{{ asset('js/status.js') }}"></script>
 @endsection

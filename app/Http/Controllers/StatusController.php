@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class StatusProfitController extends Controller
+class StatusController extends Controller
 {
     public function index(Request $request)
     {
-        return view('statusprofit.show');
+        return view('status.show');
     }
 
     public function getDatos(Request $request)
@@ -21,6 +21,20 @@ class StatusProfitController extends Controller
         ->where("trader_id", $request->id)
         ->orderBy('status_profit.fecha', 'DESC')
         ->first();
+
+        $status_lotes = DB::table('status_lot')
+            ->join('traders', 'traders.id', '=', 'status_lot.trader_id')
+            ->select()
+            ->where("trader_id", $request->id)
+            ->orderBy('status_lot.fecha', 'DESC')
+            ->first();
+
+        $status_active = DB::table('status_active')
+            ->join('traders', 'traders.id', '=', 'status_active.trader_id')
+            ->select()
+            ->where("trader_id", $request->id)
+            ->orderBy('status_active.fecha', 'DESC')
+            ->first();
 
         $status_profit2 = DB::table('status_profit')
             ->join('traders', 'traders.id', '=', 'status_profit.trader_id')
@@ -38,9 +52,11 @@ class StatusProfitController extends Controller
         $data = array(
             "condicional" => $condicional,
             "status_profit" => $status_profit,
+            "status_lotes" => $status_lotes,
+            "status_active" => $status_active,
         );
 
-        return response()->view('statusprofit.tabla', $data, 200);
+        return response()->view('status.tabla', $data, 200);
     }
 
 }

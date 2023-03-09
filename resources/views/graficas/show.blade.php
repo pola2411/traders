@@ -55,6 +55,17 @@ Gráfica Balance/Equity
                             <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar información</button>
                         </div>
                     </div>
+                    <div class="row justify-content-ceter mt-2 mb-4 text-center">
+                        <div class="col-md-12 col-12 mt-2"><button class="btn btn-dark" id="mostrarTodo">Mostrar todo</button></div>
+
+                        <div class="col-md-4 col-12 mt-2"><button class="btn btn-outline-primary" id="mostrarBalance">Mostar solo balance</button></div>
+                        <div class="col-md-4 col-12 mt-2"><button class="btn btn-outline-success" id="mostrarEquity">Mostar solo equity</button></div>
+                        <div class="col-md-4 col-12 mt-2"><button class="btn btn-outline-warning" id="mostrarMargenLibre">Mostar solo margen libre</button></div>
+
+                        <div class="col-md-4 col-12 mt-2"><button class="btn btn-outline-success btn_balance_equity" id="mostrarBlanceEquity">Mostrar balance y equity</button></div>
+                        <div class="col-md-4 col-12 mt-2"><button class="btn btn-outline-success btn_equity_margen_libre" id="mostrarEquityMargenLibre">Mostrar equity y margen libre</button></div>                    
+                        <div class="col-md-4 col-12 mt-2"><button class="btn btn-outline-success btn_balance_margen_libre" id="mostrarBalanceMargenLibre">Mostrar balance y margen libre</button></div>
+                    </div>
                     <div id="balanceEquity"></div>
                 </div>
             </div>

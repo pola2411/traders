@@ -1,30 +1,12 @@
-// let sound = new Audio("../../audio/alarma.mp3");
-// $("#bocinaEncendida").click(function () {
-//     $("#bocinaEncendida").addClass("d-none");
-//     $("#bocinaApagada").removeClass("d-none");
-//     sound.pause();
-// });
-// $("#bocinaApagada").click(function () {
-//     $("#bocinaApagada").addClass("d-none");
-//     $("#bocinaEncendida").removeClass("d-none");
-// });
-
 //Se obtiene el valor de la URL desde el navegador
 var url = window.location + "";
 var separador = url.split("/");
-var id = separador[separador.length - 1];
+var traderID = separador[separador.length - 1];
+var boton_select = "";
 
 am5.ready(function () {
-    // Create root element
-    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
     var root = am5.Root.new("chartdiv");
-
-    // Set themes
-    // https://www.amcharts.com/docs/v5/concepts/themes/
     root.setThemes([am5themes_Animated.new(root)]);
-
-    // Create chart
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/
     var chart = root.container.children.push(
         am5xy.XYChart.new(root, {
             panX: true,
@@ -34,9 +16,7 @@ am5.ready(function () {
             pinchZoomX: true,
         })
     );
-
-    // Add cursor
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+    chart.get("colors").set("step", 5);
     var cursor = chart.set(
         "cursor",
         am5xy.XYCursor.new(root, {
@@ -44,12 +24,8 @@ am5.ready(function () {
         })
     );
     cursor.lineY.set("visible", false);
-
-    // Create axes
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
     var xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
-            maxDeviation: 0.2,
             baseInterval: {
                 timeUnit: "minute",
                 count: 1,
@@ -58,56 +34,42 @@ am5.ready(function () {
             tooltip: am5.Tooltip.new(root, {}),
         })
     );
-
     var yAxis = chart.yAxes.push(
         am5xy.ValueAxis.new(root, {
-            renderer: am5xy.AxisRendererY.new(root, {
-                
-            }),
+            renderer: am5xy.AxisRendererY.new(root, {}),
         })
     );
-
-    // Add series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-    var series = chart.series.push(
+    var series1 = chart.series.push(
         am5xy.LineSeries.new(root, {
             name: "Series",
             xAxis: xAxis,
             yAxis: yAxis,
-            valueYField: "value",
-            openValueYField: "valuefree",
+            valueYField: "open",
+            openValueYField: "close",
             valueXField: "date",
-            stroke: "#00f",
-            fill: "#00f4",
+            stroke: "#5D9C59",
+            fill: "#539165",
             tooltip: am5.Tooltip.new(root, {
                 labelText: "Margin: {valueY}",
             }),
         })
     );
-    
-     series.fills.template.setAll({
-        fillOpacity: 0.6,
-        visible: true,
-    });
 
-    
-        var series2 = chart.series.push(
+    var series2 = chart.series.push(
         am5xy.LineSeries.new(root, {
             name: "Series",
             xAxis: xAxis,
             yAxis: yAxis,
-            valueYField: "valuefree",
+            valueYField: "close",
             valueXField: "date",
-            stroke: "#6a972f",
-            fill: "#6a972f8e",
+            stroke: "#F7C04A",
+            fill: "#E7B10A",
             tooltip: am5.Tooltip.new(root, {
                 labelText: "Free Margin: {valueY}",
             }),
         })
     );
 
-    // Add scrollbar
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
     chart.set(
         "scrollbarX",
         am5.Scrollbar.new(root, {
@@ -117,26 +79,8 @@ am5.ready(function () {
 
     let hoy = new Date();
 
-    let inicio = new Date(hoy.getFullYear(), 0, 1);
-
-    let fechaInicio_inicio =
-        inicio.getFullYear() +
-        "-0" +
-        (inicio.getMonth() + 1) +
-        "-0" +
-        inicio.getDate() +
-        " 0" +
-        inicio.getHours() +
-        ":0" +
-        inicio.getMinutes() +
-        ":0" +
-        inicio.getSeconds();
-
     let mes = "";
     let dia = "";
-    let horas = "";
-    let minutos = "";
-    let segundos = "";
 
     if (hoy.getMonth().toString().length == 1) {
         mes = "-0" + (hoy.getMonth() + 1);
@@ -165,9 +109,6 @@ am5.ready(function () {
         minutos = ":" + hoy.getMinutes();
     }
 
-    let fechaFin_inicio =
-        hoy.getFullYear() + mes + dia + " " + "23" + ":59" + ":00";
-
     let semana = moment(hoy.getFullYear() + mes + dia, "YYYYMMDD").isoWeek();
     let inicio_semana = moment()
         .isoWeek(semana)
@@ -183,10 +124,14 @@ am5.ready(function () {
     $("#fechaDesdeInput").val(inicio_semana);
     $("#fechaHastaInput").val(fin_semana);
 
-    const margenFunction = (id, inicio, fin) => {
+    function setData(traderID, inicio, fin) {
         $.get({
-            url: "/admin/showMargen",
-            data: { id: id, inicio: inicio, fin: fin },
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
             success: function (response) {
                 var data = [];
                 $("#numeroTrader").text(response.tradersNombre[0].nombre);
@@ -194,20 +139,204 @@ am5.ready(function () {
                 response.traders.map(function (trader) {
                     data.push({
                         date: new Date(trader.fecha).getTime(),
-                        value: trader.margin,
-                        valuefree: trader.free_margin,
+                        close: trader.free_margin,
+                        open: trader.margin,
                     });
-                    series.data.setAll(data);
-                    series2.data.setAll(data);
                 });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
             },
             error: function (error) {
                 console.log(error);
             },
         });
-    };
+    }
 
-    margenFunction(id, inicio_semana, fin_semana);
+    function setDataMargin(traderID, inicio, fin) {
+        $.get({
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
+            success: function (response) {
+                var data = [];
+                $("#numeroTrader").text(response.tradersNombre[0].nombre);
+
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        open: trader.margin,
+                    });
+                });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
+    function setDataFreeMargin(traderID, inicio, fin) {
+        $.get({
+            url: "/admin/getTrader",
+            data: {
+                id: traderID,
+                inicio: inicio,
+                fin: fin,
+            },
+            success: function (response) {
+                var data = [];
+                $("#numeroTrader").text(response.tradersNombre[0].nombre);
+
+                response.traders.map(function (trader) {
+                    data.push({
+                        date: new Date(trader.fecha).getTime(),
+                        close: trader.free_margin,
+                    });
+                });
+
+                series1.data.setAll(data);
+                series2.data.setAll(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
+    setDataMargin(traderID, inicio_semana, fin_semana);
+
+    var i = 0;
+    var baseInterval = xAxis.get("baseInterval");
+    var baseDuration = xAxis.baseDuration();
+    var rangeDataItem;
+
+    am5.array.each(series1.dataItems, function (s1DataItem) {
+        var s1PreviousDataItem;
+        var s2PreviousDataItem;
+
+        var s2DataItem = series2.dataItems[i];
+
+        if (i > 0) {
+            s1PreviousDataItem = series1.dataItems[i - 1];
+            s2PreviousDataItem = series2.dataItems[i - 1];
+        }
+
+        var startTime = am5.time
+            .round(
+                new Date(s1DataItem.get("valueX")),
+                baseInterval.timeUnit,
+                baseInterval.count
+            )
+            .getTime();
+
+        // intersections
+        if (s1PreviousDataItem && s2PreviousDataItem) {
+            var x0 =
+                am5.time
+                    .round(
+                        new Date(s1PreviousDataItem.get("valueX")),
+                        baseInterval.timeUnit,
+                        baseInterval.count
+                    )
+                    .getTime() +
+                baseDuration / 2;
+            var y01 = s1PreviousDataItem.get("valueY");
+            var y02 = s2PreviousDataItem.get("valueY");
+
+            var x1 = startTime + baseDuration / 2;
+            var y11 = s1DataItem.get("valueY");
+            var y12 = s2DataItem.get("valueY");
+
+            var intersection = getLineIntersection(
+                {
+                    x: x0,
+                    y: y01,
+                },
+                {
+                    x: x1,
+                    y: y11,
+                },
+                {
+                    x: x0,
+                    y: y02,
+                },
+                {
+                    x: x1,
+                    y: y12,
+                }
+            );
+
+            startTime = Math.round(intersection.x);
+        }
+
+        // start range here
+        if (s2DataItem.get("valueY") > s1DataItem.get("valueY")) {
+            if (!rangeDataItem) {
+                rangeDataItem = xAxis.makeDataItem({});
+                var range = series1.createAxisRange(rangeDataItem);
+                rangeDataItem.set("value", startTime);
+                range.fills.template.setAll({
+                    fill: series2.get("fill"),
+                    fillOpacity: 0.6,
+                    visible: true,
+                });
+                range.strokes.template.setAll({
+                    stroke: series1.get("stroke"),
+                    strokeWidth: 1,
+                });
+            }
+        } else {
+            // if negative range started
+            if (rangeDataItem) {
+                rangeDataItem.set("endValue", startTime);
+            }
+
+            rangeDataItem = undefined;
+        }
+        // end if last
+        if (i == series1.dataItems.length - 1) {
+            if (rangeDataItem) {
+                rangeDataItem.set(
+                    "endValue",
+                    s1DataItem.get("valueX") + baseDuration / 2
+                );
+                rangeDataItem = undefined;
+            }
+        }
+
+        i++;
+    });
+
+    series1.appear(1000);
+    series2.appear(1000);
+    chart.appear(1000, 100);
+
+    function getLineIntersection(pointA1, pointA2, pointB1, pointB2) {
+        let x =
+            ((pointA1.x * pointA2.y - pointA2.x * pointA1.y) *
+                (pointB1.x - pointB2.x) -
+                (pointA1.x - pointA2.x) *
+                    (pointB1.x * pointB2.y - pointB1.y * pointB2.x)) /
+            ((pointA1.x - pointA2.x) * (pointB1.y - pointB2.y) -
+                (pointA1.y - pointA2.y) * (pointB1.x - pointB2.x));
+        let y =
+            ((pointA1.x * pointA2.y - pointA2.x * pointA1.y) *
+                (pointB1.y - pointB2.y) -
+                (pointA1.y - pointA2.y) *
+                    (pointB1.x * pointB2.y - pointB1.y * pointB2.x)) /
+            ((pointA1.x - pointA2.x) * (pointB1.y - pointB2.y) -
+                (pointA1.y - pointA2.y) * (pointB1.x - pointB2.x));
+        return {
+            x: x,
+            y: y,
+        };
+    }
 
     $(document).on("click", "#obtenerRegistros", () => {
         let fecha_inicio = $("#fechaDesdeInput").val();
@@ -226,7 +355,15 @@ am5.ready(function () {
                     confirmButtonColor: "#01bbcc",
                 });
             } else {
-                margenFunction(id, fecha_inicio, fecha_fin);
+                if (boton_select == "ambos") {
+                    setData(traderID, fecha_inicio, fecha_fin);
+                } else if (boton_select == "margin") {
+                    setDataMargin(traderID, fecha_inicio, fecha_fin);
+                } else if (boton_select == "free_margin") {
+                    setDataFreeMargin(traderID, fecha_inicio, fecha_fin);
+                } else {
+                    setData(traderID, fecha_inicio, fecha_fin);
+                }
             }
         } else {
             Swal.fire({
@@ -239,9 +376,55 @@ am5.ready(function () {
             });
         }
     });
-    // Make stuff animate on load
-    // https://www.amcharts.com/docs/v5/concepts/animations/
-    series.appear(1000);
-    series2.appear(1000);
-    chart.appear(1000, 100);
-}); // end am5.ready()
+
+    $(document).on("click", "#mostrarAmbos", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "ambos";
+
+        $("#mostrarAmbos").addClass("btn-dark");
+        $("#mostrarAmbos").removeClass("btn-outline-dark");
+
+        $("#mostrarMargin").addClass("btn-outline-success");
+        $("#mostrarMargin").removeClass("btn-success");
+
+        $("#mostrarFreeMargin").addClass("btn-outline-warning");
+        $("#mostrarFreeMargin").removeClass("btn-warning");
+
+        setData(traderID, fecha_inicio, fecha_fin);
+    });
+
+    $(document).on("click", "#mostrarMargin", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "margin";
+
+        $("#mostrarMargin").addClass("btn-success");
+        $("#mostrarMargin").removeClass("btn-outline-success");
+
+        $("#mostrarAmbos").addClass("btn-outline-dark");
+        $("#mostrarAmbos").removeClass("btn-dark");
+
+        $("#mostrarFreeMargin").addClass("btn-outline-warning");
+        $("#mostrarFreeMargin").removeClass("btn-warning");
+
+        setDataMargin(traderID, fecha_inicio, fecha_fin);
+    });
+
+    $(document).on("click", "#mostrarFreeMargin", () => {
+        let fecha_inicio = $("#fechaDesdeInput").val();
+        let fecha_fin = $("#fechaHastaInput").val();
+        boton_select = "free_margin";
+
+        $("#mostrarFreeMargin").addClass("btn-warning");
+        $("#mostrarFreeMargin").removeClass("btn-outline-warning");
+
+        $("#mostrarAmbos").addClass("btn-outline-dark");
+        $("#mostrarAmbos").removeClass("btn-dark");
+
+        $("#mostrarMargin").addClass("btn-outline-success");
+        $("#mostrarMargin").removeClass("btn-success");
+
+        setDataFreeMargin(traderID, fecha_inicio, fecha_fin);
+    });
+});
