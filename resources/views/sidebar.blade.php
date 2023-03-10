@@ -90,14 +90,14 @@
                 <span>Boxes</span>
             </a>
         </li>
-        {{--
-        <li class="nav-item">
+        
+        {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/boxes2')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/boxes2') }}">
                 <i class="bi bi-box-seam"></i>
                 <span>Boxes 2</span>
             </a>
-        </li>
-        --}}
+        </li> --}}
+        
         <li class="nav-item">
             <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/indexUSD') }}">
                 <i class="bi bi-currency-exchange"></i>
@@ -235,6 +235,20 @@
                     </a>
                 </li>
             </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/grafica-suma-lote')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/grafica-suma-lote') }}">
+                <i class="bi bi-file-plus"></i>
+                <span>Suma lote</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/grafica-equity')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/grafica-equity') }}">
+                <i class="bi bi-file-earmark-bar-graph"></i>
+                <span>Gráfica equity</span>
+            </a>
         </li>
 
         <li class="nav-item">

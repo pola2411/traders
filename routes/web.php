@@ -120,12 +120,11 @@ Route::get('/admin/getStatusGraficaProfit', [App\Http\Controllers\StatusGraficaC
 Route::get('/admin/grafica-lote/{id}', [App\Http\Controllers\StatusGraficaController::class, 'indexLote'])->name('graficalote')->middleware('auth');
 Route::get('/admin/getStatusGraficaLote', [App\Http\Controllers\StatusGraficaController::class, 'getGraficaLote']);
 
-
-Route::get('/admin/grafica-suma-lote/{par}', [App\Http\Controllers\StatusGraficaController::class, 'indexSumLote'])->name('graficasumalote')->middleware('auth');
-Route::get('/admin/grafica-equity/{id}', [App\Http\Controllers\StatusGraficaController::class, 'indexEquity'])->name('graficaequity')->middleware('auth');
-
+Route::get('/admin/grafica-suma-lote', [App\Http\Controllers\StatusGraficaController::class, 'indexSumLote'])->name('graficasumalote')->middleware('auth');
+Route::get('/admin/grafica-equity', [App\Http\Controllers\StatusGraficaController::class, 'indexEquity'])->name('graficaequity')->middleware('auth');
 
 Route::get('/admin/grafica-velocimetro/{par}', [App\Http\Controllers\StatusGraficaController::class, 'indexVelocimetro'])->name('velocimetro')->middleware('auth');
+
 
 Route::get('/admin/ejemplo', [App\Http\Controllers\EjemploController::class, 'index'])->name('ejemplo')->middleware('auth');
 Route::get('/admin/ejemplo1', [App\Http\Controllers\EjemploController1::class, 'index'])->name('ejemplo1')->middleware('auth');
