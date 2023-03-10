@@ -202,6 +202,65 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#profit-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-arrow-up-square"></i><span>Profit</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="profit-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="ps-2" href="/admin/grafica-profit/99999">
+                        <i class="bi bi-circle"></i><span>MAM</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ps-2" href="/admin/grafica-profit/99998">
+                        <i class="bi bi-circle"></i><span>POOL</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#lote-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-bounding-box"></i><span>Lote</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="lote-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="ps-2" href="/admin/grafica-lote/99999">
+                        <i class="bi bi-circle"></i><span>MAM</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ps-2" href="/admin/grafica-lote/99998">
+                        <i class="bi bi-circle"></i><span>POOL</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#ejemplo-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-body-text"></i></i><span>Ejemplos</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="ejemplo-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="ps-2" href="/admin/ejemplo">
+                        <i class="bi bi-circle"></i><span>Ejemplo</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ps-2" href="/admin/ejemplo1">
+                        <i class="bi bi-circle"></i><span>Ejemplo 1</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ps-2" href="/admin/ejemplo3">
+                        <i class="bi bi-circle"></i><span>Ejemplo 3</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#traderReport-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-file-earmark-bar-graph"></i><span>Trader report</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
@@ -215,8 +274,8 @@
                 @endforeach
             </ul>
         </li>
-        {{--
-        <li class="nav-item">
+        
+        {{-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#monitoreo-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-tv"></i><span>Monitoreo</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
@@ -237,7 +296,7 @@
                     </a>
                 </li>
             </ul>
-        </li>--}}
+        </li> --}}
 
 
         <li class="nav-item">
