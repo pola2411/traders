@@ -112,22 +112,26 @@ Route::get('/admin/showStatus', [App\Http\Controllers\StatusController::class, '
 
 //consultar status gráfica
 Route::get('/admin/status-grafica/{id}', [App\Http\Controllers\StatusGraficaController::class, 'index'])->name('statusgrafica')->middleware('auth');
-Route::get('/admin/getMonedasStatus', [App\Http\Controllers\StatusGraficaController::class, 'getMonedas']);
+Route::get('/admin/getMonedasStatus', [App\Http\Controllers\StatusGraficaController::class, 'getMonedas'])->middleware('auth');
 
 Route::get('/admin/grafica-profit/{id}', [App\Http\Controllers\StatusGraficaController::class, 'indexProfit'])->name('graficaprofit')->middleware('auth');
-Route::get('/admin/getStatusGraficaProfit', [App\Http\Controllers\StatusGraficaController::class, 'getGraficaProfit']);
+Route::get('/admin/getStatusGraficaProfit', [App\Http\Controllers\StatusGraficaController::class, 'getGraficaProfit'])->middleware('auth');
 
 Route::get('/admin/grafica-lote/{id}', [App\Http\Controllers\StatusGraficaController::class, 'indexLote'])->name('graficalote')->middleware('auth');
-Route::get('/admin/getStatusGraficaLote', [App\Http\Controllers\StatusGraficaController::class, 'getGraficaLote']);
+Route::get('/admin/getStatusGraficaLote', [App\Http\Controllers\StatusGraficaController::class, 'getGraficaLote'])->middleware('auth');
 
 Route::get('/admin/grafica-suma-lote', [App\Http\Controllers\StatusGraficaController::class, 'indexSumLote'])->name('graficasumalote')->middleware('auth');
 Route::get('/admin/grafica-equity', [App\Http\Controllers\StatusGraficaController::class, 'indexEquity'])->name('graficaequity')->middleware('auth');
 
-Route::get('/admin/grafica-velocimetro/{par}', [App\Http\Controllers\StatusGraficaController::class, 'indexVelocimetro'])->name('velocimetro')->middleware('auth');
+Route::get('/admin/cleo-data/{par}', [App\Http\Controllers\StatusGraficaController::class, 'indexVelocimetro'])->name('velocimetro')->middleware('auth');
+Route::get('/admin/cleoDataShow', [App\Http\Controllers\StatusGraficaController::class, 'cleoData'])->middleware('auth');
 
+Route::get('/admin/logs/', [App\Http\Controllers\LogsController::class, 'index'])->name('logs')->middleware('auth');
+Route::get('/admin/logsShow', [App\Http\Controllers\LogsController::class, 'getLogs'])->middleware('auth');
+Route::get('/admin/logsShowFiltro', [App\Http\Controllers\LogsController::class, 'getLogsFiltro'])->middleware('auth');
 
 Route::get('/admin/ejemplo', [App\Http\Controllers\EjemploController::class, 'index'])->name('ejemplo')->middleware('auth');
 Route::get('/admin/ejemplo1', [App\Http\Controllers\EjemploController1::class, 'index'])->name('ejemplo1')->middleware('auth');
 
 Route::get('/admin/ejemplo3', [App\Http\Controllers\EjemploController::class, 'index3'])->name('ejemplo3')->middleware('auth');
-Route::get('/admin/getEditEjemplo3', [App\Http\Controllers\EjemploController::class, 'getEditEjemplo3']);
+Route::get('/admin/getEditEjemplo3', [App\Http\Controllers\EjemploController::class, 'getEditEjemplo3'])->middleware('auth');

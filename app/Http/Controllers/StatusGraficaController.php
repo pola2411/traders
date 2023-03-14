@@ -84,4 +84,16 @@ class StatusGraficaController extends Controller
         return view('statusgrafica.showvelocimetro', compact('par'));
     }
 
+    public function cleoData(Request $request)
+    {
+        $pair = $request->pair;
+
+        $cleo_data = DB::table('cleo_data')
+            ->where('pair', $pair)
+            ->orderBy('cleo_data.id', 'DESC')
+            ->first();
+
+        return response(["pair" => $cleo_data]);
+    }
+
 }

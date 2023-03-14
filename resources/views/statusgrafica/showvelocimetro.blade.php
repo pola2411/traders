@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title') Velocimetros @endsection
+@section('title') Cleo Data @endsection
 
 @section('css')
 <script src="https://kit.fontawesome.com/ab4fa16bfb.js" crossorigin="anonymous"></script>
@@ -23,11 +23,11 @@
 @section('content')
 <div class="pagetitle d-flex justify-content-between">
     <div>
-        <h1>Velocimetros</h1>
+        <h1>Cleo Data</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Panel de control</a></li>
-                <li class="breadcrumb-item">Velocimetros</li>
+                <li class="breadcrumb-item">Cleo Data</li>
             </ol>
         </nav>
     </div>
@@ -45,9 +45,9 @@
                         <hr class="m-0 p-0 mb-2">
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-12"><div id="velocimetro3"></div></div>
-                        <div class="col-md-6 col-12"><div id="velocimetro2"></div></div>
-                        <div class="col-md-12 col-12"><div id="velocimetro1"></div></div>
+                        <div class="col-md-4 col-12"><div id="velocimetro1"></div></div>
+                        <div class="col-md-4 col-12"><div id="velocimetro2"></div></div>
+                        <div class="col-md-4 col-12"><div id="velocimetro3"></div></div>
                     </div>
                 </div>
             </div>

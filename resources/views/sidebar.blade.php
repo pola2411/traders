@@ -251,6 +251,25 @@
             </a>
         </li>
 
+        @php
+            $valores_moneda = DB::table('valores_moneda')->skip(1)->limit(28)->get();
+        @endphp
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#cleo-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-discord"></i><span>Cleo Data</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="cleo-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @foreach ($valores_moneda as $moneda)
+                    <li>
+                        <a class="ps-2" href="/admin/cleo-data/{{$moneda->moneda}}">
+                            <i class="bi bi-circle"></i><span>{{$moneda->moneda}}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </li>
+
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#ejemplo-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-body-text"></i></i><span>Ejemplos</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -312,6 +331,12 @@
             </ul>
         </li> --}}
 
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/logs')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/logs') }}">
+                <i class="bi bi-book-half"></i>
+                <span>Logs</span>
+            </a>
+        </li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ url('/admin/logout') }}">

@@ -113,7 +113,6 @@ am5.ready(function () {
 
     let mes = "";
     let dia = "";
-    let horas = "";
 
     if (hoy.getMonth().toString().length == 1) {
         mes = "-0" + (hoy.getMonth() + 1);
