@@ -135,3 +135,6 @@ Route::get('/admin/ejemplo1', [App\Http\Controllers\EjemploController1::class, '
 
 Route::get('/admin/ejemplo3', [App\Http\Controllers\EjemploController::class, 'index3'])->name('ejemplo3')->middleware('auth');
 Route::get('/admin/getEditEjemplo3', [App\Http\Controllers\EjemploController::class, 'getEditEjemplo3'])->middleware('auth');
+
+Route::get('/admin/cleoTabla', [App\Http\Controllers\StatusGraficaController::class, 'cleoTabla'])->name('cleotabla')->middleware('auth');
+Route::get('/admin/cleoTablaShow', [App\Http\Controllers\StatusGraficaController::class, 'cleoTablaShow'])->middleware('auth');

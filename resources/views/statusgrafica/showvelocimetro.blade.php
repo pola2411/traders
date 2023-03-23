@@ -38,13 +38,17 @@
         <div class="col-12">
             <div class="card pb-0">
                 <div class="card-body" style="padding-top: 20px;">
-                    <div class="row">
+                    <div class="row justify-content-center" id="datosNueovos">
                         <div class="pagetitle d-flex justify-content-between align-items-center">
                             <h1>{{$par}}</h1>
+                            <span id="ultimaHora">
+                                Última actualización: {{ ucfirst(Carbon\Carbon::parse($fecha)->diffForHumans()) }}
+                            </span>
                         </div>
                         <hr class="m-0 p-0 mb-2">
+                        
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-top: -8rem">
                         <div class="col-md-4 col-12"><div id="velocimetro1"></div></div>
                         <div class="col-md-4 col-12"><div id="velocimetro2"></div></div>
                         <div class="col-md-4 col-12"><div id="velocimetro3"></div></div>
@@ -81,6 +85,7 @@
 <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/es.js"></script>
 <script src="{{ asset('js/velocimetros.js') }}"></script>
 @endsection

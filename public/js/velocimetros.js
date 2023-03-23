@@ -68,14 +68,17 @@ am5.ready(function () {
             url: "/admin/cleoDataShow",
             data: { pair: pair },
             success: function (data) {
-                value = data.pair.market;
+                if (data.pair != null) {
+                    value = data.pair.market;
 
-                if (value == 1) {
-                    value = 0.75;
+                    if (value == 1) {
+                        value = 0.75;
+                    } else {
+                        value = 0.25;
+                    }
                 } else {
-                    value = 0.25;
+                    value = 0.5;
                 }
-
                 axisDataItem.animate({
                     key: "value",
                     to: value,
@@ -93,7 +96,7 @@ am5.ready(function () {
 
     setInterval(function () {
         getData();
-    }, 5000);
+    }, 20000);
     chart.appear(1000, 100);
 });
 
@@ -163,16 +166,19 @@ am5.ready(function () {
             url: "/admin/cleoDataShow",
             data: { pair: pair },
             success: function (data) {
-                value = data.pair.direction;
+                if (data.pair != null) {
+                    value = data.pair.direction;
 
-                if (value == -1) {
-                    value = 0.75;
-                } else if (value == 0) {
-                    value = 0.5;
+                    if (value == -1) {
+                        value = 0.75;
+                    } else if (value == 0) {
+                        value = 0.5;
+                    } else {
+                        value = 0.25;
+                    }
                 } else {
-                    value = 0.25;
+                    value = 0.5;
                 }
-
                 axisDataItem.animate({
                     key: "value",
                     to: value,
@@ -190,7 +196,7 @@ am5.ready(function () {
 
     setInterval(function () {
         getData();
-    }, 5000);
+    }, 20000);
     chart.appear(1000, 100);
 });
 
@@ -223,7 +229,7 @@ am5.ready(function () {
         am5xy.ValueAxis.new(root, {
             maxDeviation: 0,
             min: 1,
-            max: 4,
+            max: 9,
             strictMinMax: true,
             renderer: axisRenderer,
         })
@@ -247,16 +253,36 @@ am5.ready(function () {
             url: "/admin/cleoDataShow",
             data: { pair: pair },
             success: function (data) {
+                // if (data.pair != null) {
                 value = data.pair.shot;
                 compra = data.pair.direction;
 
+                let fecha = moment(
+                    data.pair.fecha,
+                    "YYYY-MM-DD hh:mm:ss"
+                ).fromNow();
+
+                $("#ultimaHora").text(`Última actualización: ${fecha}`);
+
                 if (compra == 1) {
-                    if (value != 1 && value != 2 && value != 3 && value != 4) {
+                    if (
+                        value != 1 &&
+                        value != 2 &&
+                        value != 3 &&
+                        value != 4 &&
+                        value != 5 &&
+                        value != 6 &&
+                        value != 7 &&
+                        value != 8
+                    ) {
                         value = 2.5;
                     }
                 } else {
                     value = 1;
                 }
+                // } else {
+                //     value = 1;
+                // }
 
                 axisDataItem.animate({
                     key: "value",
