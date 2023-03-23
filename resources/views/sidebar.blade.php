@@ -271,6 +271,14 @@
         </li>
 
         <li class="nav-item">
+            <a class="@if (request()->is('/admin/cleoTabla')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/cleoTabla') }}">
+                <i class="bi bi-discord"></i>
+                <span>Cleo tabla</span>
+            </a>
+        </li>
+
+
+        <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#ejemplo-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-body-text"></i></i><span>Ejemplos</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
