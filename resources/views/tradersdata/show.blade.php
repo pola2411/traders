@@ -1,16 +1,8 @@
 @extends('index')
 
 @section('css')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
-
-<style>
-    #chartdiv {
-        width: 100%;
-        height: 500px;
-        max-width: 100%
-    }
-</style>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
 @endsection
 
 @section('title') Traders Data @endsection

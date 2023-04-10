@@ -8,10 +8,8 @@
         ->first();
 @endphp
 
-<table class="table table-striped table-bordered nowrap"
-    style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;">
-    <thead class="text-center sticky-top"
-        style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
+<table class="table table-striped table-bordered nowrap" style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;" id="trader_data">
+    <thead class="text-center sticky-top" style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
             <th data-priority="0" scope="col" colspan="7">{{ $tradersNombre->Signal }}</th>
             <th data-priority="0" scope="col" colspan="3">Lotes</th>
@@ -297,37 +295,30 @@
     </tbody>
 </table>
 <br>
+<br>
 <div class="pagetitle">
     <h1>Traders Data Analysis</h1>
     <div id="contTable2" style="overflow-x: auto;"></div>
 </div>
 
-<table class="table table-striped table-bordered nowrap"
-    style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;">
-    <thead class="text-center sticky-top"
-        style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
+<table class="table table-striped table-bordered nowrap" style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;" id="trader_analysis">
+    <thead class="text-center sticky-top" style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
             <th data-priority="0" scope="col" colspan="2">{{ $tradersNombre->Signal }}</th>
             <th data-priority="0" scope="col" colspan="3">Lotes</th>
             <th data-priority="0" scope="col" colspan="3">Advance</th>
             <th data-priority="0" scope="col" colspan="3">Retracement</th>
             <th data-priority="0" scope="col" colspan="4">PIP</th>
-            <th data-priority="0" scope="col" colspan="5">Hours</th>
+            <th data-priority="0" scope="col" colspan="4">Hours</th>
         </tr>
         <tr>
             <th data-priority="0" scope="col">PAIR</th>
             <th data-priority="0" scope="col">Registros</th>
-
             <th data-priority="0" scope="col" colspan="3">RANGES</th>
-
             <th data-priority="0" scope="col" colspan="3">RANGES</th>
-
             <th data-priority="0" scope="col" colspan="3">RANGES</th>
-
             <th data-priority="0" scope="col" colspan="4">RANGES</th>
-
-            <th data-priority="0" scope="col" colspan="5">RANGES</th>
-
+            <th data-priority="0" scope="col" colspan="4">RANGES</th>
         </tr>
     </thead>
     <tbody style="vertical-align: middle !important; text-align: center !important; padding: 5px !important">
