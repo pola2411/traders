@@ -151,12 +151,11 @@ am5.ready(function () {
 
     $(document).on("click", "#imprimirAnalisis", function () {
         let id = $(this).data("id");
-        let moneda = $(this).data("moneda");
         let fecha_inicio =  $(this).data("fechaini");
         let fecha_fin = $(this).data("fechafin");
         
 
-        window.open(`/admin/traders-analysis/${id}?moneda=${moneda}&fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`, "_blank");
+        window.open(`/admin/traders-analysis/${id}?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`, "_blank");
     });
 
     $(document).on("click", ".verOficina", function () {

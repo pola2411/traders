@@ -111,7 +111,7 @@
                 @foreach ($monedas as $moneda)
                     @php
                         $registros = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -120,7 +120,7 @@
                         
                         $pipsump = DB::table('operaciones_traders')
                             ->select(DB::raw('SUM(pips) as sumpip'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -130,7 +130,7 @@
                         
                         $pipsumn = DB::table('operaciones_traders')
                             ->select(DB::raw('SUM(pips) as sumpip'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -140,7 +140,7 @@
                         
                         $pipsumtotal = DB::table('operaciones_traders')
                             ->select(DB::raw('SUM(pips) as sumpip'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -148,7 +148,7 @@
                             ->get();
                         
                         $buy = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('type', 'Buy')
                             ->where('advance', '!=', 999999)
@@ -157,7 +157,7 @@
                             ->count();
                         
                         $sell = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('type', 'Sell')
                             ->where('advance', '!=', 999999)
@@ -166,7 +166,7 @@
                             ->count();
                         
                         $volumeavg = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -175,7 +175,7 @@
                         
                         $volumestd = DB::table('operaciones_traders')
                             ->select(DB::raw('stddev(volume) as std'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -184,7 +184,7 @@
                         
                         $volumemax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(volume) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -192,7 +192,7 @@
                             ->get();
                         
                         $advavg = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -201,7 +201,7 @@
                         
                         $advstd = DB::table('operaciones_traders')
                             ->select(DB::raw('stddev(advance) as std'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -210,7 +210,7 @@
                         
                         $advmax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(advance) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -218,7 +218,7 @@
                             ->get();
                         
                         $retavg = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -227,7 +227,7 @@
                         
                         $retstd = DB::table('operaciones_traders')
                             ->select(DB::raw('stddev(retracement) as std'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -236,7 +236,7 @@
                         
                         $retmax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(retracement) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -244,7 +244,7 @@
                             ->get();
                         
                         $pipavg = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -253,7 +253,7 @@
                         
                         $pipstd = DB::table('operaciones_traders')
                             ->select(DB::raw('stddev(pips) as std'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -262,7 +262,7 @@
                         
                         $pipmax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(pips) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -271,7 +271,7 @@
                         
                         $pipmin = DB::table('operaciones_traders')
                             ->select(DB::raw('MIN(pips) as min'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -279,7 +279,7 @@
                             ->get();
                         
                         $minavg = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -288,7 +288,7 @@
                         
                         $minstd = DB::table('operaciones_traders')
                             ->select(DB::raw('stddev(minutes) as std'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -297,7 +297,7 @@
                         
                         $minmax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(minutes) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -306,7 +306,7 @@
                         
                         $profsum = DB::table('operaciones_traders')
                             ->select(DB::raw('SUM(profit) as profit'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -317,7 +317,7 @@
 
                     @if ($registros > 0)
                         <tr>
-                            <td>{{ $moneda->moneda }}</td>
+                            <td>{{ $moneda }}</td>
                             <td>{{ $registros }}</td>
                             <td>{{ number_format($pipsump[0]->sumpip, 2) }}</td>
                             <td>{{ number_format($pipsumn[0]->sumpip * -1, 2) }}</td>
@@ -397,7 +397,7 @@
                 @foreach ($monedas as $moneda)
                     @php
                         $registros = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -406,7 +406,7 @@
                         
                         $volumemax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(volume) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -415,7 +415,7 @@
                         
                         $volumemin = DB::table('operaciones_traders')
                             ->select(DB::raw('MIN(volume) as min'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -427,7 +427,7 @@
                         $mitadvol = $volmax / 1.2;
                         
                         $countv = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -438,7 +438,7 @@
                             ->count();
                         
                         $countv2 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -448,7 +448,7 @@
                             ->count();
                         
                         $countv3 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -459,7 +459,7 @@
                         
                         $advmax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(advance) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -468,7 +468,7 @@
                         
                         $advmin = DB::table('operaciones_traders')
                             ->select(DB::raw('MIN(advance) as min'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -481,7 +481,7 @@
                         $mitad2adv = $mitadadv * 2;
                         
                         $countadv = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -492,7 +492,7 @@
                             ->count();
                         
                         $countadv2 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -502,7 +502,7 @@
                             ->count();
                         
                         $countadv3 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -512,7 +512,7 @@
                             ->count();
                         
                         $countadv4 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -523,7 +523,7 @@
                         
                         $retmax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(retracement) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -532,7 +532,7 @@
                         
                         $retmin = DB::table('operaciones_traders')
                             ->select(DB::raw('MIN(retracement) as min'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -545,7 +545,7 @@
                         $mitad2ret = $mitadret * 2;
                         
                         $countret = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -556,7 +556,7 @@
                             ->count();
                         
                         $countret2 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -566,7 +566,7 @@
                             ->count();
                         
                         $countret3 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -576,7 +576,7 @@
                             ->count();
                         
                         $countret4 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -587,7 +587,7 @@
                         
                         $pipmax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(pips) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -596,7 +596,7 @@
                         
                         $pipmin = DB::table('operaciones_traders')
                             ->select(DB::raw('MIN(pips) as min'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -609,7 +609,7 @@
                         $mitad2pip = $mitadpip * 2;
                         
                         $countp = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -620,7 +620,7 @@
                             ->count();
                         
                         $countp2 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -630,7 +630,7 @@
                             ->count();
                         
                         $countp3 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -640,7 +640,7 @@
                             ->count();
                         
                         $countp4 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -651,7 +651,7 @@
                         
                         $minmax = DB::table('operaciones_traders')
                             ->select(DB::raw('MAX(minutes) as max'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -660,7 +660,7 @@
                         
                         $minumin = DB::table('operaciones_traders')
                             ->select(DB::raw('MIN(minutes) as min'))
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -673,7 +673,7 @@
                         $mitad2min = $mitadmin * 2;
                         
                         $countm = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -684,7 +684,7 @@
                             ->count();
                         
                         $countm2 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -694,7 +694,7 @@
                             ->count();
                         
                         $countm3 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -704,7 +704,7 @@
                             ->count();
                         
                         $countm4 = DB::table('operaciones_traders')
-                            ->where('symbol', $moneda->moneda)
+                            ->where('symbol', $moneda)
                             ->where('trader', $tradersNombre->id)
                             ->where('advance', '!=', 999999)
                             ->where('retracement', '!=', 999999)
@@ -717,7 +717,7 @@
 
                     @if ($registros > 0)
                         <tr>
-                            <td>{{ $moneda->moneda }}</td>
+                            <td>{{ $moneda }}</td>
                             <td>{{ $registros }}</td>
 
 

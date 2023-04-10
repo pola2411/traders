@@ -59,6 +59,10 @@ Route::get('/admin/indexUSD', [App\Http\Controllers\IndexUSDController::class, '
 Route::get('/admin/getMonedas', [App\Http\Controllers\IndexUSDController::class, 'getMonedas'])->middleware('auth');
 Route::get('/admin/getIndexUSD', [App\Http\Controllers\IndexUSDController::class, 'getIndexUSD'])->middleware('auth');
 
+Route::get('/admin/indexUSDCADCHF', [App\Http\Controllers\IndexUSDCADCHFController::class, 'index'])->middleware('auth');
+Route::get('/admin/getMonedasUSDCADCHF', [App\Http\Controllers\IndexUSDCADCHFController::class, 'getMonedasUSDCADCHF'])->middleware('auth');
+Route::get('/admin/getIndexUSDUSDCADCHF', [App\Http\Controllers\IndexUSDCADCHFController::class, 'getIndexUSDUSDCADCHF'])->middleware('auth');
+
 //monitor
 Route::get('/admin/monitor', [App\Http\Controllers\MonitorController::class, 'index'])->middleware('auth');
 Route::get('/admin/showMonitor', [App\Http\Controllers\MonitorController::class, 'getMonitor'])->middleware('auth');

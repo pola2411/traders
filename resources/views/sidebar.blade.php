@@ -1,6 +1,7 @@
 @php
     $traders = DB::table("traders")->where("activado", "activado")->orderBy("id", "DESC")->get();        
     $traders_data = DB::table('traders_data')->get();
+    $valores_moneda = array("EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY", "EURGBP", "EURAUD", "EURNZD", "GBPAUD", "GBPNZD", "AUDNZD", "EURCAD", "EURCHF", "EURJPY", "GBPCAD", "GBPCHF", "GBPJPY", "AUDCAD", "AUDCHF", "AUDJPY", "NZDCAD", "NZDCHF", "NZDJPY", "CADCHF", "CADJPY", "CHFJPY");
 @endphp        
 
 <header id="header" class="header fixed-top d-flex align-items-center">
@@ -102,6 +103,13 @@
             <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/indexUSD') }}">
                 <i class="bi bi-currency-exchange"></i>
                 <span>Index USD</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/indexUSDCADCHF')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/indexUSDCADCHF') }}">
+                <i class="bi bi-currency-exchange"></i>
+                <span>Index USDCADCHF</span>
             </a>
         </li>
 
@@ -251,10 +259,6 @@
             </a>
         </li>
 
-        @php
-            $valores_moneda = DB::table('valores_moneda')->skip(1)->limit(28)->get();
-        @endphp
-
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#cleo-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-discord"></i><span>Cleo Data</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -262,8 +266,8 @@
             <ul id="cleo-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($valores_moneda as $moneda)
                     <li>
-                        <a class="ps-2" href="/admin/cleo-data/{{$moneda->moneda}}">
-                            <i class="bi bi-circle"></i><span>{{$moneda->moneda}}</span>
+                        <a class="ps-2" href="/admin/cleo-data/{{$moneda}}">
+                            <i class="bi bi-circle"></i><span>{{$moneda}}</span>
                         </a>
                     </li>
                 @endforeach
