@@ -99,6 +99,10 @@ Route::get('/admin/traders-data/{id}', [App\Http\Controllers\TradersDataControll
 Route::get('/admin/getInfo', [App\Http\Controllers\TradersDataController::class, 'getInfo'])->middleware('auth');
 Route::get('/admin/traders-analysis/{id}', [App\Http\Controllers\TradersDataController::class, 'getPDF'])->middleware('auth');
 
+Route::get('/admin/traders-data-apertura/{id}', [App\Http\Controllers\TradersDataAperturaController::class, 'index'])->middleware('auth');
+Route::get('/admin/getInfoApertura', [App\Http\Controllers\TradersDataAperturaController::class, 'getInfo'])->middleware('auth');
+Route::get('/admin/traders-analysis-apertura/{id}', [App\Http\Controllers\TradersDataAperturaController::class, 'getPDF'])->middleware('auth');
+
 //Traders
 Route::get('/admin/traders', [App\Http\Controllers\TraderController::class, 'index'])->middleware('auth');
 Route::get('/admin/showTraders', [App\Http\Controllers\TraderController::class, 'getTrader'])->middleware('auth');

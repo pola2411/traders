@@ -129,7 +129,24 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-table"></i><span>Traders Data</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-table"></i><span>Traders Data Apertura</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tradersdata-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @foreach ($traders_data as $trader)
+                    @if(strlen($trader->Signal) > 0)
+                        <li>
+                            <a class="ps-2" href="/admin/traders-data-apertura/{{$trader->id}}">
+                                <i class="bi bi-circle"></i><span>Trader {{ $trader->id }} ({{$trader->Signal}})</span>
+                            </a>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-table"></i><span>Traders Data Cierre</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="tradersdata-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders_data as $trader)
