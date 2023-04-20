@@ -1,5 +1,7 @@
 $(document).ready(function () {
+    let hoy_temprano = moment().format("YYYY-MM-DD");
     let hoy = moment().format("YYYY-MM-DD HH:mm:ss");
+    $("#fechaInicioInput").val(`${hoy_temprano} 00:00:00`);
     $("#fechaFinInput").val(hoy);
     let url = "/admin/logsShow";
 
