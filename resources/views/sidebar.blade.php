@@ -85,12 +85,15 @@
             </a>
         </li> --}}
         
+        {{--
         <li class="nav-item">
             <a class="@if (request()->is('/admin/boxes')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/boxes') }}">
                 <i class="bi bi-boxes"></i>
                 <span>Boxes</span>
             </a>
         </li>
+        --}}
+
         
         {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/boxes2')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/boxes2') }}">
