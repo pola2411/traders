@@ -74,7 +74,7 @@
         <li class="nav-item">
             <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/dashboard') }}">
                 <i class="bi bi-grid"></i>
-                <span>Panel de control</span>
+                <span>Panel de control Paola</span>
             </a>
         </li>        
 
