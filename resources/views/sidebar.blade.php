@@ -74,7 +74,7 @@
         <li class="nav-item">
             <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/dashboard') }}">
                 <i class="bi bi-grid"></i>
-                <span>Panel de control Paola</span>
+                <span>Panel de control</span>
             </a>
         </li>        
 
@@ -108,13 +108,15 @@
                 <span>Index USD</span>
             </a>
         </li>
-
+        
+        {{--
         <li class="nav-item">
             <a class="@if (request()->is('/admin/indexUSDCADCHF')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/indexUSDCADCHF') }}">
                 <i class="bi bi-currency-exchange"></i>
                 <span>Index USDCADCHF</span>
             </a>
         </li>
+        --}}
 
         {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/desbalanceo')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/desbalanceo') }}">
@@ -129,7 +131,8 @@
                 <span>Traders</span>
             </a>
         </li>
-
+         
+        {{--}}
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-table"></i><span>Traders Data Apertura</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -146,6 +149,8 @@
                 @endforeach
             </ul>
         </li>
+        --}}
+
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
@@ -164,6 +169,8 @@
             </ul>
         </li>
 
+
+        {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#momento-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-clock"></i><span>Momento</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -180,6 +187,8 @@
                 @endforeach
             </ul>
         </li>
+        --}}
+
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#equitybalance-nav" data-bs-toggle="collapse" href="#">
@@ -196,6 +205,8 @@
             </ul>
         </li>        
 
+         
+        {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#margen-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-graph-up"></i><span>Margen/Margen Libre</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -210,6 +221,8 @@
                 @endforeach
             </ul>
         </li>
+        --}}
+
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#status-nav" data-bs-toggle="collapse" href="#">
@@ -229,6 +242,8 @@
             </ul>
         </li>
 
+
+        {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#profit-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-arrow-up-square"></i><span>Profit</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -246,7 +261,9 @@
                 </li>
             </ul>
         </li>
+        --}}
 
+        {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#lote-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-bounding-box"></i><span>Lote</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -264,20 +281,26 @@
                 </li>
             </ul>
         </li>
+        --}}
 
+        {{--
         <li class="nav-item">
             <a class="@if (request()->is('/admin/grafica-suma-lote')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/grafica-suma-lote') }}">
                 <i class="bi bi-file-plus"></i>
                 <span>Suma lote</span>
             </a>
         </li>
+        --}}
 
+        {{--
         <li class="nav-item">
             <a class="@if (request()->is('/admin/grafica-equity')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/grafica-equity') }}">
                 <i class="bi bi-file-earmark-bar-graph"></i>
                 <span>Gráfica equity</span>
             </a>
         </li>
+        --}}
+
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#cleo-nav" data-bs-toggle="collapse" href="#">
@@ -301,7 +324,7 @@
             </a>
         </li>
 
-
+        {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#ejemplo-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-body-text"></i></i><span>Ejemplos</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -324,7 +347,9 @@
                 </li>
             </ul>
         </li>
+        --}}
 
+        {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#traderReport-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-file-earmark-bar-graph"></i><span>Trader report</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -339,6 +364,7 @@
                 @endforeach
             </ul>
         </li>
+        --}}
         
         {{-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#monitoreo-nav" data-bs-toggle="collapse" href="#">
