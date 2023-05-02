@@ -1,8 +1,8 @@
 $(document).ready(function () {
     let hoy_temprano = moment().format("YYYY-MM-DD");
-    let hoy = moment().format("YYYY-MM-DD HH:mm:ss");
+    let hoy = moment().format("YYYY-MM-DD");
     $("#fechaInicioInput").val(`${hoy_temprano} 00:00:00`);
-    $("#fechaFinInput").val(hoy);
+    $("#fechaFinInput").val(`${hoy} 23:59:59`);
     let url = "/admin/logsShow";
 
     const tablaResumen = (url) => {
