@@ -242,6 +242,25 @@
             </ul>
         </li>
 
+        
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#status-magic-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-magic"></i><span>Magic Number</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="status-magic-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="ps-2" href="/admin/statusMagic/99999">
+                        <i class="bi bi-circle"></i><span>MAM</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ps-2" href="/admin/statusMagic/99998">
+                        <i class="bi bi-circle"></i><span>POOL</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
 
         {{--
         <li class="nav-item">

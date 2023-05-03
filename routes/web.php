@@ -114,9 +114,14 @@ Route::get('/admin/momento/{id}', [App\Http\Controllers\MomentoController::class
 Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class, 'getMomento'])->middleware('auth');
 Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class, 'getMomento'])->middleware('auth');
 
+//consultar operaciones magic number
+Route::get('/admin/statusMagic/{id}', [App\Http\Controllers\MagicOperacionController::class, 'index'])->name('status')->middleware('auth');
+Route::get('/admin/showStatusmagic', [App\Http\Controllers\MagicOperacionController::class, 'getDatos']);
+
 //consultar status
 Route::get('/admin/status/{id}', [App\Http\Controllers\StatusController::class, 'index'])->name('status')->middleware('auth');
 Route::get('/admin/showStatus', [App\Http\Controllers\StatusController::class, 'getDatos']);
+
 
 //consultar status gráfica
 Route::get('/admin/status-grafica/{id}', [App\Http\Controllers\StatusGraficaController::class, 'index'])->name('statusgrafica')->middleware('auth');
