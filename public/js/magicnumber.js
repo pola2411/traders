@@ -13,12 +13,12 @@ const tableStatus = () => {
             table = $("#status").DataTable({
                 language: {
                     processing: "Procesando...",
-                    lengthMenu: "Mostrar _MENU_ pagos",
+                    lengthMenu: "Mostrar _MENU_ monedas",
                     zeroRecords: "No se encontraron resultados",
-                    emptyTable: "No se ha registrado ningún pago",
+                    emptyTable: "No se ha registrado ninguna moneda",
                     infoEmpty:
-                        "Mostrando pagos del 0 al 0 de un total de 0 pagos",
-                    infoFiltered: "(filtrado de un total de _MAX_ pagos)",
+                        "Mostrando monedas del 0 al 0 de un total de 0 monedas",
+                    infoFiltered: "(filtrado de un total de _MAX_ monedas)",
                     search: "Buscar:",
                     infoThousands: ",",
                     loadingRecords: "Cargando...",
@@ -190,7 +190,7 @@ const tableStatus = () => {
                                 "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
                         },
                     },
-                    info: "Mostrando de _START_ a _END_ de _TOTAL_ pagos",
+                    info: "Mostrando de _START_ a _END_ de _TOTAL_ monedas",
                 },
                 lengthMenu: [
                     [50, 100, 150, -1],
@@ -211,7 +211,4 @@ tableStatus();
 setInterval(function () {
     table.destroy();
     tableStatus();
-}, 3000000);
-
-var cualquierCadena = "40301010"; 
-console.log(cualquierCadena.substring(6,7))
+}, 50000);

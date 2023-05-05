@@ -20,161 +20,301 @@ class MagicOperacionController extends Controller
         $magiceurusd = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[0])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
-       
         $magicgbpusd = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[1])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicaudusd = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[2])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicnzdusd = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[3])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicusdcad = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[4])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicusdchf = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[5])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicusdjpy = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[6])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magiceurgbp = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[7])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magiceuraud = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[8])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magiceurnzd = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[9])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicgbpaud = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[10])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicgbpnzd = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[11])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicaudnzd = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[12])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magiceurcad = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[13])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magiceurchf = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[14])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magiceurjpy = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[15])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicgbpcad = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[16])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicgbpchf = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[17])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicgbpjpy = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[18])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicaudcad = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[19])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicaudchf = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[20])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicaudjpy = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[21])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicnzdcad = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[22])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicnzdchf = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[23])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicnzdjpy = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[24])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magiccadchf = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[25])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magiccadjpy = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[26])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $magicchfjpy = DB::table('operaciones')
             ->where('symbol', '=', $valores_moneda[27])
             ->where("trader_id", $request->id)
+            ->where(function ($query) {
+                $query->where('magicnumber', 'like', '403%')
+                    ->orWhere('magicnumber', 'like', '404%');
+            })
+            ->orderBy('magicnumber', 'ASC')
             ->get();
 
         $status_profit = DB::table('status_profit')
-        ->join('traders', 'traders.id', '=', 'status_profit.trader_id')
-        ->select()
-        ->where("trader_id", $request->id)
-        ->orderBy('status_profit.fecha', 'DESC')
-        ->first();
+            ->join('traders', 'traders.id', '=', 'status_profit.trader_id')
+            ->select()
+            ->where("trader_id", $request->id)
+            ->orderBy('status_profit.fecha', 'DESC')
+            ->first();
 
         $status_profit2 = DB::table('status_profit')
-        ->join('traders', 'traders.id', '=', 'status_profit.trader_id')
-        ->select()
-        ->where("trader_id", $request->id)
-        ->orderBy('status_profit.fecha', 'DESC')
-        ->get();
+            ->join('traders', 'traders.id', '=', 'status_profit.trader_id')
+            ->select()
+            ->where("trader_id", $request->id)
+            ->orderBy('status_profit.fecha', 'DESC')
+            ->get();
 
-        if(sizeof($status_profit2) > 0){
+
+        if (sizeof($status_profit2) > 0) {
             $condicional = true;
-        }else{
+        } else {
             $condicional = false;
         }
 
@@ -209,9 +349,11 @@ class MagicOperacionController extends Controller
             "magiccadchf" => $magiccadchf,
             "magiccadjpy" => $magiccadjpy,
             "magicchfjpy" => $magicchfjpy,
+            "trader_id" => $request->id,
         );
 
         return response()->view('magicnumber.tabla', $data, 200);
     }
+
 
 }

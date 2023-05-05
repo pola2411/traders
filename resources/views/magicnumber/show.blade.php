@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Status')
+@section('title', 'Magic Number')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">

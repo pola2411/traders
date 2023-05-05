@@ -239,6 +239,11 @@
                         <i class="bi bi-circle"></i><span>POOL</span>
                     </a>
                 </li>
+                <li>
+                    <a class="ps-2" href="/admin/status/99997">
+                        <i class="bi bi-circle"></i><span>POOL II</span>
+                    </a>
+                </li>
             </ul>
         </li>
 
@@ -255,7 +260,13 @@
                 </li>
                 <li>
                     <a class="ps-2" href="/admin/statusMagic/99998">
-                        <i class="bi bi-circle"></i><span>POOL</span>
+                        <i class="bi bi-circle"></i><span>POOL I</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="ps-2" href="/admin/statusMagic/99997">
+                        <i class="bi bi-circle"></i><span>POOL II</span>
                     </a>
                 </li>
             </ul>
