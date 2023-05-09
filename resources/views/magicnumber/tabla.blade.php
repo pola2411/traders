@@ -1462,8 +1462,9 @@
         <thead>
             <tr>
                 <th data-priority="0" scope="col" colspan="4">Trader: <span
-                        style="font-weight: 500">{{ $status_profit->nombre }}</span></th>
-                <th data-priority="0" scope="col" colspan="7">Total totales: <span {{-- style="font-weight: 500">{{ $sum_totales }}</span> --}} </th>
+                        style="font-weight: 500">{{ $nombre_trader->nombre }}</span></th>
+                <th data-priority="0" scope="col" colspan="7">Total totales: <span
+                        style="font-weight: 500">{{ $sum_totales }}</span> </th>
             </tr>
             <tr>
                 <th>MONEDA</th>
@@ -1479,21 +1480,48 @@
                 <th>Total</th>
             </tr>
         </thead>
+        <div class="text-center">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-dark mb-3" id="obtener403">Serie 403</button>
+                    <button type="button" class="btn btn-dark mb-3" id="obtener404">Serie 404</button>
+                    <button type="button" class="btn btn-dark mb-3" id="obtener405">Serie 405</button>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-dark mb-3" id="obtenerTodos">Todas las series</button>
 
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+        </div>
         <tbody>
             <tr>
                 <td data-priority="0" scope="col">EURUSD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if ($sumabuy_array[$i] != $sumasell_array[$i] && $sumasell_array[$i] > 0 && $sumabuy_array[$i] > 0)
+                    @php
+                        $sumabuy_sell = $sumabuy_array[$i] + $sumasell_array[$i];
+                    @endphp
+                    @if ($sumabuy_array[$i] == $sumasell_array[$i] && $sumabuy_array[$i] > 0 && $sumasell_array[$i] > 0)
                         <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurusd[$i] }}
-                        @elseif ($sumabuy_array[$i] != $sumasell_array[$i] && $sumasell_array[$i] < 0 && $sumabuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_eurusd[$i] }}
-                        @elseif ($sumabuy_array[$i] != $sumasell_array[$i])
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurusd[$i] }}</td>
+                    @elseif ($sumabuy_array[$i] == $sumasell_array[$i] && $sumabuy_array[$i] != 0 && $sumasell_array[$i] != 0)
                         <td data-priority="0" scope="col"
                             style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurusd[$i] }}</td>
-                    @else
+                    @elseif(
+                        ($sumabuy_array[$i] != $sumasell_array[$i] && $sumasell_array[$i] > 0 && $sumabuy_array[$i] > 0) ||
+                            $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurusd[$i] }}
+                        @elseif (
+                            ($sumabuy_array[$i] != $sumasell_array[$i] && $sumasell_array[$i] < 0 && $sumabuy_array[$i] < 0) ||
+                                $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_eurusd[$i] }}
+                        @else
                         <td data-priority="0" scope="col">{{ $array_eurusd[$i] }}</td>
                     @endif
                 @endfor
@@ -1503,24 +1531,28 @@
             <tr>
                 <td data-priority="0" scope="col">GBPUSD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumagbpusdbuy_array[$i] != $sumagbpusdsell_array[$i] &&
-                            $sumagbpusdsell_array[$i] > 0 &&
-                            $sumagbpusdbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpusd[$i] }}
-                        @elseif (
-                            $sumagbpusdbuy_array[$i] != $sumagbpusdsell_array[$i] &&
-                                $sumagbpusdsell_array[$i] < 0 &&
-                                $sumagbpusdbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_gbpusd[$i] }}
-                        @elseif ($sumagbpusdbuy_array[$i] != $sumagbpusdsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpusd[$i] }}</td>
-                    @else
-                        <td data-priority="0" scope="col">{{ $array_gbpusd[$i] }}</td>
-                    @endif
+                @php
+                $sumabuy_sell = $sumagbpusdbuy_array[$i] + $sumagbpusdsell_array[$i];
+                @endphp
+                       @if ($sumagbpusdbuy_array[$i] == $sumagbpusdsell_array[$i] && $sumagbpusdbuy_array[$i] > 0 && $sumagbpusdsell_array[$i] > 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpusd[$i] }}</td>
+                   @elseif ($sumagbpusdbuy_array[$i] == $sumagbpusdsell_array[$i] && $sumagbpusdbuy_array[$i] != 0 && $sumagbpusdsell_array[$i] != 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpusd[$i] }}</td>
+                   @elseif(
+                       ($sumagbpusdbuy_array[$i] != $sumagbpusdsell_array[$i] && $sumagbpusdsell_array[$i] > 0 && $sumagbpusdbuy_array[$i] > 0) ||
+                           $sumabuy_sell > 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpusd[$i] }}
+                       @elseif (
+                           ($sumagbpusdbuy_array[$i] != $sumagbpusdsell_array[$i] && $sumagbpusdsell_array[$i] < 0 && $sumagbpusdbuy_array[$i] < 0) ||
+                               $sumabuy_sell < 0)
+                       <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                           {{ $array_gbpusd[$i] }}
+                       @else
+                       <td data-priority="0" scope="col">{{ $array_gbpusd[$i] }}</td>
+                   @endif
                 @endfor
                 <td data-priority="0" scope="col">{{ $suma_gbpusd }}</td>
             </tr>
@@ -1529,25 +1561,28 @@
             <tr>
                 <td data-priority="0" scope="col">AUDUSD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaaudusdbuy_array[$i] != $sumaaudusdsell_array[$i] &&
-                            $sumaaudusdsell_array[$i] > 0 &&
-                            $sumaaudusdbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audusd[$i] }}
-                        @elseif (
-                            $sumaaudusdbuy_array[$i] != $sumaaudusdsell_array[$i] &&
-                                $sumaaudusdsell_array[$i] < 0 &&
-                                $sumaaudusdbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_audusd[$i] }}
-                        @elseif ($sumaaudusdbuy_array[$i] != $sumaaudusdsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audusd[$i] }}
-                        </td>
-                    @else
-                        <td data-priority="0" scope="col">{{ $array_audusd[$i] }}</td>
-                    @endif
+                @php
+                $sumabuy_sell = $sumaaudusdbuy_array[$i] + $sumaaudusdsell_array[$i];
+                @endphp
+                     @if ($sumaaudusdbuy_array[$i] == $sumaaudusdsell_array[$i] && $sumaaudusdbuy_array[$i] > 0 && $sumaaudusdsell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audusd[$i] }}</td>
+                 @elseif ($sumaaudusdbuy_array[$i] == $sumaaudusdsell_array[$i] && $sumaaudusdbuy_array[$i] != 0 && $sumaaudusdsell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_audusd[$i] }}</td>
+                 @elseif(
+                     ($sumaaudusdbuy_array[$i] != $sumaaudusdsell_array[$i] && $sumaaudusdsell_array[$i] > 0 && $sumaaudusdbuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{ $array_audusd[$i] }}
+                     @elseif (
+                         ($sumaaudusdbuy_array[$i] != $sumaaudusdsell_array[$i] && $sumaaudusdsell_array[$i] < 0 && $sumaaudusdbuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_audusd[$i] }}
+                     @else
+                     <td data-priority="0" scope="col">{{ $array_audusd[$i] }}</td>
+                 @endif
                 @endfor
                 <td data-priority="0" scope="col">{{ $suma_audusd }}</td>
             </tr>
@@ -1556,25 +1591,28 @@
             <tr>
                 <td data-priority="0" scope="col">NZDUSD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumanzdusdbuy_array[$i] != $sumanzdusdsell_array[$i] &&
-                            $sumanzdusdsell_array[$i] > 0 &&
-                            $sumanzdusdbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdusd[$i] }}
-                        @elseif (
-                            $sumanzdusdbuy_array[$i] != $sumanzdusdsell_array[$i] &&
-                                $sumanzdusdsell_array[$i] < 0 &&
-                                $sumanzdusdbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_nzdusd[$i] }}
-                        @elseif ($sumanzdusdbuy_array[$i] != $sumanzdusdsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdusd[$i] }}
-                        </td>
-                    @else
-                        <td data-priority="0" scope="col">{{ $array_nzdusd[$i] }}</td>
-                    @endif
+                @php
+                $sumabuy_sell = $sumanzdusdbuy_array[$i] + $sumanzdusdsell_array[$i];
+                @endphp
+                      @if ($sumanzdusdbuy_array[$i] == $sumanzdusdsell_array[$i] && $sumanzdusdbuy_array[$i] > 0 && $sumanzdusdsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdusd[$i] }}</td>
+                  @elseif ($sumanzdusdbuy_array[$i] == $sumanzdusdsell_array[$i] && $sumanzdusdbuy_array[$i] != 0 && $sumanzdusdsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdusd[$i] }}</td>
+                  @elseif(
+                      ($sumanzdusdbuy_array[$i] != $sumanzdusdsell_array[$i] && $sumanzdusdsell_array[$i] > 0 && $sumanzdusdbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdusd[$i] }}
+                      @elseif (
+                          ($sumanzdusdbuy_array[$i] != $sumanzdusdsell_array[$i] && $sumanzdusdsell_array[$i] < 0 && $sumanzdusdbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_nzdusd[$i] }}
+                      @else
+                      <td data-priority="0" scope="col">{{ $array_nzdusd[$i] }}</td>
+                  @endif
                 @endfor
                 <td data-priority="0" scope="col">{{ $suma_nzdusd }}</td>
             </tr>
@@ -1582,25 +1620,28 @@
             <tr>
                 <td data-priority="0" scope="col">USDCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumausdcadbuy_array[$i] != $sumausdcadsell_array[$i] &&
-                            $sumausdcadsell_array[$i] > 0 &&
-                            $sumausdcadbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_usdcad[$i] }}
-                        @elseif (
-                            $sumausdcadbuy_array[$i] != $sumausdcadsell_array[$i] &&
-                                $sumausdcadsell_array[$i] < 0 &&
-                                $sumausdcadbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_usdcad[$i] }}
-                        @elseif ($sumausdcadbuy_array[$i] != $sumausdcadsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdcad[$i] }}
-                        </td>
-                    @else
-                        <td data-priority="0" scope="col">{{ $array_usdcad[$i] }}</td>
-                    @endif
+                @php
+                $sumabuy_sell = $sumausdcadbuy_array[$i] + $sumausdcadsell_array[$i];
+                @endphp
+                      @if ($sumausdcadbuy_array[$i] == $sumausdcadsell_array[$i] && $sumausdcadbuy_array[$i] > 0 && $sumausdcadsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_usdcad[$i] }}</td>
+                  @elseif ($sumausdcadbuy_array[$i] == $sumausdcadsell_array[$i] && $sumausdcadbuy_array[$i] != 0 && $sumausdcadsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdcad[$i] }}</td>
+                  @elseif(
+                      ($sumausdcadbuy_array[$i] != $sumausdcadsell_array[$i] && $sumausdcadsell_array[$i] > 0 && $sumausdcadbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_usdcad[$i] }}
+                      @elseif (
+                          ($sumausdcadbuy_array[$i] != $sumausdcadsell_array[$i] && $sumausdcadsell_array[$i] < 0 && $sumausdcadbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_usdcad[$i] }}
+                      @else
+                      <td data-priority="0" scope="col">{{ $array_usdcad[$i] }}</td>
+                  @endif
                 @endfor
                 <td data-priority="0" scope="col">{{ $suma_usdcad }}</td>
             </tr>
@@ -1608,22 +1649,25 @@
             <tr>
                 <td data-priority="0" scope="col">USDCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumausdchfbuy_array[$i] != $sumausdchfsell_array[$i] &&
-                            $sumausdchfsell_array[$i] > 0 &&
-                            $sumausdchfbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_usdchf[$i] }}
-                        @elseif (
-                            $sumausdchfbuy_array[$i] != $sumausdchfsell_array[$i] &&
-                                $sumausdchfsell_array[$i] < 0 &&
-                                $sumausdchfbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_usdchf[$i] }}
-                        @elseif ($sumausdchfbuy_array[$i] != $sumausdchfsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdchf[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumausdchfbuy_array[$i] + $sumausdchfsell_array[$i];
+                @endphp
+                      @if ($sumausdchfbuy_array[$i] == $sumausdchfsell_array[$i] && $sumausdchfbuy_array[$i] > 0 && $sumausdchfsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_usdchf[$i] }}</td>
+                  @elseif ($sumausdchfbuy_array[$i] == $sumausdchfsell_array[$i] && $sumausdchfbuy_array[$i] != 0 && $sumausdchfsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdchf[$i] }}</td>
+                  @elseif(
+                      ($sumausdchfbuy_array[$i] != $sumausdchfsell_array[$i] && $sumausdchfsell_array[$i] > 0 && $sumausdchfbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_usdchf[$i] }}
+                      @elseif (
+                          ($sumausdchfbuy_array[$i] != $sumausdchfsell_array[$i] && $sumausdchfsell_array[$i] < 0 && $sumausdchfbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_usdchf[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_usdchf[$i] }}</td>
                     @endif
@@ -1634,22 +1678,25 @@
             <tr>
                 <td data-priority="0" scope="col">USDJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumausdjpybuy_array[$i] != $sumausdjpysell_array[$i] &&
-                            $sumausdjpysell_array[$i] > 0 &&
-                            $sumausdjpybuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_usdjpy[$i] }}
-                        @elseif (
-                            $sumausdjpybuy_array[$i] != $sumausdjpysell_array[$i] &&
-                                $sumausdjpysell_array[$i] < 0 &&
-                                $sumausdjpybuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_usdjpy[$i] }}
-                        @elseif ($sumausdjpybuy_array[$i] != $sumausdjpysell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdjpy[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumausdjpybuy_array[$i] + $sumausdjpysell_array[$i];
+                @endphp
+                   @if ($sumausdjpybuy_array[$i] == $sumausdjpysell_array[$i] && $sumausdjpybuy_array[$i] > 0 && $sumausdjpysell_array[$i] > 0)
+                   <td data-priority="0" scope="col"
+                       style="background-color: #FF6000; color:white; font-weight:500">{{$array_usdjpy[$i] }}</td>
+               @elseif ($sumausdjpybuy_array[$i] == $sumausdjpysell_array[$i] && $sumausdjpybuy_array[$i] != 0 && $sumausdjpysell_array[$i] != 0)
+                   <td data-priority="0" scope="col"
+                       style="background-color: #D21312; color:white; font-weight:500">{{$array_usdjpy[$i] }}</td>
+               @elseif(
+                   ($sumausdjpybuy_array[$i] != $sumausdjpysell_array[$i] && $sumausdjpysell_array[$i] > 0 && $sumausdjpybuy_array[$i] > 0) ||
+                       $sumabuy_sell > 0)
+                   <td data-priority="0" scope="col"
+                       style="background-color: #285430; color:white; font-weight:500">{{$array_usdjpy[$i] }}
+                   @elseif (
+                       ($sumausdjpybuy_array[$i] != $sumausdjpysell_array[$i] && $sumausdjpysell_array[$i] < 0 && $sumausdjpybuy_array[$i] < 0) ||
+                           $sumabuy_sell < 0)
+                   <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                       {{ $array_usdjpy[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_usdjpy[$i] }}</td>
                     @endif
@@ -1660,22 +1707,25 @@
             <tr>
                 <td data-priority="0" scope="col">EURGBP</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaeurgbpbuy_array[$i] != $sumaeurgbpsell_array[$i] &&
-                            $sumaeurgbpsell_array[$i] > 0 &&
-                            $sumaeurgbpbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurgbp[$i] }}
-                        @elseif (
-                            $sumaeurgbpbuy_array[$i] != $sumaeurgbpsell_array[$i] &&
-                                $sumaeurgbpsell_array[$i] < 0 &&
-                                $sumaeurgbpbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_eurgbp[$i] }}
-                        @elseif ($sumaeurgbpbuy_array[$i] != $sumaeurgbpsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurgbp[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaeurgbpbuy_array[$i] + $sumaeurgbpsell_array[$i];
+                @endphp
+                       @if ($sumaeurgbpbuy_array[$i] == $sumaeurgbpsell_array[$i] && $sumaeurgbpbuy_array[$i] > 0 && $sumaeurgbpsell_array[$i] > 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurgbp[$i] }}</td>
+                   @elseif ($sumaeurgbpbuy_array[$i] == $sumaeurgbpsell_array[$i] && $sumaeurgbpbuy_array[$i] != 0 && $sumaeurgbpsell_array[$i] != 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurgbp[$i] }}</td>
+                   @elseif(
+                       ($sumaeurgbpbuy_array[$i] != $sumaeurgbpsell_array[$i] && $sumaeurgbpsell_array[$i] > 0 && $sumaeurgbpbuy_array[$i] > 0) ||
+                           $sumabuy_sell > 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #285430; color:white; font-weight:500">{{ $array_eurgbp[$i] }}
+                       @elseif (
+                           ($sumaeurgbpbuy_array[$i] != $sumaeurgbpsell_array[$i] && $sumaeurgbpsell_array[$i] < 0 && $sumaeurgbpbuy_array[$i] < 0) ||
+                               $sumabuy_sell < 0)
+                       <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                           {{ $array_eurgbp[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurgbp[$i] }}</td>
                     @endif
@@ -1686,22 +1736,25 @@
             <tr>
                 <td data-priority="0" scope="col">EURAUD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaeuraudbuy_array[$i] != $sumaeuraudsell_array[$i] &&
-                            $sumaeuraudsell_array[$i] > 0 &&
-                            $sumaeuraudbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_euraud[$i] }}
-                        @elseif (
-                            $sumaeuraudbuy_array[$i] != $sumaeuraudsell_array[$i] &&
-                                $sumaeuraudsell_array[$i] < 0 &&
-                                $sumaeuraudbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_euraud[$i] }}
-                        @elseif ($sumaeuraudbuy_array[$i] != $sumaeuraudsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_euraud[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaeuraudbuy_array[$i] + $sumaeuraudsell_array[$i];
+                @endphp
+                    @if ($sumaeuraudbuy_array[$i] == $sumaeuraudsell_array[$i] && $sumaeuraudbuy_array[$i] > 0 && $sumaeuraudsell_array[$i] > 0)
+                    <td data-priority="0" scope="col"
+                        style="background-color: #FF6000; color:white; font-weight:500">{{ $array_euraud[$i] }}</td>
+                @elseif ($sumaeuraudbuy_array[$i] == $sumaeuraudsell_array[$i] && $sumaeuraudbuy_array[$i] != 0 && $sumaeuraudsell_array[$i] != 0)
+                    <td data-priority="0" scope="col"
+                        style="background-color: #D21312; color:white; font-weight:500">{{ $array_euraud[$i] }}</td>
+                @elseif(
+                    ($sumaeuraudbuy_array[$i] != $sumaeuraudsell_array[$i] && $sumaeuraudsell_array[$i] > 0 && $sumaeuraudbuy_array[$i] > 0) ||
+                        $sumabuy_sell > 0)
+                    <td data-priority="0" scope="col"
+                        style="background-color: #285430; color:white; font-weight:500">{{ $array_euraud[$i] }}
+                    @elseif (
+                        ($sumaeuraudbuy_array[$i] != $sumaeuraudsell_array[$i] && $sumaeuraudsell_array[$i] < 0 && $sumaeuraudbuy_array[$i] < 0) ||
+                            $sumabuy_sell < 0)
+                    <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                        {{ $array_euraud[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_euraud[$i] }}</td>
                     @endif
@@ -1712,22 +1765,25 @@
             <tr>
                 <td data-priority="0" scope="col">EURNZD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaeurnzdbuy_array[$i] != $sumaeurnzdsell_array[$i] &&
-                            $sumaeurnzdsell_array[$i] > 0 &&
-                            $sumaeurnzdbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurnzd[$i] }}
-                        @elseif (
-                            $sumaeurnzdbuy_array[$i] != $sumaeurnzdsell_array[$i] &&
-                                $sumaeurnzdsell_array[$i] < 0 &&
-                                $sumaeurnzdbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_eurnzd[$i] }}
-                        @elseif ($sumaeurnzdbuy_array[$i] != $sumaeurnzdsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurnzd[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaeurnzdbuy_array[$i] + $sumaeurnzdsell_array[$i];
+                @endphp
+                      @if ($sumaeurnzdbuy_array[$i] == $sumaeurnzdsell_array[$i] && $sumaeurnzdbuy_array[$i] > 0 && $sumaeurnzdsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurnzd[$i] }}</td>
+                  @elseif ($sumaeurnzdbuy_array[$i] == $sumaeurnzdsell_array[$i] && $sumaeurnzdbuy_array[$i] != 0 && $sumaeurnzdsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurnzd[$i] }}</td>
+                  @elseif(
+                      ($sumaeurnzdbuy_array[$i] != $sumaeurnzdsell_array[$i] && $sumaeurnzdsell_array[$i] > 0 && $sumaeurnzdbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_eurnzd[$i] }}
+                      @elseif (
+                          ($sumaeurnzdbuy_array[$i] != $sumaeurnzdsell_array[$i] && $sumaeurnzdsell_array[$i] < 0 && $sumaeurnzdbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_eurnzd[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurnzd[$i] }}</td>
                     @endif
@@ -1738,22 +1794,25 @@
             <tr>
                 <td data-priority="0" scope="col">GBPAUD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumagbpaudbuy_array[$i] != $sumagbpaudsell_array[$i] &&
-                            $sumagbpaudsell_array[$i] > 0 &&
-                            $sumagbpaudbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpaud[$i] }}
-                        @elseif (
-                            $sumagbpaudbuy_array[$i] != $sumagbpaudsell_array[$i] &&
-                                $sumagbpaudsell_array[$i] < 0 &&
-                                $sumagbpaudbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_gbpaud[$i] }}
-                        @elseif ($sumagbpaudbuy_array[$i] != $sumagbpaudsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpaud[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumagbpaudbuy_array[$i] + $sumagbpaudsell_array[$i];
+                @endphp
+                      @if ($sumagbpaudbuy_array[$i] == $sumagbpaudsell_array[$i] && $sumagbpaudbuy_array[$i] > 0 && $sumagbpaudsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpaud[$i] }}</td>
+                  @elseif ($sumagbpaudbuy_array[$i] == $sumagbpaudsell_array[$i] && $sumagbpaudbuy_array[$i] != 0 && $sumagbpaudsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpaud[$i] }}</td>
+                  @elseif(
+                      ($sumagbpaudbuy_array[$i] != $sumagbpaudsell_array[$i] && $sumagbpaudsell_array[$i] > 0 && $sumagbpaudbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpaud[$i] }}
+                      @elseif (
+                          ($sumagbpaudbuy_array[$i] != $sumagbpaudsell_array[$i] && $sumagbpaudsell_array[$i] < 0 && $sumagbpaudbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_gbpaud[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpaud[$i] }}</td>
                     @endif
@@ -1764,22 +1823,25 @@
             <tr>
                 <td data-priority="0" scope="col">GBPNZD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumagbpnzdbuy_array[$i] != $sumagbpnzdsell_array[$i] &&
-                            $sumagbpnzdsell_array[$i] > 0 &&
-                            $sumagbpnzdbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}
-                        @elseif (
-                            $sumagbpnzdbuy_array[$i] != $sumagbpnzdsell_array[$i] &&
-                                $sumagbpnzdsell_array[$i] < 0 &&
-                                $sumagbpnzdbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_gbpnzd[$i] }}
-                        @elseif ($sumagbpnzdbuy_array[$i] != $sumagbpnzdsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumagbpnzdbuy_array[$i] + $sumagbpnzdsell_array[$i];
+                @endphp
+                      @if ($sumagbpnzdbuy_array[$i] == $sumagbpnzdsell_array[$i] && $sumagbpnzdbuy_array[$i] > 0 && $sumagbpnzdsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}</td>
+                  @elseif ($sumagbpnzdbuy_array[$i] == $sumagbpnzdsell_array[$i] && $sumagbpnzdbuy_array[$i] != 0 && $sumagbpnzdsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}</td>
+                  @elseif(
+                      ($sumagbpnzdbuy_array[$i] != $sumagbpnzdsell_array[$i] && $sumagbpnzdsell_array[$i] > 0 && $sumagbpnzdbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}
+                      @elseif (
+                          ($sumagbpnzdbuy_array[$i] != $sumagbpnzdsell_array[$i] && $sumagbpnzdsell_array[$i] < 0 && $sumagbpnzdbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_gbpnzd[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpnzd[$i] }}</td>
                     @endif
@@ -1790,22 +1852,25 @@
             <tr>
                 <td data-priority="0" scope="col">AUDNZD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaaudnzdbuy_array[$i] != $sumaaudnzdsell_array[$i] &&
-                            $sumaaudnzdsell_array[$i] > 0 &&
-                            $sumaaudnzdbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audnzd[$i] }}
-                        @elseif (
-                            $sumaaudnzdbuy_array[$i] != $sumaaudnzdsell_array[$i] &&
-                                $sumaaudnzdsell_array[$i] < 0 &&
-                                $sumaaudnzdbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_audnzd[$i] }}
-                        @elseif ($sumaaudnzdbuy_array[$i] != $sumaaudnzdsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audnzd[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaaudnzdbuy_array[$i] + $sumaaudnzdsell_array[$i];
+                @endphp
+                      @if ($sumaaudnzdbuy_array[$i] == $sumaaudnzdsell_array[$i] && $sumaaudnzdbuy_array[$i] > 0 && $sumaaudnzdsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audnzd[$i] }}</td>
+                  @elseif ($sumaaudnzdbuy_array[$i] == $sumaaudnzdsell_array[$i] && $sumaaudnzdbuy_array[$i] != 0 && $sumaaudnzdsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_audnzd[$i] }}</td>
+                  @elseif(
+                      ($sumaaudnzdbuy_array[$i] != $sumaaudnzdsell_array[$i] && $sumaaudnzdsell_array[$i] > 0 && $sumaaudnzdbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_audnzd[$i] }}
+                      @elseif (
+                          ($sumaaudnzdbuy_array[$i] != $sumaaudnzdsell_array[$i] && $sumaaudnzdsell_array[$i] < 0 && $sumaaudnzdbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_audnzd[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_audnzd[$i] }}</td>
                     @endif
@@ -1816,22 +1881,25 @@
             <tr>
                 <td data-priority="0" scope="col">EURCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaeurcadbuy_array[$i] != $sumaeurcadsell_array[$i] &&
-                            $sumaeurcadsell_array[$i] > 0 &&
-                            $sumaeurcadbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurcad[$i] }}
-                        @elseif (
-                            $sumaeurcadbuy_array[$i] != $sumaeurcadsell_array[$i] &&
-                                $sumaeurcadsell_array[$i] < 0 &&
-                                $sumaeurcadbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_eurcad[$i] }}
-                        @elseif ($sumaeurcadbuy_array[$i] != $sumaeurcadsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurcad[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaeurcadbuy_array[$i] + $sumaeurcadsell_array[$i];
+                @endphp
+                      @if ($sumaeurcadbuy_array[$i] == $sumaeurcadsell_array[$i] && $sumaeurcadbuy_array[$i] > 0 && $sumaeurcadsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurcad[$i] }}</td>
+                  @elseif ($sumaeurcadbuy_array[$i] == $sumaeurcadsell_array[$i] && $sumaeurcadbuy_array[$i] != 0 && $sumaeurcadsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurcad[$i] }}</td>
+                  @elseif(
+                      ($sumaeurcadbuy_array[$i] != $sumaeurcadsell_array[$i] && $sumaeurcadsell_array[$i] > 0 && $sumaeurcadbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_eurcad[$i] }}
+                      @elseif (
+                          ($sumaeurcadbuy_array[$i] != $sumaeurcadsell_array[$i] && $sumaeurcadsell_array[$i] < 0 && $sumaeurcadbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_eurcad[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurcad[$i] }}</td>
                     @endif
@@ -1842,22 +1910,25 @@
             <tr>
                 <td data-priority="0" scope="col">EURCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaeurchfbuy_array[$i] != $sumaeurchfsell_array[$i] &&
-                            $sumaeurchfsell_array[$i] > 0 &&
-                            $sumaeurchfbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurchf[$i] }}
-                        @elseif (
-                            $sumaeurchfbuy_array[$i] != $sumaeurchfsell_array[$i] &&
-                                $sumaeurchfsell_array[$i] < 0 &&
-                                $sumaeurchfbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_eurchf[$i] }}
-                        @elseif ($sumaeurchfbuy_array[$i] != $sumaeurchfsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurchf[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaeurchfbuy_array[$i] + $sumaeurchfsell_array[$i];
+                @endphp
+                     @if ($sumaeurchfbuy_array[$i] == $sumaeurchfsell_array[$i] && $sumaeurchfbuy_array[$i] > 0 && $sumaeurchfsell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurchf[$i] }}</td>
+                 @elseif ($sumaeurchfbuy_array[$i] == $sumaeurchfsell_array[$i] && $sumaeurchfbuy_array[$i] != 0 && $sumaeurchfsell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurchf[$i] }}</td>
+                 @elseif(
+                     ($sumaeurchfbuy_array[$i] != $sumaeurchfsell_array[$i] && $sumaeurchfsell_array[$i] > 0 && $sumaeurchfbuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{ $array_eurchf[$i] }}
+                     @elseif (
+                         ($sumaeurchfbuy_array[$i] != $sumaeurchfsell_array[$i] && $sumaeurchfsell_array[$i] < 0 && $sumaeurchfbuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_eurchf[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurchf[$i] }}</td>
                     @endif
@@ -1868,22 +1939,25 @@
             <tr>
                 <td data-priority="0" scope="col">EURJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaeurjpybuy_array[$i] != $sumaeurjpysell_array[$i] &&
-                            $sumaeurjpysell_array[$i] > 0 &&
-                            $sumaeurjpybuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurjpy[$i] }}
-                        @elseif (
-                            $sumaeurjpybuy_array[$i] != $sumaeurjpysell_array[$i] &&
-                                $sumaeurjpysell_array[$i] < 0 &&
-                                $sumaeurjpybuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_eurjpy[$i] }}
-                        @elseif ($sumaeurjpybuy_array[$i] != $sumaeurjpysell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurjpy[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaeurjpybuy_array[$i] + $sumaeurjpysell_array[$i];
+                @endphp
+                       @if ($sumaeurjpybuy_array[$i] == $sumaeurjpysell_array[$i] && $sumaeurjpybuy_array[$i] > 0 && $sumaeurjpysell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurjpy[$i] }}</td>
+                  @elseif ($sumaeurjpybuy_array[$i] == $sumaeurjpysell_array[$i] && $sumaeurjpybuy_array[$i] != 0 && $sumaeurjpysell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurjpy[$i] }}</td>
+                  @elseif(
+                      ($sumaeurjpybuy_array[$i] != $sumaeurjpysell_array[$i] && $sumaeurjpysell_array[$i] > 0 && $sumaeurjpybuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_eurjpy[$i] }}
+                      @elseif (
+                          ($sumaeurjpybuy_array[$i] != $sumaeurjpysell_array[$i] && $sumaeurjpysell_array[$i] < 0 && $sumaeurjpybuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_eurjpy[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurjpy[$i] }}</td>
                     @endif
@@ -1894,22 +1968,25 @@
             <tr>
                 <td data-priority="0" scope="col">GBPCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumagbpcadbuy_array[$i] != $sumagbpcadsell_array[$i] &&
-                            $sumagbpcadsell_array[$i] > 0 &&
-                            $sumagbpcadbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpcad[$i] }}
-                        @elseif (
-                            $sumagbpcadbuy_array[$i] != $sumagbpcadsell_array[$i] &&
-                                $sumagbpcadsell_array[$i] < 0 &&
-                                $sumagbpcadbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_gbpcad[$i] }}
-                        @elseif ($sumagbpcadbuy_array[$i] != $sumagbpcadsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpcad[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumagbpcadbuy_array[$i] + $sumagbpcadsell_array[$i];
+                @endphp
+                     @if ($sumagbpcadbuy_array[$i] == $sumagbpcadsell_array[$i] && $sumagbpcadbuy_array[$i] > 0 && $sumagbpcadsell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpcad[$i] }}</td>
+                 @elseif ($sumagbpcadbuy_array[$i] == $sumagbpcadsell_array[$i] && $sumagbpcadbuy_array[$i] != 0 && $sumagbpcadsell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpcad[$i] }}</td>
+                 @elseif(
+                     ($sumagbpcadbuy_array[$i] != $sumagbpcadsell_array[$i] && $sumagbpcadsell_array[$i] > 0 && $sumagbpcadbuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpcad[$i] }}
+                     @elseif (
+                         ($sumagbpcadbuy_array[$i] != $sumagbpcadsell_array[$i] && $sumagbpcadsell_array[$i] < 0 && $sumagbpcadbuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_gbpcad[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpcad[$i] }}</td>
                     @endif
@@ -1920,22 +1997,25 @@
             <tr>
                 <td data-priority="0" scope="col">GBPCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumagbpchfbuy_array[$i] != $sumagbpchfsell_array[$i] &&
-                            $sumagbpchfsell_array[$i] > 0 &&
-                            $sumagbpchfbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpchf[$i] }}
-                        @elseif (
-                            $sumagbpchfbuy_array[$i] != $sumagbpchfsell_array[$i] &&
-                                $sumagbpchfsell_array[$i] < 0 &&
-                                $sumagbpchfbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_gbpchf[$i] }}
-                        @elseif ($sumagbpchfbuy_array[$i] != $sumagbpchfsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpchf[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumagbpchfbuy_array[$i] + $sumagbpchfsell_array[$i];
+                @endphp
+                     @if ($sumagbpchfbuy_array[$i] == $sumagbpchfsell_array[$i] && $sumagbpchfbuy_array[$i] > 0 && $sumagbpchfsell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpchf[$i] }}</td>
+                 @elseif ($sumagbpchfbuy_array[$i] == $sumagbpchfsell_array[$i] && $sumagbpchfbuy_array[$i] != 0 && $sumagbpchfsell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpchf[$i] }}</td>
+                 @elseif(
+                     ($sumagbpchfbuy_array[$i] != $sumagbpchfsell_array[$i] && $sumagbpchfsell_array[$i] > 0 && $sumagbpchfbuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpchf[$i] }}
+                     @elseif (
+                         ($sumagbpchfbuy_array[$i] != $sumagbpchfsell_array[$i] && $sumagbpchfsell_array[$i] < 0 && $sumagbpchfbuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_gbpchf[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpchf[$i] }}</td>
                     @endif
@@ -1946,22 +2026,25 @@
             <tr>
                 <td data-priority="0" scope="col">GBPJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumagbpjpybuy_array[$i] != $sumagbpjpysell_array[$i] &&
-                            $sumagbpjpysell_array[$i] > 0 &&
-                            $sumagbpjpybuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}
-                        @elseif (
-                            $sumagbpjpybuy_array[$i] != $sumagbpjpysell_array[$i] &&
-                                $sumagbpjpysell_array[$i] < 0 &&
-                                $sumagbpjpybuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_gbpjpy[$i] }}
-                        @elseif ($sumagbpjpybuy_array[$i] != $sumagbpjpysell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumagbpjpybuy_array[$i] + $sumagbpjpysell_array[$i];
+                @endphp
+                     @if ($sumagbpjpybuy_array[$i] == $sumagbpjpysell_array[$i] && $sumagbpjpybuy_array[$i] > 0 && $sumagbpjpysell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}</td>
+                 @elseif ($sumagbpjpybuy_array[$i] == $sumagbpjpysell_array[$i] && $sumagbpjpybuy_array[$i] != 0 && $sumagbpjpysell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}</td>
+                 @elseif(
+                     ($sumagbpjpybuy_array[$i] != $sumagbpjpysell_array[$i] && $sumagbpjpysell_array[$i] > 0 && $sumagbpjpybuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}
+                     @elseif (
+                         ($sumagbpjpybuy_array[$i] != $sumagbpjpysell_array[$i] && $sumagbpjpysell_array[$i] < 0 && $sumagbpjpybuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_gbpjpy[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpjpy[$i] }}</td>
                     @endif
@@ -1972,22 +2055,25 @@
             <tr>
                 <td data-priority="0" scope="col">AUDCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaaudcadbuy_array[$i] != $sumaaudcadsell_array[$i] &&
-                            $sumaaudcadsell_array[$i] > 0 &&
-                            $sumaaudcadbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audcad[$i] }}
-                        @elseif (
-                            $sumaaudcadbuy_array[$i] != $sumaaudcadsell_array[$i] &&
-                                $sumaaudcadsell_array[$i] < 0 &&
-                                $sumaaudcadbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_audcad[$i] }}
-                        @elseif ($sumaaudcadbuy_array[$i] != $sumaaudcadsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audcad[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaaudcadbuy_array[$i] + $sumaaudcadsell_array[$i];
+                @endphp
+                      @if ($sumaaudcadbuy_array[$i] == $sumaaudcadsell_array[$i] && $sumaaudcadbuy_array[$i] > 0 && $sumaaudcadsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{  $array_audcad[$i] }}</td>
+                  @elseif ($sumaaudcadbuy_array[$i] == $sumaaudcadsell_array[$i] && $sumaaudcadbuy_array[$i] != 0 && $sumaaudcadsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{  $array_audcad[$i] }}</td>
+                  @elseif(
+                      ($sumaaudcadbuy_array[$i] != $sumaaudcadsell_array[$i] && $sumaaudcadsell_array[$i] > 0 && $sumaaudcadbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{  $array_audcad[$i] }}
+                      @elseif (
+                          ($sumaaudcadbuy_array[$i] != $sumaaudcadsell_array[$i] && $sumaaudcadsell_array[$i] < 0 && $sumaaudcadbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_audcad[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_audcad[$i] }}</td>
                     @endif
@@ -1998,22 +2084,25 @@
             <tr>
                 <td data-priority="0" scope="col">AUDCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaaudchfbuy_array[$i] != $sumaaudchfsell_array[$i] &&
-                            $sumaaudchfsell_array[$i] > 0 &&
-                            $sumaaudchfbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audchf[$i] }}
-                        @elseif (
-                            $sumaaudchfbuy_array[$i] != $sumaaudchfsell_array[$i] &&
-                                $sumaaudchfsell_array[$i] < 0 &&
-                                $sumaaudchfbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_audchf[$i] }}
-                        @elseif ($sumaaudchfbuy_array[$i] != $sumaaudchfsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audchf[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaaudchfbuy_array[$i] + $sumaaudchfsell_array[$i];
+                @endphp
+                     @if ($sumaaudchfbuy_array[$i] == $sumaaudchfsell_array[$i] && $sumaaudchfbuy_array[$i] > 0 && $sumaaudchfsell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audchf[$i] }}</td>
+                 @elseif ($sumaaudchfbuy_array[$i] == $sumaaudchfsell_array[$i] && $sumaaudchfbuy_array[$i] != 0 && $sumaaudchfsell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_audchf[$i] }}</td>
+                 @elseif(
+                     ($sumaaudchfbuy_array[$i] != $sumaaudchfsell_array[$i] && $sumaaudchfsell_array[$i] > 0 && $sumaaudchfbuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{ $array_audchf[$i] }}
+                     @elseif (
+                         ($sumaaudchfbuy_array[$i] != $sumaaudchfsell_array[$i] && $sumaaudchfsell_array[$i] < 0 && $sumaaudchfbuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_audchf[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_audchf[$i] }}</td>
                     @endif
@@ -2024,22 +2113,25 @@
             <tr>
                 <td data-priority="0" scope="col">AUDJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumaaudjpybuy_array[$i] != $sumaaudjpysell_array[$i] &&
-                            $sumaaudjpysell_array[$i] > 0 &&
-                            $sumaaudjpybuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audjpy[$i] }}
-                        @elseif (
-                            $sumaaudjpybuy_array[$i] != $sumaaudjpysell_array[$i] &&
-                                $sumaaudjpysell_array[$i] < 0 &&
-                                $sumaaudjpybuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_audjpy[$i] }}
-                        @elseif ($sumaaudjpybuy_array[$i] != $sumaaudjpysell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audjpy[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumaaudjpybuy_array[$i] + $sumaaudjpysell_array[$i];
+                @endphp
+                     @if ($sumaaudjpybuy_array[$i] == $sumaaudjpysell_array[$i] && $sumaaudjpybuy_array[$i] > 0 && $sumaaudjpysell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audjpy[$i] }}</td>
+                 @elseif ($sumaaudjpybuy_array[$i] == $sumaaudjpysell_array[$i] && $sumaaudjpybuy_array[$i] != 0 && $sumaaudjpysell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_audjpy[$i] }}</td>
+                 @elseif(
+                     ($sumaaudjpybuy_array[$i] != $sumaaudjpysell_array[$i] && $sumaaudjpysell_array[$i] > 0 && $sumaaudjpybuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{ $array_audjpy[$i] }}
+                     @elseif (
+                         ($sumaaudjpybuy_array[$i] != $sumaaudjpysell_array[$i] && $sumaaudjpysell_array[$i] < 0 && $sumaaudjpybuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_audjpy[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_audjpy[$i] }}</td>
                     @endif
@@ -2050,22 +2142,25 @@
             <tr>
                 <td data-priority="0" scope="col">NZDCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumanzdcadbuy_array[$i] != $sumanzdcadsell_array[$i] &&
-                            $sumanzdcadsell_array[$i] > 0 &&
-                            $sumanzdcadbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdcad[$i] }}
-                        @elseif (
-                            $sumanzdcadbuy_array[$i] != $sumanzdcadsell_array[$i] &&
-                                $sumanzdcadsell_array[$i] < 0 &&
-                                $sumanzdcadbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_nzdcad[$i] }}
-                        @elseif ($sumanzdcadbuy_array[$i] != $sumanzdcadsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdcad[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumanzdcadbuy_array[$i] + $sumanzdcadsell_array[$i];
+                @endphp
+                      @if ($sumanzdcadbuy_array[$i] == $sumanzdcadsell_array[$i] && $sumanzdcadbuy_array[$i] > 0 && $sumanzdcadsell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdcad[$i] }}</td>
+                  @elseif ($sumanzdcadbuy_array[$i] == $sumanzdcadsell_array[$i] && $sumanzdcadbuy_array[$i] != 0 && $sumanzdcadsell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdcad[$i] }}</td>
+                  @elseif(
+                      ($sumanzdcadbuy_array[$i] != $sumanzdcadsell_array[$i] && $sumanzdcadsell_array[$i] > 0 && $sumanzdcadbuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdcad[$i] }}
+                      @elseif (
+                          ($sumanzdcadbuy_array[$i] != $sumanzdcadsell_array[$i] && $sumanzdcadsell_array[$i] < 0 && $sumanzdcadbuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_nzdcad[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_nzdcad[$i] }}</td>
                     @endif
@@ -2076,22 +2171,25 @@
             <tr>
                 <td data-priority="0" scope="col">NZDCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumanzdchfbuy_array[$i] != $sumanzdchfsell_array[$i] &&
-                            $sumanzdchfsell_array[$i] > 0 &&
-                            $sumanzdchfbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdchf[$i] }}
-                        @elseif (
-                            $sumanzdchfbuy_array[$i] != $sumanzdchfsell_array[$i] &&
-                                $sumanzdchfsell_array[$i] < 0 &&
-                                $sumanzdchfbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_nzdchf[$i] }}
-                        @elseif ($sumanzdchfbuy_array[$i] != $sumanzdchfsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdchf[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumanzdchfbuy_array[$i] + $sumanzdchfsell_array[$i];
+                @endphp
+                       @if ($sumanzdchfbuy_array[$i] == $sumanzdchfsell_array[$i] && $sumanzdchfbuy_array[$i] > 0 && $sumanzdchfsell_array[$i] > 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdchf[$i] }}</td>
+                   @elseif ($sumanzdchfbuy_array[$i] == $sumanzdchfsell_array[$i] && $sumanzdchfbuy_array[$i] != 0 && $sumanzdchfsell_array[$i] != 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdchf[$i] }}</td>
+                   @elseif(
+                       ($sumanzdchfbuy_array[$i] != $sumanzdchfsell_array[$i] && $sumanzdchfsell_array[$i] > 0 && $sumanzdchfbuy_array[$i] > 0) ||
+                           $sumabuy_sell > 0)
+                       <td data-priority="0" scope="col"
+                           style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdchf[$i] }}
+                       @elseif (
+                           ($sumanzdchfbuy_array[$i] != $sumanzdchfsell_array[$i] && $sumanzdchfsell_array[$i] < 0 && $sumanzdchfbuy_array[$i] < 0) ||
+                               $sumabuy_sell < 0)
+                       <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                           {{ $array_nzdchf[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_nzdchf[$i] }}</td>
                     @endif
@@ -2102,22 +2200,25 @@
             <tr>
                 <td data-priority="0" scope="col">NZDJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumanzdjpybuy_array[$i] != $sumanzdjpysell_array[$i] &&
-                            $sumanzdjpysell_array[$i] > 0 &&
-                            $sumanzdjpybuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdjpy[$i] }}
-                        @elseif (
-                            $sumanzdjpybuy_array[$i] != $sumanzdjpysell_array[$i] &&
-                                $sumanzdjpysell_array[$i] < 0 &&
-                                $sumanzdjpybuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_nzdjpy[$i] }}
-                        @elseif ($sumanzdjpybuy_array[$i] != $sumanzdjpysell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdjpy[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumanzdjpybuy_array[$i] + $sumanzdjpysell_array[$i];
+                @endphp
+                      @if ($sumanzdjpybuy_array[$i] == $sumanzdjpysell_array[$i] && $sumanzdjpybuy_array[$i] > 0 && $sumanzdjpysell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{$array_nzdjpy[$i] }}</td>
+                  @elseif ($sumanzdjpybuy_array[$i] == $sumanzdjpysell_array[$i] && $sumanzdjpybuy_array[$i] != 0 && $sumanzdjpysell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{$array_nzdjpy[$i] }}</td>
+                  @elseif(
+                      ($sumanzdjpybuy_array[$i] != $sumanzdjpysell_array[$i] && $sumanzdjpysell_array[$i] > 0 && $sumanzdjpybuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{$array_nzdjpy[$i] }}
+                      @elseif (
+                          ($sumanzdjpybuy_array[$i] != $sumanzdjpysell_array[$i] && $sumanzdjpysell_array[$i] < 0 && $sumanzdjpybuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_nzdjpy[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_nzdjpy[$i] }}</td>
                     @endif
@@ -2128,22 +2229,25 @@
             <tr>
                 <td data-priority="0" scope="col">CADCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumacadchfbuy_array[$i] != $sumacadchfsell_array[$i] &&
-                            $sumacadchfsell_array[$i] > 0 &&
-                            $sumacadchfbuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_cadchf[$i] }}
-                        @elseif (
-                            $sumacadchfbuy_array[$i] != $sumacadchfsell_array[$i] &&
-                                $sumacadchfsell_array[$i] < 0 &&
-                                $sumacadchfbuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_cadchf[$i] }}
-                        @elseif ($sumacadchfbuy_array[$i] != $sumacadchfsell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_cadchf[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumacadchfbuy_array[$i] + $sumacadchfsell_array[$i];
+                @endphp
+                     @if ($sumacadchfbuy_array[$i] == $sumacadchfsell_array[$i] && $sumacadchfbuy_array[$i] > 0 && $sumacadchfsell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{$array_cadchf[$i] }}</td>
+                 @elseif ($sumacadchfbuy_array[$i] == $sumacadchfsell_array[$i] && $sumacadchfbuy_array[$i] != 0 && $sumacadchfsell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{$array_cadchf[$i] }}</td>
+                 @elseif(
+                     ($sumacadchfbuy_array[$i] != $sumacadchfsell_array[$i] && $sumacadchfsell_array[$i] > 0 && $sumacadchfbuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{$array_cadchf[$i] }}
+                     @elseif (
+                         ($sumacadchfbuy_array[$i] != $sumacadchfsell_array[$i] && $sumacadchfsell_array[$i] < 0 && $sumacadchfbuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_cadchf[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_cadchf[$i] }}</td>
                     @endif
@@ -2154,22 +2258,25 @@
             <tr>
                 <td data-priority="0" scope="col">CADJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumacadjpybuy_array[$i] != $sumacadjpysell_array[$i] &&
-                            $sumacadjpysell_array[$i] > 0 &&
-                            $sumacadjpybuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_cadjpy[$i] }}
-                        @elseif (
-                            $sumacadjpybuy_array[$i] != $sumacadjpysell_array[$i] &&
-                                $sumacadjpysell_array[$i] < 0 &&
-                                $sumacadjpybuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_cadjpy[$i] }}
-                        @elseif ($sumacadjpybuy_array[$i] != $sumacadjpysell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_cadjpy[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumacadjpybuy_array[$i] + $sumacadjpysell_array[$i];
+                @endphp
+                     @if ($sumacadjpybuy_array[$i] == $sumacadjpysell_array[$i] && $sumacadjpybuy_array[$i] > 0 && $sumacadjpysell_array[$i] > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_cadjpy[$i] }}</td>
+                 @elseif ($sumacadjpybuy_array[$i] == $sumacadjpysell_array[$i] && $sumacadjpybuy_array[$i] != 0 && $sumacadjpysell_array[$i] != 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_cadjpy[$i] }}</td>
+                 @elseif(
+                     ($sumacadjpybuy_array[$i] != $sumacadjpysell_array[$i] && $sumacadjpysell_array[$i] > 0 && $sumacadjpybuy_array[$i] > 0) ||
+                         $sumabuy_sell > 0)
+                     <td data-priority="0" scope="col"
+                         style="background-color: #285430; color:white; font-weight:500">{{ $array_cadjpy[$i] }}
+                     @elseif (
+                         ($sumacadjpybuy_array[$i] != $sumacadjpysell_array[$i] && $sumacadjpysell_array[$i] < 0 && $sumacadjpybuy_array[$i] < 0) ||
+                             $sumabuy_sell < 0)
+                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                         {{ $array_cadjpy[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_cadjpy[$i] }}</td>
                     @endif
@@ -2180,22 +2287,25 @@
             <tr>
                 <td data-priority="0" scope="col">CHFJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                    @if (
-                        $sumachfjpybuy_array[$i] != $sumachfjpysell_array[$i] &&
-                            $sumachfjpysell_array[$i] > 0 &&
-                            $sumachfjpybuy_array[$i] > 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #285430; color:white; font-weight:500">{{ $array_chfjpy[$i] }}
-                        @elseif (
-                            $sumachfjpybuy_array[$i] != $sumachfjpysell_array[$i] &&
-                                $sumachfjpysell_array[$i] < 0 &&
-                                $sumachfjpybuy_array[$i] < 0)
-                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                            {{ $array_chfjpy[$i] }}
-                        @elseif ($sumachfjpybuy_array[$i] != $sumachfjpysell_array[$i])
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_chfjpy[$i] }}
-                        </td>
+                @php
+                $sumabuy_sell = $sumachfjpybuy_array[$i] + $sumachfjpysell_array[$i];
+                @endphp
+                      @if ($sumachfjpybuy_array[$i] == $sumachfjpysell_array[$i] && $sumachfjpybuy_array[$i] > 0 && $sumachfjpysell_array[$i] > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #FF6000; color:white; font-weight:500">{{$array_chfjpy[$i] }}</td>
+                  @elseif ($sumachfjpybuy_array[$i] == $sumachfjpysell_array[$i] && $sumachfjpybuy_array[$i] != 0 && $sumachfjpysell_array[$i] != 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #D21312; color:white; font-weight:500">{{$array_chfjpy[$i] }}</td>
+                  @elseif(
+                      ($sumachfjpybuy_array[$i] != $sumachfjpysell_array[$i] && $sumachfjpysell_array[$i] > 0 && $sumachfjpybuy_array[$i] > 0) ||
+                          $sumabuy_sell > 0)
+                      <td data-priority="0" scope="col"
+                          style="background-color: #285430; color:white; font-weight:500">{{$array_chfjpy[$i] }}
+                      @elseif (
+                          ($sumachfjpybuy_array[$i] != $sumachfjpysell_array[$i] && $sumachfjpysell_array[$i] < 0 && $sumachfjpybuy_array[$i] < 0) ||
+                              $sumabuy_sell < 0)
+                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                          {{ $array_chfjpy[$i] }}
                     @else
                         <td data-priority="0" scope="col">{{ $array_chfjpy[$i] }}</td>
                     @endif

@@ -2,10 +2,21 @@ var table;
 var url = window.location + "";
 var separador = url.split("/");
 var traderID = separador[separador.length - 1];
+var numero = 0;
 
 const tableStatus = () => {
+    if (numero == 403) {
+        url = `/admin/showStatusmagic403?id=${traderID}`;
+    } else if(numero == 404) {
+        url = `/admin/showStatusmagic404?id=${traderID}`;
+    } else if(numero == 405) {
+        url = `/admin/showStatusmagic405?id=${traderID}`;
+    }
+    else{
+        url=`/admin/showStatusmagic?id=${traderID}`;
+    }
     $.get({
-        url: `/admin/showStatusmagic?id=${traderID}`,
+        url: url,
         success: function (response) {
             $("#contTabla").empty();
             $("#contTabla").html(response);
@@ -205,6 +216,34 @@ const tableStatus = () => {
         },
     });
 };
+
+$(document).on("click", "#obtener403", () => {
+    table.destroy();
+    numero=403;
+    console.log('403')
+    tableStatus();
+});
+
+$(document).on("click", "#obtener404", () => {
+    table.destroy();
+    numero=404;
+    console.log('404')
+    tableStatus();
+});
+
+$(document).on("click", "#obtener405", () => {
+    table.destroy();
+    numero=405;
+    console.log('405')
+    tableStatus();
+});
+
+$(document).on("click", "#obtenerTodos", () => {
+    table.destroy();
+    numero=0;
+    console.log('404')
+    tableStatus();
+});
 
 tableStatus();
 

@@ -117,6 +117,12 @@ Route::get('/admin/showMomento', [App\Http\Controllers\MomentoController::class,
 //consultar operaciones magic number
 Route::get('/admin/statusMagic/{id}', [App\Http\Controllers\MagicOperacionController::class, 'index'])->name('status')->middleware('auth');
 Route::get('/admin/showStatusmagic', [App\Http\Controllers\MagicOperacionController::class, 'getDatos']);
+Route::get('/admin/showStatusmagic403', [App\Http\Controllers\MagicOperacionController::class, 'getDatos403'])->name('status')->middleware('auth');
+// Route::get('/admin/showStatusmagic/403', [App\Http\Controllers\MagicOperacionController::class, 'getDatos403']);
+Route::get('/admin/showStatusmagic404', [App\Http\Controllers\MagicOperacionController::class, 'getDatos404'])->name('status')->middleware('auth');
+Route::get('/admin/showStatusmagic405', [App\Http\Controllers\MagicOperacionController::class, 'getDatos405'])->name('status')->middleware('auth');
+
+// Route::get('/admin/showStatusmagic/404', [App\Http\Controllers\MagicOperacionController::class, 'getDatos404']);
 
 //consultar status
 Route::get('/admin/status/{id}', [App\Http\Controllers\StatusController::class, 'index'])->name('status')->middleware('auth');
