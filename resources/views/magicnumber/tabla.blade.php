@@ -6,12 +6,23 @@
         $array_eurusd = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumabuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurusd_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurusd_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         
         foreach ($magiceurusd as $eurusd) {
             $magiceurusdsell = DB::table('operaciones')
                 ->select(DB::raw('SUM(profit) as sumsell'))
+                ->where('symbol', '=', $eurusd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', $eurusd->magicnumber)
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiceurusdsell_vol = DB::table('operaciones')
+                ->select('volume')
                 ->where('symbol', '=', $eurusd->symbol)
                 ->where('trader_id', $trader_id)
                 ->where('type', '=', 'SELL')
@@ -28,7 +39,16 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $eurusd->magicnumber) {
+            $magiceurusdbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurusd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', $eurusd->magicnumber)
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $eurusd->serie_magic) {
                 $sumarest += $eurusd->profit;
             } else {
                 $sumarest = $eurusd->profit;
@@ -40,18 +60,36 @@
                     $array_eurusd[$i] = $sumarest;
                     $sumasell_array[$i] = $magiceurusdsell->sumsell;
                     $sumabuy_array[$i] = $magiceurusdbuy->sumbuy;
+        
+                    if (empty($magiceurusdsell_vol)) {
+                        $voleurusd_sell_array[$i] = 0;
+                    } else {
+                        $voleurusd_sell_array[$i] = $magiceurusdsell_vol->volume;
+                    }
+        
+                    if (empty($magiceurusdbuy_vol)) {
+                        $voleurusd_buy_array[$i] = 0;
+                    } else {
+                        $voleurusd_buy_array[$i] = $magiceurusdbuy_vol->volume;
+                    }
                 }
+        
                 if ($sumasell_array[$i] == null) {
                     $sumasell_array[$i] = 0;
                 }
                 if ($sumabuy_array[$i] == null) {
                     $sumabuy_array[$i] = 0;
                 }
+                if ($voleurusd_sell_array[$i] == null) {
+                    $voleurusd_sell_array[$i] = 0;
+                }
+                if ($voleurusd_buy_array[$i] == null) {
+                    $voleurusd_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $eurusd->magicnumber;
+            $magicnumber_anterior = $eurusd->serie_magic;
         }
-        
         $suma_eurusd = array_sum($array_eurusd);
         
         $sumarest = 0;
@@ -59,8 +97,11 @@
         $array_gbpusd = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpusdsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpusdbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpusd_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpusd_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
+        
         foreach ($magicgbpusd as $gbpusd) {
             $magicgbpusdsell = DB::table('operaciones')
                 ->select(DB::raw('SUM(profit) as sumsell'))
@@ -80,7 +121,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $gbpusd->magicnumber) {
+            $magicgbpusdsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpusd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', $gbpusd->magicnumber)
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicgbpusdbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpusd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$gbpusd->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $gbpusd->serie_magic) {
                 $sumarest += $gbpusd->profit;
             } else {
                 $sumarest = $gbpusd->profit;
@@ -92,6 +151,18 @@
                     $array_gbpusd[$i] = $sumarest;
                     $sumagbpusdsell_array[$i] = $magicgbpusdsell->sumsell;
                     $sumagbpusdbuy_array[$i] = $magicgbpusdbuy->sumbuy;
+        
+                    if (empty($magicgbpusdsell_vol)) {
+                        $volgbpusd_sell_array[$i] = 0;
+                    } else {
+                        $volgbpusd_sell_array[$i] = $magicgbpusdsell_vol->volume;
+                    }
+        
+                    if (empty($magicgbpusdbuy_vol)) {
+                        $volgbpusd_buy_array[$i] = 0;
+                    } else {
+                        $volgbpusd_buy_array[$i] = $magicgbpusdbuy_vol->volume;
+                    }
                 }
                 if ($sumagbpusdsell_array[$i] == null) {
                     $sumagbpusdsell_array[$i] = 0;
@@ -99,9 +170,15 @@
                 if ($sumagbpusdbuy_array[$i] == null) {
                     $sumagbpusdbuy_array[$i] = 0;
                 }
+                if ($volgbpusd_sell_array[$i] == null) {
+                    $volgbpusd_sell_array[$i] = 0;
+                }
+                if ($volgbpusd_buy_array[$i] == null) {
+                    $volgbpusd_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $gbpusd->magicnumber;
+            $magicnumber_anterior = $gbpusd->serie_magic;
         }
         
         $suma_gbpusd = array_sum($array_gbpusd);
@@ -111,6 +188,8 @@
         $array_audusd = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudusdsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudusdbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudusd_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudusd_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicaudusd as $audusd) {
@@ -132,7 +211,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $audusd->magicnumber) {
+            $magicaudusdsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audusd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$audusd->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicaudusdbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audusd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$audusd->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $audusd->serie_magic) {
                 $sumarest += $audusd->profit;
             } else {
                 $sumarest = $audusd->profit;
@@ -144,6 +241,18 @@
                     $array_audusd[$i] = $sumarest;
                     $sumaaudusdsell_array[$i] = $magicaudusdsell->sumsell;
                     $sumaaudusdbuy_array[$i] = $magicaudusdbuy->sumbuy;
+        
+                    if (empty($magicaudusdsell_vol)) {
+                        $volaudusd_sell_array[$i] = 0;
+                    } else {
+                        $volaudusd_sell_array[$i] = $magicaudusdsell_vol->volume;
+                    }
+        
+                    if (empty($magicaudusdbuy_vol)) {
+                        $volaudusd_buy_array[$i] = 0;
+                    } else {
+                        $volaudusd_buy_array[$i] = $magicaudusdbuy_vol->volume;
+                    }
                 }
                 if ($sumaaudusdsell_array[$i] == null) {
                     $sumaaudusdsell_array[$i] = 0;
@@ -151,9 +260,15 @@
                 if ($sumaaudusdbuy_array[$i] == null) {
                     $sumaaudusdbuy_array[$i] = 0;
                 }
+                if ($volaudusd_sell_array[$i] == null) {
+                    $volaudusd_sell_array[$i] = 0;
+                }
+                if ($volaudusd_buy_array[$i] == null) {
+                    $volaudusd_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $audusd->magicnumber;
+            $magicnumber_anterior = $audusd->serie_magic;
         }
         
         $suma_audusd = array_sum($array_audusd);
@@ -163,6 +278,8 @@
         $array_nzdusd = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumanzdusdsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumanzdusdbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volnzdusd_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volnzdusd_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicnzdusd as $nzdusd) {
@@ -184,7 +301,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $nzdusd->magicnumber) {
+            $magicnzdusdsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $nzdusd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$nzdusd->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicnzdusdbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $nzdusd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$nzdusd->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $nzdusd->serie_magic) {
                 $sumarest += $nzdusd->profit;
             } else {
                 $sumarest = $nzdusd->profit;
@@ -196,6 +331,18 @@
                     $array_nzdusd[$i] = $sumarest;
                     $sumanzdusdsell_array[$i] = $magicnzdusdsell->sumsell;
                     $sumanzdusdbuy_array[$i] = $magicnzdusdbuy->sumbuy;
+        
+                    if (empty($magicnzdusdsell_vol)) {
+                        $volnzdusd_sell_array[$i] = 0;
+                    } else {
+                        $volnzdusd_sell_array[$i] = $magicnzdusdsell_vol->volume;
+                    }
+        
+                    if (empty($magicnzdusdbuy_vol)) {
+                        $volnzdusd_buy_array[$i] = 0;
+                    } else {
+                        $volnzdusd_buy_array[$i] = $magicnzdusdbuy_vol->volume;
+                    }
                 }
                 if ($sumanzdusdsell_array[$i] == null) {
                     $sumanzdusdsell_array[$i] = 0;
@@ -203,9 +350,15 @@
                 if ($sumanzdusdbuy_array[$i] == null) {
                     $sumanzdusdbuy_array[$i] = 0;
                 }
+                if ($volnzdusd_sell_array[$i] == null) {
+                    $volnzdusd_sell_array[$i] = 0;
+                }
+                if ($volnzdusd_buy_array[$i] == null) {
+                    $volnzdusd_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $nzdusd->magicnumber;
+            $magicnumber_anterior = $nzdusd->serie_magic;
         }
         
         $suma_nzdusd = array_sum($array_nzdusd);
@@ -215,6 +368,8 @@
         $array_usdcad = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumausdcadsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumausdcadbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volusdcad_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volusdcad_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicusdcad as $usdcad) {
@@ -236,7 +391,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $usdcad->magicnumber) {
+            $magicusdcadsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $usdcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', $usdcad->magicnumber)
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicusdcadbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $usdcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', $usdcad->magicnumber)
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $usdcad->serie_magic) {
                 $sumarest += $usdcad->profit;
             } else {
                 $sumarest = $usdcad->profit;
@@ -248,6 +421,18 @@
                     $array_usdcad[$i] = $sumarest;
                     $sumausdcadsell_array[$i] = $magicusdcadsell->sumsell;
                     $sumausdcadbuy_array[$i] = $magicusdcadbuy->sumbuy;
+        
+                    if (empty($magicusdcadsell_vol)) {
+                        $volusdcad_sell_array[$i] = 0;
+                    } else {
+                        $volusdcad_sell_array[$i] = $magicusdcadsell_vol->volume;
+                    }
+        
+                    if (empty($magicusdcadbuy_vol)) {
+                        $volusdcad_buy_array[$i] = 0;
+                    } else {
+                        $volusdcad_buy_array[$i] = $magicusdcadbuy_vol->volume;
+                    }
                 }
                 if ($sumausdcadsell_array[$i] == null) {
                     $sumausdcadsell_array[$i] = 0;
@@ -255,9 +440,15 @@
                 if ($sumausdcadbuy_array[$i] == null) {
                     $sumausdcadbuy_array[$i] = 0;
                 }
+                if ($volusdcad_sell_array[$i] == null) {
+                    $volusdcad_sell_array[$i] = 0;
+                }
+                if ($volusdcad_buy_array[$i] == null) {
+                    $volusdcad_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $usdcad->magicnumber;
+            $magicnumber_anterior = $usdcad->serie_magic;
         }
         
         $suma_usdcad = array_sum($array_usdcad);
@@ -267,6 +458,8 @@
         $array_usdchf = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumausdchfsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumausdchfbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volusdchf_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volusdchf_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicusdchf as $usdchf) {
@@ -288,7 +481,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $usdchf->magicnumber) {
+            $magicusdchfsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $usdchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$usdchf->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicusdchfbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $usdchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$usdchf->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $usdchf->serie_magic) {
                 $sumarest += $usdchf->profit;
             } else {
                 $sumarest = $usdchf->profit;
@@ -300,6 +511,18 @@
                     $array_usdchf[$i] = $sumarest;
                     $sumausdchfsell_array[$i] = $magicusdchfsell->sumsell;
                     $sumausdchfbuy_array[$i] = $magicusdchfbuy->sumbuy;
+        
+                    if (empty($magicusdchfsell_vol)) {
+                        $volusdchf_sell_array[$i] = 0;
+                    } else {
+                        $volusdchf_sell_array[$i] = $magicusdchfsell_vol->volume;
+                    }
+        
+                    if (empty($magicusdchfbuy_vol)) {
+                        $volusdchf_buy_array[$i] = 0;
+                    } else {
+                        $volusdchf_buy_array[$i] = $magicusdchfbuy_vol->volume;
+                    }
                 }
                 if ($sumausdchfsell_array[$i] == null) {
                     $sumausdchfsell_array[$i] = 0;
@@ -307,9 +530,15 @@
                 if ($sumausdchfbuy_array[$i] == null) {
                     $sumausdchfbuy_array[$i] = 0;
                 }
+                if ($volusdchf_sell_array[$i] == null) {
+                    $volusdchf_sell_array[$i] = 0;
+                }
+                if ($volusdchf_buy_array[$i] == null) {
+                    $volusdchf_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $usdchf->magicnumber;
+            $magicnumber_anterior = $usdchf->serie_magic;
         }
         
         $suma_usdchf = array_sum($array_usdchf);
@@ -319,6 +548,8 @@
         $array_usdjpy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumausdjpysell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumausdjpybuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volusdjpy_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volusdjpy_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicusdjpy as $usdjpy) {
@@ -340,7 +571,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $usdjpy->magicnumber) {
+            $magicusdjpysell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $usdjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$usdjpy->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicusdjpybuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $usdjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$usdjpy->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $usdjpy->serie_magic) {
                 $sumarest += $usdjpy->profit;
             } else {
                 $sumarest = $usdjpy->profit;
@@ -352,6 +601,18 @@
                     $array_usdjpy[$i] = $sumarest;
                     $sumausdjpysell_array[$i] = $magicusdjpysell->sumsell;
                     $sumausdjpybuy_array[$i] = $magicusdjpybuy->sumbuy;
+        
+                    if (empty($magicusdjpysell_vol)) {
+                        $volusdjpy_sell_array[$i] = 0;
+                    } else {
+                        $volusdjpy_sell_array[$i] = $magicusdjpysell_vol->volume;
+                    }
+        
+                    if (empty($magicusdjpybuy_vol)) {
+                        $volusdjpy_buy_array[$i] = 0;
+                    } else {
+                        $volusdjpy_buy_array[$i] = $magicusdjpybuy_vol->volume;
+                    }
                 }
                 if ($sumausdjpysell_array[$i] == null) {
                     $sumausdjpysell_array[$i] = 0;
@@ -359,9 +620,15 @@
                 if ($sumausdjpybuy_array[$i] == null) {
                     $sumausdjpybuy_array[$i] = 0;
                 }
+                if ($volusdjpy_sell_array[$i] == null) {
+                    $volusdjpy_sell_array[$i] = 0;
+                }
+                if ($volusdjpy_buy_array[$i] == null) {
+                    $volusdjpy_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $usdjpy->magicnumber;
+            $magicnumber_anterior = $usdjpy->serie_magic;
         }
         
         $suma_usdjpy = array_sum($array_usdjpy);
@@ -371,6 +638,8 @@
         $array_eurgbp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurgbpsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurgbpbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurgbp_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurgbp_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magiceurgbp as $eurgbp) {
@@ -392,7 +661,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $eurgbp->magicnumber) {
+            $magiceurgbpsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurgbp->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$eurgbp->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiceurgbpbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurgbp->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$eurgbp->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $eurgbp->serie_magic) {
                 $sumarest += $eurgbp->profit;
             } else {
                 $sumarest = $eurgbp->profit;
@@ -404,6 +691,18 @@
                     $array_eurgbp[$i] = $sumarest;
                     $sumaeurgbpsell_array[$i] = $magiceurgbpsell->sumsell;
                     $sumaeurgbpbuy_array[$i] = $magiceurgbpbuy->sumbuy;
+        
+                    if (empty($magiceurgbpsell_vol)) {
+                        $voleurgbp_sell_array[$i] = 0;
+                    } else {
+                        $voleurgbp_sell_array[$i] = $magiceurgbpsell_vol->volume;
+                    }
+        
+                    if (empty($magiceurgbpbuy_vol)) {
+                        $voleurgbp_buy_array[$i] = 0;
+                    } else {
+                        $voleurgbp_buy_array[$i] = $magiceurgbpbuy_vol->volume;
+                    }
                 }
                 if ($sumaeurgbpsell_array[$i] == null) {
                     $sumaeurgbpsell_array[$i] = 0;
@@ -411,9 +710,15 @@
                 if ($sumaeurgbpbuy_array[$i] == null) {
                     $sumaeurgbpbuy_array[$i] = 0;
                 }
+                if ($voleurgbp_sell_array[$i] == null) {
+                    $voleurgbp_sell_array[$i] = 0;
+                }
+                if ($voleurgbp_buy_array[$i] == null) {
+                    $voleurgbp_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $eurgbp->magicnumber;
+            $magicnumber_anterior = $eurgbp->serie_magic;
         }
         $suma_eurgbp = array_sum($array_eurgbp);
         
@@ -422,6 +727,8 @@
         $array_euraud = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeuraudsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeuraudbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleuraud_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleuraud_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magiceuraud as $euraud) {
@@ -443,7 +750,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $euraud->magicnumber) {
+            $magiceuraudsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $euraud->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$euraud->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiceuraudbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $euraud->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$euraud->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $euraud->serie_magic) {
                 $sumarest += $euraud->profit;
             } else {
                 $sumarest = $euraud->profit;
@@ -455,6 +780,18 @@
                     $array_euraud[$i] = $sumarest;
                     $sumaeuraudsell_array[$i] = $magiceuraudsell->sumsell;
                     $sumaeuraudbuy_array[$i] = $magiceuraudbuy->sumbuy;
+        
+                    if (empty($magiceuraudsell_vol)) {
+                        $voleuraud_sell_array[$i] = 0;
+                    } else {
+                        $voleuraud_sell_array[$i] = $magiceuraudsell_vol->volume;
+                    }
+        
+                    if (empty($magiceuraudbuy_vol)) {
+                        $voleuraud_buy_array[$i] = 0;
+                    } else {
+                        $voleuraud_buy_array[$i] = $magiceuraudbuy_vol->volume;
+                    }
                 }
                 if ($sumaeuraudsell_array[$i] == null) {
                     $sumaeuraudsell_array[$i] = 0;
@@ -462,9 +799,15 @@
                 if ($sumaeuraudbuy_array[$i] == null) {
                     $sumaeuraudbuy_array[$i] = 0;
                 }
+                if ($voleuraud_sell_array[$i] == null) {
+                    $voleuraud_sell_array[$i] = 0;
+                }
+                if ($voleuraud_buy_array[$i] == null) {
+                    $voleuraud_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $euraud->magicnumber;
+            $magicnumber_anterior = $euraud->serie_magic;
         }
         
         $suma_euraud = array_sum($array_euraud);
@@ -474,6 +817,8 @@
         $array_eurnzd = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurnzdsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurnzdbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurnzd_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurnzd_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magiceurnzd as $eurnzd) {
@@ -495,7 +840,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $eurnzd->magicnumber) {
+            $magiceurnzdsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurnzd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$eurnzd->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiceurnzdbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurnzd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$eurnzd->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $eurnzd->serie_magic) {
                 $sumarest += $eurnzd->profit;
             } else {
                 $sumarest = $eurnzd->profit;
@@ -507,6 +870,18 @@
                     $array_eurnzd[$i] = $sumarest;
                     $sumaeurnzdsell_array[$i] = $magiceurnzdsell->sumsell;
                     $sumaeurnzdbuy_array[$i] = $magiceurnzdbuy->sumbuy;
+        
+                    if (empty($magiceurnzdsell_vol)) {
+                        $voleurnzd_sell_array[$i] = 0;
+                    } else {
+                        $voleurnzd_sell_array[$i] = $magiceurnzdsell_vol->volume;
+                    }
+        
+                    if (empty($magiceurnzdbuy_vol)) {
+                        $voleurnzd_buy_array[$i] = 0;
+                    } else {
+                        $voleurnzd_buy_array[$i] = $magiceurnzdbuy_vol->volume;
+                    }
                 }
                 if ($sumaeurnzdsell_array[$i] == null) {
                     $sumaeurnzdsell_array[$i] = 0;
@@ -514,9 +889,15 @@
                 if ($sumaeurnzdbuy_array[$i] == null) {
                     $sumaeurnzdbuy_array[$i] = 0;
                 }
+                if ($voleurnzd_sell_array[$i] == null) {
+                    $voleurnzd_sell_array[$i] = 0;
+                }
+                if ($voleurnzd_buy_array[$i] == null) {
+                    $voleurnzd_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $eurnzd->magicnumber;
+            $magicnumber_anterior = $eurnzd->serie_magic;
         }
         
         $suma_eurnzd = array_sum($array_eurnzd);
@@ -526,6 +907,8 @@
         $array_gbpaud = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpaudsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpaudbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpaud_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpaud_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicgbpaud as $gbpaud) {
@@ -547,7 +930,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $gbpaud->magicnumber) {
+            $magicgbpaudsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpaud->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$gbpaud->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicgbpaudbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpaud->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$gbpaud->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $gbpaud->serie_magic) {
                 $sumarest += $gbpaud->profit;
             } else {
                 $sumarest = $gbpaud->profit;
@@ -559,6 +960,18 @@
                     $array_gbpaud[$i] = $sumarest;
                     $sumagbpaudsell_array[$i] = $magicgbpaudsell->sumsell;
                     $sumagbpaudbuy_array[$i] = $magicgbpaudbuy->sumbuy;
+        
+                    if (empty($magicgbpaudsell_vol)) {
+                        $volgbpaud_sell_array[$i] = 0;
+                    } else {
+                        $volgbpaud_sell_array[$i] = $magicgbpaudsell_vol->volume;
+                    }
+        
+                    if (empty($magicgbpaudbuy_vol)) {
+                        $volgbpaud_buy_array[$i] = 0;
+                    } else {
+                        $volgbpaud_buy_array[$i] = $magicgbpaudbuy_vol->volume;
+                    }
                 }
                 if ($sumagbpaudsell_array[$i] == null) {
                     $sumagbpaudsell_array[$i] = 0;
@@ -566,9 +979,15 @@
                 if ($sumagbpaudbuy_array[$i] == null) {
                     $sumagbpaudbuy_array[$i] = 0;
                 }
+                if ($volgbpaud_sell_array[$i] == null) {
+                    $volgbpaud_sell_array[$i] = 0;
+                }
+                if ($volgbpaud_buy_array[$i] == null) {
+                    $volgbpaud_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $gbpaud->magicnumber;
+            $magicnumber_anterior = $gbpaud->serie_magic;
         }
         
         $suma_gbpaud = array_sum($array_gbpaud);
@@ -578,6 +997,8 @@
         $array_gbpnzd = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpnzdsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpnzdbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpnzd_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpnzd_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicgbpnzd as $gbpnzd) {
@@ -599,7 +1020,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $gbpnzd->magicnumber) {
+            $magicgbpnzdsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpnzd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$gbpnzd->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicgbpnzdbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpnzd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$gbpnzd->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $gbpnzd->serie_magic) {
                 $sumarest += $gbpnzd->profit;
             } else {
                 $sumarest = $gbpnzd->profit;
@@ -611,6 +1050,18 @@
                     $array_gbpnzd[$i] = $sumarest;
                     $sumagbpnzdsell_array[$i] = $magicgbpnzdsell->sumsell;
                     $sumagbpnzdbuy_array[$i] = $magicgbpnzdbuy->sumbuy;
+        
+                    if (empty($magicgbpnzdsell_vol)) {
+                        $volgbpnzd_sell_array[$i] = 0;
+                    } else {
+                        $volgbpnzd_sell_array[$i] = $magicgbpnzdsell_vol->volume;
+                    }
+        
+                    if (empty($magicgbpnzdbuy_vol)) {
+                        $volgbpnzd_buy_array[$i] = 0;
+                    } else {
+                        $volgbpnzd_buy_array[$i] = $magicgbpnzdbuy_vol->volume;
+                    }
                 }
                 if ($sumagbpnzdsell_array[$i] == null) {
                     $sumagbpnzdsell_array[$i] = 0;
@@ -618,9 +1069,15 @@
                 if ($sumagbpnzdbuy_array[$i] == null) {
                     $sumagbpnzdbuy_array[$i] = 0;
                 }
+                if ($volgbpnzd_sell_array[$i] == null) {
+                    $volgbpnzd_sell_array[$i] = 0;
+                }
+                if ($volgbpnzd_buy_array[$i] == null) {
+                    $volgbpnzd_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $gbpnzd->magicnumber;
+            $magicnumber_anterior = $gbpnzd->serie_magic;
         }
         
         $suma_gbpnzd = array_sum($array_gbpnzd);
@@ -630,6 +1087,8 @@
         $array_audnzd = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudnzdsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudnzdbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudnzd_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudnzd_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicaudnzd as $audnzd) {
@@ -651,7 +1110,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $audnzd->magicnumber) {
+            $magicaudnzdsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audnzd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$audnzd->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicaudnzdbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audnzd->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$audnzd->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $audnzd->serie_magic) {
                 $sumarest += $audnzd->profit;
             } else {
                 $sumarest = $audnzd->profit;
@@ -663,6 +1140,18 @@
                     $array_audnzd[$i] = $sumarest;
                     $sumaaudnzdsell_array[$i] = $magicaudnzdsell->sumsell;
                     $sumaaudnzdbuy_array[$i] = $magicaudnzdbuy->sumbuy;
+        
+                    if (empty($magicaudnzdsell_vol)) {
+                        $volaudnzd_sell_array[$i] = 0;
+                    } else {
+                        $volaudnzd_sell_array[$i] = $magicaudnzdsell_vol->volume;
+                    }
+        
+                    if (empty($magicaudnzdbuy_vol)) {
+                        $volaudnzd_buy_array[$i] = 0;
+                    } else {
+                        $volaudnzd_buy_array[$i] = $magicaudnzdbuy_vol->volume;
+                    }
                 }
                 if ($sumaaudnzdsell_array[$i] == null) {
                     $sumaaudnzdsell_array[$i] = 0;
@@ -670,9 +1159,15 @@
                 if ($sumaaudnzdbuy_array[$i] == null) {
                     $sumaaudnzdbuy_array[$i] = 0;
                 }
+                if ($volaudnzd_sell_array[$i] == null) {
+                    $volaudnzd_sell_array[$i] = 0;
+                }
+                if ($volaudnzd_buy_array[$i] == null) {
+                    $volaudnzd_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $audnzd->magicnumber;
+            $magicnumber_anterior = $audnzd->serie_magic;
         }
         
         $suma_audnzd = array_sum($array_audnzd);
@@ -682,6 +1177,8 @@
         $array_eurcad = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurcadsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurcadbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurcad_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurcad_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magiceurcad as $eurcad) {
@@ -703,7 +1200,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $eurcad->magicnumber) {
+            $magiceurcadsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$eurcad->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiceurcadbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$eurcad->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $eurcad->serie_magic) {
                 $sumarest += $eurcad->profit;
             } else {
                 $sumarest = $eurcad->profit;
@@ -715,6 +1230,18 @@
                     $array_eurcad[$i] = $sumarest;
                     $sumaeurcadsell_array[$i] = $magiceurcadsell->sumsell;
                     $sumaeurcadbuy_array[$i] = $magiceurcadbuy->sumbuy;
+        
+                    if (empty($magiceurcadsell_vol)) {
+                        $voleurcad_sell_array[$i] = 0;
+                    } else {
+                        $voleurcad_sell_array[$i] = $magiceurcadsell_vol->volume;
+                    }
+        
+                    if (empty($magiceurcadbuy_vol)) {
+                        $voleurcad_buy_array[$i] = 0;
+                    } else {
+                        $voleurcad_buy_array[$i] = $magiceurcadbuy_vol->volume;
+                    }
                 }
                 if ($sumaeurcadsell_array[$i] == null) {
                     $sumaeurcadsell_array[$i] = 0;
@@ -722,9 +1249,15 @@
                 if ($sumaeurcadbuy_array[$i] == null) {
                     $sumaeurcadbuy_array[$i] = 0;
                 }
+                if ($voleurcad_sell_array[$i] == null) {
+                    $voleurcad_sell_array[$i] = 0;
+                }
+                if ($voleurcad_buy_array[$i] == null) {
+                    $voleurcad_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $eurcad->magicnumber;
+            $magicnumber_anterior = $eurcad->serie_magic;
         }
         
         $suma_eurcad = array_sum($array_eurcad);
@@ -734,6 +1267,8 @@
         $array_eurchf = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurchfsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurchfbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurchf_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurchf_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magiceurchf as $eurchf) {
@@ -755,7 +1290,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $eurchf->magicnumber) {
+            $magiceurchfsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$eurchf->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiceurchfbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$eurchf->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $eurchf->serie_magic) {
                 $sumarest += $eurchf->profit;
             } else {
                 $sumarest = $eurchf->profit;
@@ -767,6 +1320,18 @@
                     $array_eurchf[$i] = $sumarest;
                     $sumaeurchfsell_array[$i] = $magiceurchfsell->sumsell;
                     $sumaeurchfbuy_array[$i] = $magiceurchfbuy->sumbuy;
+        
+                    if (empty($magiceurchfsell_vol)) {
+                        $voleurchf_sell_array[$i] = 0;
+                    } else {
+                        $voleurchf_sell_array[$i] = $magiceurchfsell_vol->volume;
+                    }
+        
+                    if (empty($magiceurchfbuy_vol)) {
+                        $voleurchf_buy_array[$i] = 0;
+                    } else {
+                        $voleurchf_buy_array[$i] = $magiceurchfbuy_vol->volume;
+                    }
                 }
                 if ($sumaeurchfsell_array[$i] == null) {
                     $sumaeurchfsell_array[$i] = 0;
@@ -774,9 +1339,15 @@
                 if ($sumaeurchfbuy_array[$i] == null) {
                     $sumaeurchfbuy_array[$i] = 0;
                 }
+                if ($voleurchf_sell_array[$i] == null) {
+                    $voleurchf_sell_array[$i] = 0;
+                }
+                if ($voleurchf_buy_array[$i] == null) {
+                    $voleurchf_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $eurchf->magicnumber;
+            $magicnumber_anterior = $eurchf->serie_magic;
         }
         
         $suma_eurchf = array_sum($array_eurchf);
@@ -786,6 +1357,8 @@
         $array_eurjpy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurjpysell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaeurjpybuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurjpy_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $voleurjpy_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magiceurjpy as $eurjpy) {
@@ -807,7 +1380,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $eurjpy->magicnumber) {
+            $magiceurjpysell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$eurjpy->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiceurjpybuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $eurjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$eurjpy->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $eurjpy->serie_magic) {
                 $sumarest += $eurjpy->profit;
             } else {
                 $sumarest = $eurjpy->profit;
@@ -819,6 +1410,18 @@
                     $array_eurjpy[$i] = $sumarest;
                     $sumaeurjpysell_array[$i] = $magiceurjpysell->sumsell;
                     $sumaeurjpybuy_array[$i] = $magiceurjpybuy->sumbuy;
+        
+                    if (empty($magiceurjpysell_vol)) {
+                        $voleurjpy_sell_array[$i] = 0;
+                    } else {
+                        $voleurjpy_sell_array[$i] = $magiceurjpysell_vol->volume;
+                    }
+        
+                    if (empty($magiceurjpybuy_vol)) {
+                        $voleurjpy_buy_array[$i] = 0;
+                    } else {
+                        $voleurjpy_buy_array[$i] = $magiceurjpybuy_vol->volume;
+                    }
                 }
                 if ($sumaeurjpysell_array[$i] == null) {
                     $sumaeurjpysell_array[$i] = 0;
@@ -826,9 +1429,15 @@
                 if ($sumaeurjpybuy_array[$i] == null) {
                     $sumaeurjpybuy_array[$i] = 0;
                 }
+                if ($voleurjpy_sell_array[$i] == null) {
+                    $voleurjpy_sell_array[$i] = 0;
+                }
+                if ($voleurjpy_buy_array[$i] == null) {
+                    $voleurjpy_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $eurjpy->magicnumber;
+            $magicnumber_anterior = $eurjpy->serie_magic;
         }
         
         $suma_eurjpy = array_sum($array_eurjpy);
@@ -838,6 +1447,8 @@
         $array_gbpcad = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpcadsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpcadbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpcad_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpcad_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicgbpcad as $gbpcad) {
@@ -859,7 +1470,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $gbpcad->magicnumber) {
+            $magicgbpcadsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$gbpcad->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicgbpcadbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$gbpcad->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $gbpcad->serie_magic) {
                 $sumarest += $gbpcad->profit;
             } else {
                 $sumarest = $gbpcad->profit;
@@ -871,6 +1500,18 @@
                     $array_gbpcad[$i] = $sumarest;
                     $sumagbpcadsell_array[$i] = $magicgbpcadsell->sumsell;
                     $sumagbpcadbuy_array[$i] = $magicgbpcadbuy->sumbuy;
+        
+                    if (empty($magicgbpcadsell_vol)) {
+                        $volgbpcad_sell_array[$i] = 0;
+                    } else {
+                        $volgbpcad_sell_array[$i] = $magicgbpcadsell_vol->volume;
+                    }
+        
+                    if (empty($magicgbpcadbuy_vol)) {
+                        $volgbpcad_buy_array[$i] = 0;
+                    } else {
+                        $volgbpcad_buy_array[$i] = $magicgbpcadbuy_vol->volume;
+                    }
                 }
                 if ($sumagbpcadsell_array[$i] == null) {
                     $sumagbpcadsell_array[$i] = 0;
@@ -878,9 +1519,15 @@
                 if ($sumagbpcadbuy_array[$i] == null) {
                     $sumagbpcadbuy_array[$i] = 0;
                 }
+                if ($volgbpcad_sell_array[$i] == null) {
+                    $volgbpcad_sell_array[$i] = 0;
+                }
+                if ($volgbpcad_buy_array[$i] == null) {
+                    $volgbpcad_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $gbpcad->magicnumber;
+            $magicnumber_anterior = $gbpcad->serie_magic;
         }
         
         $suma_gbpcad = array_sum($array_gbpcad);
@@ -890,6 +1537,8 @@
         $array_gbpchf = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpchfsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpchfbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpchf_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpchf_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicgbpchf as $gbpchf) {
@@ -911,7 +1560,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $gbpchf->magicnumber) {
+            $magicgbpchfsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$gbpchf->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicgbpchfbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$gbpchf->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $gbpchf->serie_magic) {
                 $sumarest += $gbpchf->profit;
             } else {
                 $sumarest = $gbpchf->profit;
@@ -923,6 +1590,18 @@
                     $array_gbpchf[$i] = $sumarest;
                     $sumagbpchfsell_array[$i] = $magicgbpchfsell->sumsell;
                     $sumagbpchfbuy_array[$i] = $magicgbpchfbuy->sumbuy;
+        
+                    if (empty($magicgbpchfsell_vol)) {
+                        $volgbpchf_sell_array[$i] = 0;
+                    } else {
+                        $volgbpchf_sell_array[$i] = $magicgbpchfsell_vol->volume;
+                    }
+        
+                    if (empty($magicgbpchfbuy_vol)) {
+                        $volgbpchf_buy_array[$i] = 0;
+                    } else {
+                        $volgbpchf_buy_array[$i] = $magicgbpchfbuy_vol->volume;
+                    }
                 }
                 if ($sumagbpchfsell_array[$i] == null) {
                     $sumagbpchfsell_array[$i] = 0;
@@ -930,9 +1609,15 @@
                 if ($sumagbpchfbuy_array[$i] == null) {
                     $sumagbpchfbuy_array[$i] = 0;
                 }
+                if ($volgbpchf_sell_array[$i] == null) {
+                    $volgbpchf_sell_array[$i] = 0;
+                }
+                if ($volgbpchf_buy_array[$i] == null) {
+                    $volgbpchf_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $gbpchf->magicnumber;
+            $magicnumber_anterior = $gbpchf->serie_magic;
         }
         
         $suma_gbpchf = array_sum($array_gbpchf);
@@ -942,6 +1627,8 @@
         $array_gbpjpy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpjpysell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumagbpjpybuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpjpy_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volgbpjpy_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicgbpjpy as $gbpjpy) {
@@ -963,7 +1650,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $gbpjpy->magicnumber) {
+            $magicgbpjpysell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$gbpjpy->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicgbpjpybuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $gbpjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$gbpjpy->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $gbpjpy->serie_magic) {
                 $sumarest += $gbpjpy->profit;
             } else {
                 $sumarest = $gbpjpy->profit;
@@ -975,6 +1680,18 @@
                     $array_gbpjpy[$i] = $sumarest;
                     $sumagbpjpysell_array[$i] = $magicgbpjpysell->sumsell;
                     $sumagbpjpybuy_array[$i] = $magicgbpjpybuy->sumbuy;
+        
+                    if (empty($magicgbpjpysell_vol)) {
+                        $volgbpjpy_sell_array[$i] = 0;
+                    } else {
+                        $volgbpjpy_sell_array[$i] = $magicgbpjpysell_vol->volume;
+                    }
+        
+                    if (empty($magicgbpjpybuy_vol)) {
+                        $volgbpjpy_buy_array[$i] = 0;
+                    } else {
+                        $volgbpjpy_buy_array[$i] = $magicgbpjpybuy_vol->volume;
+                    }
                 }
                 if ($sumagbpjpysell_array[$i] == null) {
                     $sumagbpjpysell_array[$i] = 0;
@@ -982,9 +1699,15 @@
                 if ($sumagbpjpybuy_array[$i] == null) {
                     $sumagbpjpybuy_array[$i] = 0;
                 }
+                if ($volgbpjpy_sell_array[$i] == null) {
+                    $volgbpjpy_sell_array[$i] = 0;
+                }
+                if ($volgbpjpy_buy_array[$i] == null) {
+                    $volgbpjpy_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $gbpjpy->magicnumber;
+            $magicnumber_anterior = $gbpjpy->serie_magic;
         }
         
         $suma_gbpjpy = array_sum($array_gbpjpy);
@@ -994,6 +1717,8 @@
         $array_audcad = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudcadsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudcadbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudcad_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudcad_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicaudcad as $audcad) {
@@ -1015,7 +1740,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $audcad->magicnumber) {
+            $magicaudcadsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$audcad->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicaudcadbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$audcad->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $audcad->serie_magic) {
                 $sumarest += $audcad->profit;
             } else {
                 $sumarest = $audcad->profit;
@@ -1027,6 +1770,18 @@
                     $array_audcad[$i] = $sumarest;
                     $sumaaudcadsell_array[$i] = $magicaudcadsell->sumsell;
                     $sumaaudcadbuy_array[$i] = $magicaudcadbuy->sumbuy;
+        
+                    if (empty($magicaudcadsell_vol)) {
+                        $volaudcad_sell_array[$i] = 0;
+                    } else {
+                        $volaudcad_sell_array[$i] = $magicaudcadsell_vol->volume;
+                    }
+        
+                    if (empty($magicaudcadbuy_vol)) {
+                        $volaudcad_buy_array[$i] = 0;
+                    } else {
+                        $volaudcad_buy_array[$i] = $magicaudcadbuy_vol->volume;
+                    }
                 }
                 if ($sumaaudcadsell_array[$i] == null) {
                     $sumaaudcadsell_array[$i] = 0;
@@ -1034,9 +1789,15 @@
                 if ($sumaaudcadbuy_array[$i] == null) {
                     $sumaaudcadbuy_array[$i] = 0;
                 }
+                if ($volaudcad_sell_array[$i] == null) {
+                    $volaudcad_sell_array[$i] = 0;
+                }
+                if ($volaudcad_buy_array[$i] == null) {
+                    $volaudcad_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $audcad->magicnumber;
+            $magicnumber_anterior = $audcad->serie_magic;
         }
         
         $suma_audcad = array_sum($array_audcad);
@@ -1046,6 +1807,8 @@
         $array_audchf = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudchfsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudchfbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudchf_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudchf_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicaudchf as $audchf) {
@@ -1067,7 +1830,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $audchf->magicnumber) {
+            $magicaudchfsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$audchf->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicaudchfbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$audchf->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $audchf->serie_magic) {
                 $sumarest += $audchf->profit;
             } else {
                 $sumarest = $audchf->profit;
@@ -1079,6 +1860,18 @@
                     $array_audchf[$i] = $sumarest;
                     $sumaaudchfsell_array[$i] = $magicaudchfsell->sumsell;
                     $sumaaudchfbuy_array[$i] = $magicaudchfbuy->sumbuy;
+        
+                    if (empty($magiceurusdsell_vol)) {
+                        $volaudchf_sell_array[$i] = 0;
+                    } else {
+                        $volaudchf_sell_array[$i] = $magicaudchfsell_vol->volume;
+                    }
+        
+                    if (empty($magicaudchfbuy_vol)) {
+                        $volaudchf_buy_array[$i] = 0;
+                    } else {
+                        $volaudchf_buy_array[$i] = $magicaudchfbuy_vol->volume;
+                    }
                 }
                 if ($sumaaudchfsell_array[$i] == null) {
                     $sumaaudchfsell_array[$i] = 0;
@@ -1086,9 +1879,15 @@
                 if ($sumaaudchfbuy_array[$i] == null) {
                     $sumaaudchfbuy_array[$i] = 0;
                 }
+                if ($volaudchf_sell_array[$i] == null) {
+                    $volaudchf_sell_array[$i] = 0;
+                }
+                if ($volaudchf_buy_array[$i] == null) {
+                    $volaudchf_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $audchf->magicnumber;
+            $magicnumber_anterior = $audchf->serie_magic;
         }
         
         $suma_audchf = array_sum($array_audchf);
@@ -1098,6 +1897,8 @@
         $array_audjpy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudjpysell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumaaudjpybuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudjpy_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volaudjpy_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicaudjpy as $audjpy) {
@@ -1119,7 +1920,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $audjpy->magicnumber) {
+            $magicaudjpysell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$audjpy->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicaudjpybuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $audjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$audjpy->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $audjpy->serie_magic) {
                 $sumarest += $audjpy->profit;
             } else {
                 $sumarest = $audjpy->profit;
@@ -1131,6 +1950,18 @@
                     $array_audjpy[$i] = $sumarest;
                     $sumaaudjpysell_array[$i] = $magicaudjpysell->sumsell;
                     $sumaaudjpybuy_array[$i] = $magicaudjpybuy->sumbuy;
+        
+                    if (empty($magicaudjpysell_vol)) {
+                        $volaudjpy_sell_array[$i] = 0;
+                    } else {
+                        $volaudjpy_sell_array[$i] = $magicaudjpysell_vol->volume;
+                    }
+        
+                    if (empty($magicaudjpybuy_vol)) {
+                        $volaudjpy_buy_array[$i] = 0;
+                    } else {
+                        $volaudjpy_buy_array[$i] = $magicaudjpybuy_vol->volume;
+                    }
                 }
                 if ($sumaaudjpysell_array[$i] == null) {
                     $sumaaudjpysell_array[$i] = 0;
@@ -1138,9 +1969,15 @@
                 if ($sumaaudjpybuy_array[$i] == null) {
                     $sumaaudjpybuy_array[$i] = 0;
                 }
+                if ($volaudjpy_sell_array[$i] == null) {
+                    $volaudjpy_sell_array[$i] = 0;
+                }
+                if ($volaudjpy_buy_array[$i] == null) {
+                    $volaudjpy_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $audjpy->magicnumber;
+            $magicnumber_anterior = $audjpy->serie_magic;
         }
         
         $suma_audjpy = array_sum($array_audjpy);
@@ -1151,6 +1988,8 @@
         $array_nzdcad = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumanzdcadsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumanzdcadbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volnzdcad_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volnzdcad_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicnzdcad as $nzdcad) {
@@ -1172,7 +2011,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $nzdcad->magicnumber) {
+            $magicnzdcadsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $nzdcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$nzdcad->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicnzdcadbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $nzdcad->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$nzdcad->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $nzdcad->serie_magic) {
                 $sumarest += $nzdcad->profit;
             } else {
                 $sumarest = $nzdcad->profit;
@@ -1184,6 +2041,18 @@
                     $array_nzdcad[$i] = floatval($sumarest);
                     $sumanzdcadsell_array[$i] = $magicnzdcadsell->sumsell;
                     $sumanzdcadbuy_array[$i] = $magicnzdcadbuy->sumbuy;
+        
+                    if (empty($magicnzdcadsell_vol)) {
+                        $volnzdcad_sell_array[$i] = 0;
+                    } else {
+                        $volnzdcad_sell_array[$i] = $magicnzdcadsell_vol->volume;
+                    }
+        
+                    if (empty($magicnzdcadbuy_vol)) {
+                        $volnzdcad_buy_array[$i] = 0;
+                    } else {
+                        $volnzdcad_buy_array[$i] = $magicnzdcadbuy_vol->volume;
+                    }
                 }
                 if ($sumanzdcadsell_array[$i] == null) {
                     $sumanzdcadsell_array[$i] = 0;
@@ -1191,9 +2060,15 @@
                 if ($sumanzdcadbuy_array[$i] == null) {
                     $sumanzdcadbuy_array[$i] = 0;
                 }
+                if ($volnzdcad_sell_array[$i] == null) {
+                    $volnzdcad_sell_array[$i] = 0;
+                }
+                if ($volnzdcad_buy_array[$i] == null) {
+                    $volnzdcad_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $nzdcad->magicnumber;
+            $magicnumber_anterior = $nzdcad->serie_magic;
         }
         $suma_nzdcad = array_sum($array_nzdcad);
         
@@ -1202,6 +2077,8 @@
         $array_nzdchf = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumanzdchfsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumanzdchfbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volnzdchf_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volnzdchf_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicnzdchf as $nzdchf) {
@@ -1223,7 +2100,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $nzdchf->magicnumber) {
+            $magicnzdchfsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $nzdchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$nzdchf->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicnzdchfbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $nzdchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$nzdchf->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $nzdchf->serie_magic) {
                 $sumarest += $nzdchf->profit;
             } else {
                 $sumarest = $nzdchf->profit;
@@ -1235,6 +2130,18 @@
                     $array_nzdchf[$i] = $sumarest;
                     $sumanzdchfsell_array[$i] = $magicnzdchfsell->sumsell;
                     $sumanzdchfbuy_array[$i] = $magicnzdchfbuy->sumbuy;
+        
+                    if (empty($magicnzdchfsell_vol)) {
+                        $volnzdchf_sell_array[$i] = 0;
+                    } else {
+                        $volnzdchf_sell_array[$i] = $magicnzdchfsell_vol->volume;
+                    }
+        
+                    if (empty($magicnzdchfbuy_vol)) {
+                        $volnzdchf_buy_array[$i] = 0;
+                    } else {
+                        $volnzdchf_buy_array[$i] = $magicnzdchfbuy_vol->volume;
+                    }
                 }
                 if ($sumanzdchfsell_array[$i] == null) {
                     $sumanzdchfsell_array[$i] = 0;
@@ -1242,9 +2149,15 @@
                 if ($sumanzdchfbuy_array[$i] == null) {
                     $sumanzdchfbuy_array[$i] = 0;
                 }
+                if ($volnzdchf_sell_array[$i] == null) {
+                    $volnzdchf_sell_array[$i] = 0;
+                }
+                if ($volnzdchf_buy_array[$i] == null) {
+                    $volnzdchf_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $nzdchf->magicnumber;
+            $magicnumber_anterior = $nzdchf->serie_magic;
         }
         
         $suma_nzdchf = array_sum($array_nzdchf);
@@ -1254,6 +2167,8 @@
         $array_nzdjpy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumanzdjpysell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumanzdjpybuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volnzdjpy_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volnzdjpy_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicnzdjpy as $nzdjpy) {
@@ -1275,7 +2190,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $nzdjpy->magicnumber) {
+            $magicnzdjpysell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $nzdjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$nzdjpy->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicnzdjpybuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $nzdjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$nzdjpy->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $nzdjpy->serie_magic) {
                 $sumarest += $nzdjpy->profit;
             } else {
                 $sumarest = $nzdjpy->profit;
@@ -1287,6 +2220,18 @@
                     $array_nzdjpy[$i] = $sumarest;
                     $sumanzdjpysell_array[$i] = $magicnzdjpysell->sumsell;
                     $sumanzdjpybuy_array[$i] = $magicnzdjpybuy->sumbuy;
+        
+                    if (empty($magicnzdjpysell_vol)) {
+                        $volnzdjpy_sell_array[$i] = 0;
+                    } else {
+                        $volnzdjpy_sell_array[$i] = $magicnzdjpysell_vol->volume;
+                    }
+        
+                    if (empty($magicnzdjpybuy_vol)) {
+                        $volnzdjpy_buy_array[$i] = 0;
+                    } else {
+                        $volnzdjpy_buy_array[$i] = $magicnzdjpybuy_vol->volume;
+                    }
                 }
                 if ($sumanzdjpysell_array[$i] == null) {
                     $sumanzdjpysell_array[$i] = 0;
@@ -1294,9 +2239,15 @@
                 if ($sumanzdjpybuy_array[$i] == null) {
                     $sumanzdjpybuy_array[$i] = 0;
                 }
+                if ($volnzdjpy_sell_array[$i] == null) {
+                    $volnzdjpy_sell_array[$i] = 0;
+                }
+                if ($volnzdjpy_buy_array[$i] == null) {
+                    $volnzdjpy_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $nzdjpy->magicnumber;
+            $magicnumber_anterior = $nzdjpy->serie_magic;
         }
         
         $suma_nzdjpy = array_sum($array_nzdjpy);
@@ -1306,6 +2257,8 @@
         $array_cadchf = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumacadchfsell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumacadchfbuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volcadchf_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volcadchf_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magiccadchf as $cadchf) {
@@ -1327,7 +2280,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $cadchf->magicnumber) {
+            $magiccadchfsell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $cadchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$cadchf->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiccadchfbuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $cadchf->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$cadchf->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $cadchf->serie_magic) {
                 $sumarest += $cadchf->profit;
             } else {
                 $sumarest = $cadchf->profit;
@@ -1339,6 +2310,18 @@
                     $array_cadchf[$i] = $sumarest;
                     $sumacadchfsell_array[$i] = $magiccadchfsell->sumsell;
                     $sumacadchfbuy_array[$i] = $magiccadchfbuy->sumbuy;
+        
+                    if (empty($magiccadchfsell_vol)) {
+                        $volcadchf_sell_array[$i] = 0;
+                    } else {
+                        $volcadchf_sell_array[$i] = $magiccadchfsell_vol->volume;
+                    }
+        
+                    if (empty($magiccadchfbuy_vol)) {
+                        $volcadchf_buy_array[$i] = 0;
+                    } else {
+                        $volcadchf_buy_array[$i] = $magiccadchfbuy_vol->volume;
+                    }
                 }
                 if ($sumacadchfsell_array[$i] == null) {
                     $sumacadchfsell_array[$i] = 0;
@@ -1346,9 +2329,15 @@
                 if ($sumacadchfbuy_array[$i] == null) {
                     $sumacadchfbuy_array[$i] = 0;
                 }
+                if ($volcadchf_sell_array[$i] == null) {
+                    $volcadchf_sell_array[$i] = 0;
+                }
+                if ($volcadchf_buy_array[$i] == null) {
+                    $volcadchf_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $cadchf->magicnumber;
+            $magicnumber_anterior = $cadchf->serie_magic;
         }
         
         $suma_cadchf = array_sum($array_cadchf);
@@ -1358,6 +2347,8 @@
         $array_cadjpy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumacadjpysell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumacadjpybuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volcadjpy_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volcadjpy_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magiccadjpy as $cadjpy) {
@@ -1379,7 +2370,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $cadjpy->magicnumber) {
+            $magiccadjpysell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $cadjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$cadjpy->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magiccadjpybuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $cadjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$cadjpy->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $cadjpy->serie_magic) {
                 $sumarest += $cadjpy->profit;
             } else {
                 $sumarest = $cadjpy->profit;
@@ -1391,6 +2400,18 @@
                     $array_cadjpy[$i] = $sumarest;
                     $sumacadjpysell_array[$i] = $magiccadjpysell->sumsell;
                     $sumacadjpybuy_array[$i] = $magiccadjpybuy->sumbuy;
+        
+                    if (empty($magiccadjpysell_vol)) {
+                        $volcadjpy_sell_array[$i] = 0;
+                    } else {
+                        $volcadjpy_sell_array[$i] = $magiccadjpysell_vol->volume;
+                    }
+        
+                    if (empty($magiccadjpybuy_vol)) {
+                        $volcadjpy_buy_array[$i] = 0;
+                    } else {
+                        $volcadjpy_buy_array[$i] = $magiccadjpybuy_vol->volume;
+                    }
                 }
                 if ($sumacadjpysell_array[$i] == null) {
                     $sumacadjpysell_array[$i] = 0;
@@ -1398,9 +2419,15 @@
                 if ($sumacadjpybuy_array[$i] == null) {
                     $sumacadjpybuy_array[$i] = 0;
                 }
+                if ($volcadjpy_sell_array[$i] == null) {
+                    $volcadjpy_sell_array[$i] = 0;
+                }
+                if ($volcadjpy_buy_array[$i] == null) {
+                    $volcadjpy_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $cadjpy->magicnumber;
+            $magicnumber_anterior = $cadjpy->serie_magic;
         }
         
         $suma_cadjpy = array_sum($array_cadjpy);
@@ -1410,6 +2437,8 @@
         $array_chfjpy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumachfjpysell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumachfjpybuy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volchfjpy_sell_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $volchfjpy_buy_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $sumasell = 0;
         $sumabuy = 0;
         foreach ($magicchfjpy as $chfjpy) {
@@ -1431,7 +2460,25 @@
                 ->orderBy('magicnumber', 'ASC')
                 ->first();
         
-            if ($magicnumber_anterior == $chfjpy->magicnumber) {
+            $magicchfjpysell_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $chfjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('type', '=', 'SELL')
+                ->where('magicnumber', "$chfjpy->magicnumber")
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            $magicchfjpybuy_vol = DB::table('operaciones')
+                ->select('volume')
+                ->where('symbol', '=', $chfjpy->symbol)
+                ->where('trader_id', $trader_id)
+                ->where('magicnumber', "$chfjpy->magicnumber")
+                ->where('type', '=', 'BUY')
+                ->orderBy('magicnumber', 'ASC')
+                ->first();
+        
+            if ($magicnumber_anterior == $chfjpy->serie_magic) {
                 $sumarest += $chfjpy->profit;
             } else {
                 $sumarest = $chfjpy->profit;
@@ -1443,6 +2490,18 @@
                     $array_chfjpy[$i] = $sumarest;
                     $sumachfjpysell_array[$i] = $magicchfjpysell->sumsell;
                     $sumachfjpybuy_array[$i] = $magicchfjpybuy->sumbuy;
+        
+                    if (empty($magicchfjpysell_vol)) {
+                        $volchfjpy_sell_array[$i] = 0;
+                    } else {
+                        $volchfjpy_sell_array[$i] = $magicchfjpysell_vol->volume;
+                    }
+        
+                    if (empty($magicchfjpybuy_vol)) {
+                        $volchfjpy_buy_array[$i] = 0;
+                    } else {
+                        $volchfjpy_buy_array[$i] = $magicchfjpybuy_vol->volume;
+                    }
                 }
                 if ($sumachfjpysell_array[$i] == null) {
                     $sumachfjpysell_array[$i] = 0;
@@ -1450,21 +2509,38 @@
                 if ($sumachfjpybuy_array[$i] == null) {
                     $sumachfjpybuy_array[$i] = 0;
                 }
+                if ($volchfjpy_sell_array[$i] == null) {
+                    $volchfjpy_sell_array[$i] = 0;
+                }
+                if ($volchfjpy_buy_array[$i] == null) {
+                    $volchfjpy_buy_array[$i] = 0;
+                }
             }
         
-            $magicnumber_anterior = $chfjpy->magicnumber;
+            $magicnumber_anterior = $chfjpy->serie_magic;
         }
         
         $suma_chfjpy = array_sum($array_chfjpy);
-        $sum_totales = $suma_eurusd + $suma_gbpusd + $suma_audusd + $suma_nzdusd + $suma_usdcad + $suma_usdchf + $suma_usdjpy + $suma_eurgbp + $suma_euraud + $suma_eurnzd + $suma_gbpaud + $suma_gbpnzd + $suma_audnzd + $suma_eurcad + $suma_eurchf + $suma_eurjpy + $suma_gbpcad + $suma_gbpchf + $suma_gbpjpy + $suma_audcad + $suma_audchf + $suma_audjpy + $suma_nzdcad + $suma_nzdchf + $suma_nzdjpy + $suma_cadchf + $suma_cadjpy + $suma_chfjpy;
+        
+        if ($numero == 0) {
+            $sum_totales = DB::table('operaciones')
+                ->select(DB::raw('SUM(profit) as sumtotal'))
+                ->where('trader_id', $trader_id)
+                ->first()->sumtotal;
+        } else {
+            $sum_totales = $suma_eurusd + $suma_gbpusd + $suma_audusd + $suma_nzdusd + $suma_usdcad + $suma_usdchf + $suma_usdjpy + $suma_eurgbp + $suma_euraud + $suma_eurnzd + $suma_gbpaud + $suma_gbpnzd + $suma_audnzd + $suma_eurcad + $suma_eurchf + $suma_eurjpy + $suma_gbpcad + $suma_gbpchf + $suma_gbpjpy + $suma_audcad + $suma_audchf + $suma_audjpy + $suma_nzdcad + $suma_nzdchf + $suma_nzdjpy + $suma_cadchf + $suma_cadjpy + $suma_chfjpy;
+        }
+        
     @endphp
     <table class="table table-striped table-bordered nowrap text-center" id="status">
         <thead>
             <tr>
                 <th data-priority="0" scope="col" colspan="4">Trader: <span
                         style="font-weight: 500">{{ $nombre_trader->nombre }}</span></th>
-                <th data-priority="0" scope="col" colspan="7">Total totales: <span
+                <th data-priority="0" scope="col" colspan="4">Total totales: <span
                         style="font-weight: 500">{{ $sum_totales }}</span> </th>
+                <th data-priority="0" scope="col" colspan="4">Serie: <span style="font-weight: 500"
+                        id="seriemagic_number"></span> </th>
             </tr>
             <tr>
                 <th>MONEDA</th>
@@ -1490,13 +2566,15 @@
                 <div class="row">
                     <div class="col">
                         <button type="button" class="btn btn-dark mb-3" id="obtenerTodos">Todas las series</button>
-
                     </div>
 
                 </div>
             </div>
         </div>
         <div class="text-center">
+            <div class="text">
+
+            </div>
         </div>
         <tbody>
             <tr>
@@ -1505,23 +2583,19 @@
                     @php
                         $sumabuy_sell = $sumabuy_array[$i] + $sumasell_array[$i];
                     @endphp
-                    @if ($sumabuy_array[$i] == $sumasell_array[$i] && $sumabuy_array[$i] > 0 && $sumasell_array[$i] > 0)
+                    @if ($voleurusd_sell_array[$i] == $voleurusd_buy_array[$i] && $sumabuy_sell > 0)
                         <td data-priority="0" scope="col"
                             style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurusd[$i] }}</td>
-                    @elseif ($sumabuy_array[$i] == $sumasell_array[$i] && $sumabuy_array[$i] != 0 && $sumasell_array[$i] != 0)
-                        <td data-priority="0" scope="col"
-                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurusd[$i] }}</td>
-                    @elseif(
-                        ($sumabuy_array[$i] != $sumasell_array[$i] && $sumasell_array[$i] > 0 && $sumabuy_array[$i] > 0) ||
-                            $sumabuy_sell > 0)
+                    @elseif($voleurusd_sell_array[$i] != $voleurusd_buy_array[$i] && $sumabuy_sell > 0)
                         <td data-priority="0" scope="col"
                             style="background-color: #285430; color:white; font-weight:500">{{ $array_eurusd[$i] }}
-                        @elseif (
-                            ($sumabuy_array[$i] != $sumasell_array[$i] && $sumasell_array[$i] < 0 && $sumabuy_array[$i] < 0) ||
-                                $sumabuy_sell < 0)
+                        @elseif ($voleurusd_sell_array[$i] != $voleurusd_buy_array[$i] && $sumabuy_sell < 0)
                         <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
                             {{ $array_eurusd[$i] }}
-                        @else
+                        @elseif ($voleurusd_sell_array[$i] == $voleurusd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurusd[$i] }}</td>
+                    @else
                         <td data-priority="0" scope="col">{{ $array_eurusd[$i] }}</td>
                     @endif
                 @endfor
@@ -1531,28 +2605,25 @@
             <tr>
                 <td data-priority="0" scope="col">GBPUSD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumagbpusdbuy_array[$i] + $sumagbpusdsell_array[$i];
-                @endphp
-                       @if ($sumagbpusdbuy_array[$i] == $sumagbpusdsell_array[$i] && $sumagbpusdbuy_array[$i] > 0 && $sumagbpusdsell_array[$i] > 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpusd[$i] }}</td>
-                   @elseif ($sumagbpusdbuy_array[$i] == $sumagbpusdsell_array[$i] && $sumagbpusdbuy_array[$i] != 0 && $sumagbpusdsell_array[$i] != 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpusd[$i] }}</td>
-                   @elseif(
-                       ($sumagbpusdbuy_array[$i] != $sumagbpusdsell_array[$i] && $sumagbpusdsell_array[$i] > 0 && $sumagbpusdbuy_array[$i] > 0) ||
-                           $sumabuy_sell > 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpusd[$i] }}
-                       @elseif (
-                           ($sumagbpusdbuy_array[$i] != $sumagbpusdsell_array[$i] && $sumagbpusdsell_array[$i] < 0 && $sumagbpusdbuy_array[$i] < 0) ||
-                               $sumabuy_sell < 0)
-                       <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                           {{ $array_gbpusd[$i] }}
-                       @else
-                       <td data-priority="0" scope="col">{{ $array_gbpusd[$i] }}</td>
-                   @endif
+                    @php
+                        $sumabuy_sell = $sumagbpusdbuy_array[$i] + $sumagbpusdsell_array[$i];
+                    @endphp
+                    @if ($volgbpusd_sell_array[$i] == $volgbpusd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpusd[$i] }}</td>
+                    @elseif($volgbpusd_sell_array[$i] != $volgbpusd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpusd[$i] }}
+                        @elseif ($volgbpusd_sell_array[$i] != $volgbpusd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_gbpusd[$i] }}
+                        @elseif ($volgbpusd_sell_array[$i] == $volgbpusd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpusd[$i] }}
+                        </td>
+                    @else
+                        <td data-priority="0" scope="col">{{ $array_gbpusd[$i] }}</td>
+                    @endif
                 @endfor
                 <td data-priority="0" scope="col">{{ $suma_gbpusd }}</td>
             </tr>
@@ -1561,28 +2632,26 @@
             <tr>
                 <td data-priority="0" scope="col">AUDUSD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaaudusdbuy_array[$i] + $sumaaudusdsell_array[$i];
-                @endphp
-                     @if ($sumaaudusdbuy_array[$i] == $sumaaudusdsell_array[$i] && $sumaaudusdbuy_array[$i] > 0 && $sumaaudusdsell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audusd[$i] }}</td>
-                 @elseif ($sumaaudusdbuy_array[$i] == $sumaaudusdsell_array[$i] && $sumaaudusdbuy_array[$i] != 0 && $sumaaudusdsell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_audusd[$i] }}</td>
-                 @elseif(
-                     ($sumaaudusdbuy_array[$i] != $sumaaudusdsell_array[$i] && $sumaaudusdsell_array[$i] > 0 && $sumaaudusdbuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{ $array_audusd[$i] }}
-                     @elseif (
-                         ($sumaaudusdbuy_array[$i] != $sumaaudusdsell_array[$i] && $sumaaudusdsell_array[$i] < 0 && $sumaaudusdbuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_audusd[$i] }}
-                     @else
-                     <td data-priority="0" scope="col">{{ $array_audusd[$i] }}</td>
-                 @endif
+                    @php
+                        $sumabuy_sell = $sumaaudusdbuy_array[$i] + $sumaaudusdsell_array[$i];
+                    @endphp
+                    @if ($volaudusd_sell_array[$i] == $volaudusd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audusd[$i] }}
+                        </td>
+                    @elseif($volaudusd_sell_array[$i] != $volaudusd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audusd[$i] }}
+                        @elseif ($volaudusd_sell_array[$i] != $volaudusd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_audusd[$i] }}
+                        @elseif ($volaudusd_sell_array[$i] == $volaudusd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audusd[$i] }}
+                        </td>
+                    @else
+                        <td data-priority="0" scope="col">{{ $array_audusd[$i] }}</td>
+                    @endif
                 @endfor
                 <td data-priority="0" scope="col">{{ $suma_audusd }}</td>
             </tr>
@@ -1591,28 +2660,26 @@
             <tr>
                 <td data-priority="0" scope="col">NZDUSD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumanzdusdbuy_array[$i] + $sumanzdusdsell_array[$i];
-                @endphp
-                      @if ($sumanzdusdbuy_array[$i] == $sumanzdusdsell_array[$i] && $sumanzdusdbuy_array[$i] > 0 && $sumanzdusdsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdusd[$i] }}</td>
-                  @elseif ($sumanzdusdbuy_array[$i] == $sumanzdusdsell_array[$i] && $sumanzdusdbuy_array[$i] != 0 && $sumanzdusdsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdusd[$i] }}</td>
-                  @elseif(
-                      ($sumanzdusdbuy_array[$i] != $sumanzdusdsell_array[$i] && $sumanzdusdsell_array[$i] > 0 && $sumanzdusdbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdusd[$i] }}
-                      @elseif (
-                          ($sumanzdusdbuy_array[$i] != $sumanzdusdsell_array[$i] && $sumanzdusdsell_array[$i] < 0 && $sumanzdusdbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_nzdusd[$i] }}
-                      @else
-                      <td data-priority="0" scope="col">{{ $array_nzdusd[$i] }}</td>
-                  @endif
+                    @php
+                        $sumabuy_sell = $sumanzdusdbuy_array[$i] + $sumanzdusdsell_array[$i];
+                    @endphp
+                    @if ($volnzdusd_sell_array[$i] == $volnzdusd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdusd[$i] }}
+                        </td>
+                    @elseif($volnzdusd_sell_array[$i] != $volnzdusd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdusd[$i] }}
+                        @elseif ($volnzdusd_sell_array[$i] != $volnzdusd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_nzdusd[$i] }}
+                        @elseif ($volnzdusd_sell_array[$i] == $volnzdusd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdusd[$i] }}
+                        </td>
+                    @else
+                        <td data-priority="0" scope="col">{{ $array_nzdusd[$i] }}</td>
+                    @endif
                 @endfor
                 <td data-priority="0" scope="col">{{ $suma_nzdusd }}</td>
             </tr>
@@ -1620,28 +2687,26 @@
             <tr>
                 <td data-priority="0" scope="col">USDCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumausdcadbuy_array[$i] + $sumausdcadsell_array[$i];
-                @endphp
-                      @if ($sumausdcadbuy_array[$i] == $sumausdcadsell_array[$i] && $sumausdcadbuy_array[$i] > 0 && $sumausdcadsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_usdcad[$i] }}</td>
-                  @elseif ($sumausdcadbuy_array[$i] == $sumausdcadsell_array[$i] && $sumausdcadbuy_array[$i] != 0 && $sumausdcadsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdcad[$i] }}</td>
-                  @elseif(
-                      ($sumausdcadbuy_array[$i] != $sumausdcadsell_array[$i] && $sumausdcadsell_array[$i] > 0 && $sumausdcadbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_usdcad[$i] }}
-                      @elseif (
-                          ($sumausdcadbuy_array[$i] != $sumausdcadsell_array[$i] && $sumausdcadsell_array[$i] < 0 && $sumausdcadbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_usdcad[$i] }}
-                      @else
-                      <td data-priority="0" scope="col">{{ $array_usdcad[$i] }}</td>
-                  @endif
+                    @php
+                        $sumabuy_sell = $sumausdcadbuy_array[$i] + $sumausdcadsell_array[$i];
+                    @endphp
+                    @if ($volusdcad_sell_array[$i] == $volusdcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_usdcad[$i] }}
+                        </td>
+                    @elseif($volusdcad_sell_array[$i] != $volusdcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_usdcad[$i] }}
+                        @elseif ($volusdcad_sell_array[$i] != $volusdcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_usdcad[$i] }}
+                        @elseif ($volusdcad_sell_array[$i] == $volusdcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdcad[$i] }}
+                        </td>
+                    @else
+                        <td data-priority="0" scope="col">{{ $array_usdcad[$i] }}</td>
+                    @endif
                 @endfor
                 <td data-priority="0" scope="col">{{ $suma_usdcad }}</td>
             </tr>
@@ -1649,25 +2714,23 @@
             <tr>
                 <td data-priority="0" scope="col">USDCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumausdchfbuy_array[$i] + $sumausdchfsell_array[$i];
-                @endphp
-                      @if ($sumausdchfbuy_array[$i] == $sumausdchfsell_array[$i] && $sumausdchfbuy_array[$i] > 0 && $sumausdchfsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_usdchf[$i] }}</td>
-                  @elseif ($sumausdchfbuy_array[$i] == $sumausdchfsell_array[$i] && $sumausdchfbuy_array[$i] != 0 && $sumausdchfsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdchf[$i] }}</td>
-                  @elseif(
-                      ($sumausdchfbuy_array[$i] != $sumausdchfsell_array[$i] && $sumausdchfsell_array[$i] > 0 && $sumausdchfbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_usdchf[$i] }}
-                      @elseif (
-                          ($sumausdchfbuy_array[$i] != $sumausdchfsell_array[$i] && $sumausdchfsell_array[$i] < 0 && $sumausdchfbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_usdchf[$i] }}
+                    @php
+                        $sumabuy_sell = $sumausdchfbuy_array[$i] + $sumausdchfsell_array[$i];
+                    @endphp
+                    @if ($volusdchf_sell_array[$i] == $volusdchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_usdchf[$i] }}
+                        </td>
+                    @elseif($volusdchf_sell_array[$i] != $volusdchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_usdchf[$i] }}
+                        @elseif ($volusdchf_sell_array[$i] != $volusdchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_usdchf[$i] }}
+                        @elseif ($volusdchf_sell_array[$i] == $volusdchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdchf[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_usdchf[$i] }}</td>
                     @endif
@@ -1678,25 +2741,23 @@
             <tr>
                 <td data-priority="0" scope="col">USDJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumausdjpybuy_array[$i] + $sumausdjpysell_array[$i];
-                @endphp
-                   @if ($sumausdjpybuy_array[$i] == $sumausdjpysell_array[$i] && $sumausdjpybuy_array[$i] > 0 && $sumausdjpysell_array[$i] > 0)
-                   <td data-priority="0" scope="col"
-                       style="background-color: #FF6000; color:white; font-weight:500">{{$array_usdjpy[$i] }}</td>
-               @elseif ($sumausdjpybuy_array[$i] == $sumausdjpysell_array[$i] && $sumausdjpybuy_array[$i] != 0 && $sumausdjpysell_array[$i] != 0)
-                   <td data-priority="0" scope="col"
-                       style="background-color: #D21312; color:white; font-weight:500">{{$array_usdjpy[$i] }}</td>
-               @elseif(
-                   ($sumausdjpybuy_array[$i] != $sumausdjpysell_array[$i] && $sumausdjpysell_array[$i] > 0 && $sumausdjpybuy_array[$i] > 0) ||
-                       $sumabuy_sell > 0)
-                   <td data-priority="0" scope="col"
-                       style="background-color: #285430; color:white; font-weight:500">{{$array_usdjpy[$i] }}
-                   @elseif (
-                       ($sumausdjpybuy_array[$i] != $sumausdjpysell_array[$i] && $sumausdjpysell_array[$i] < 0 && $sumausdjpybuy_array[$i] < 0) ||
-                           $sumabuy_sell < 0)
-                   <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                       {{ $array_usdjpy[$i] }}
+                    @php
+                        $sumabuy_sell = $sumausdjpybuy_array[$i] + $sumausdjpysell_array[$i];
+                    @endphp
+                    @if ($volusdjpy_sell_array[$i] == $volusdjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_usdjpy[$i] }}
+                        </td>
+                    @elseif($volusdjpy_sell_array[$i] != $volusdjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_usdjpy[$i] }}
+                        @elseif ($volusdjpy_sell_array[$i] != $volusdjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_usdjpy[$i] }}
+                        @elseif ($volusdjpy_sell_array[$i] == $volusdjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_usdjpy[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_usdjpy[$i] }}</td>
                     @endif
@@ -1707,25 +2768,23 @@
             <tr>
                 <td data-priority="0" scope="col">EURGBP</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaeurgbpbuy_array[$i] + $sumaeurgbpsell_array[$i];
-                @endphp
-                       @if ($sumaeurgbpbuy_array[$i] == $sumaeurgbpsell_array[$i] && $sumaeurgbpbuy_array[$i] > 0 && $sumaeurgbpsell_array[$i] > 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurgbp[$i] }}</td>
-                   @elseif ($sumaeurgbpbuy_array[$i] == $sumaeurgbpsell_array[$i] && $sumaeurgbpbuy_array[$i] != 0 && $sumaeurgbpsell_array[$i] != 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurgbp[$i] }}</td>
-                   @elseif(
-                       ($sumaeurgbpbuy_array[$i] != $sumaeurgbpsell_array[$i] && $sumaeurgbpsell_array[$i] > 0 && $sumaeurgbpbuy_array[$i] > 0) ||
-                           $sumabuy_sell > 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #285430; color:white; font-weight:500">{{ $array_eurgbp[$i] }}
-                       @elseif (
-                           ($sumaeurgbpbuy_array[$i] != $sumaeurgbpsell_array[$i] && $sumaeurgbpsell_array[$i] < 0 && $sumaeurgbpbuy_array[$i] < 0) ||
-                               $sumabuy_sell < 0)
-                       <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                           {{ $array_eurgbp[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaeurgbpbuy_array[$i] + $sumaeurgbpsell_array[$i];
+                    @endphp
+                    @if ($voleurgbp_sell_array[$i] == $voleurgbp_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurgbp[$i] }}
+                        </td>
+                    @elseif($voleurgbp_sell_array[$i] != $voleurgbp_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurgbp[$i] }}
+                        @elseif ($voleurgbp_sell_array[$i] != $voleurgbp_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_eurgbp[$i] }}
+                        @elseif ($voleurgbp_sell_array[$i] == $voleurgbp_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurgbp[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurgbp[$i] }}</td>
                     @endif
@@ -1736,25 +2795,23 @@
             <tr>
                 <td data-priority="0" scope="col">EURAUD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaeuraudbuy_array[$i] + $sumaeuraudsell_array[$i];
-                @endphp
-                    @if ($sumaeuraudbuy_array[$i] == $sumaeuraudsell_array[$i] && $sumaeuraudbuy_array[$i] > 0 && $sumaeuraudsell_array[$i] > 0)
-                    <td data-priority="0" scope="col"
-                        style="background-color: #FF6000; color:white; font-weight:500">{{ $array_euraud[$i] }}</td>
-                @elseif ($sumaeuraudbuy_array[$i] == $sumaeuraudsell_array[$i] && $sumaeuraudbuy_array[$i] != 0 && $sumaeuraudsell_array[$i] != 0)
-                    <td data-priority="0" scope="col"
-                        style="background-color: #D21312; color:white; font-weight:500">{{ $array_euraud[$i] }}</td>
-                @elseif(
-                    ($sumaeuraudbuy_array[$i] != $sumaeuraudsell_array[$i] && $sumaeuraudsell_array[$i] > 0 && $sumaeuraudbuy_array[$i] > 0) ||
-                        $sumabuy_sell > 0)
-                    <td data-priority="0" scope="col"
-                        style="background-color: #285430; color:white; font-weight:500">{{ $array_euraud[$i] }}
-                    @elseif (
-                        ($sumaeuraudbuy_array[$i] != $sumaeuraudsell_array[$i] && $sumaeuraudsell_array[$i] < 0 && $sumaeuraudbuy_array[$i] < 0) ||
-                            $sumabuy_sell < 0)
-                    <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                        {{ $array_euraud[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaeuraudbuy_array[$i] + $sumaeuraudsell_array[$i];
+                    @endphp
+                    @if ($voleuraud_sell_array[$i] == $voleuraud_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_euraud[$i] }}
+                        </td>
+                    @elseif($voleuraud_sell_array[$i] != $voleuraud_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_euraud[$i] }}
+                        @elseif ($voleuraud_sell_array[$i] != $voleuraud_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_euraud[$i] }}
+                        @elseif ($voleuraud_sell_array[$i] == $voleuraud_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_euraud[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_euraud[$i] }}</td>
                     @endif
@@ -1765,25 +2822,23 @@
             <tr>
                 <td data-priority="0" scope="col">EURNZD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaeurnzdbuy_array[$i] + $sumaeurnzdsell_array[$i];
-                @endphp
-                      @if ($sumaeurnzdbuy_array[$i] == $sumaeurnzdsell_array[$i] && $sumaeurnzdbuy_array[$i] > 0 && $sumaeurnzdsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurnzd[$i] }}</td>
-                  @elseif ($sumaeurnzdbuy_array[$i] == $sumaeurnzdsell_array[$i] && $sumaeurnzdbuy_array[$i] != 0 && $sumaeurnzdsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurnzd[$i] }}</td>
-                  @elseif(
-                      ($sumaeurnzdbuy_array[$i] != $sumaeurnzdsell_array[$i] && $sumaeurnzdsell_array[$i] > 0 && $sumaeurnzdbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_eurnzd[$i] }}
-                      @elseif (
-                          ($sumaeurnzdbuy_array[$i] != $sumaeurnzdsell_array[$i] && $sumaeurnzdsell_array[$i] < 0 && $sumaeurnzdbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_eurnzd[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaeurnzdbuy_array[$i] + $sumaeurnzdsell_array[$i];
+                    @endphp
+                    @if ($voleurnzd_sell_array[$i] == $voleurnzd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurnzd[$i] }}
+                        </td>
+                    @elseif($voleurnzd_sell_array[$i] != $voleurnzd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurnzd[$i] }}
+                        @elseif ($voleurnzd_sell_array[$i] != $voleurnzd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_eurnzd[$i] }}
+                        @elseif ($voleurnzd_sell_array[$i] == $voleurnzd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurnzd[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurnzd[$i] }}</td>
                     @endif
@@ -1794,25 +2849,23 @@
             <tr>
                 <td data-priority="0" scope="col">GBPAUD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumagbpaudbuy_array[$i] + $sumagbpaudsell_array[$i];
-                @endphp
-                      @if ($sumagbpaudbuy_array[$i] == $sumagbpaudsell_array[$i] && $sumagbpaudbuy_array[$i] > 0 && $sumagbpaudsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpaud[$i] }}</td>
-                  @elseif ($sumagbpaudbuy_array[$i] == $sumagbpaudsell_array[$i] && $sumagbpaudbuy_array[$i] != 0 && $sumagbpaudsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpaud[$i] }}</td>
-                  @elseif(
-                      ($sumagbpaudbuy_array[$i] != $sumagbpaudsell_array[$i] && $sumagbpaudsell_array[$i] > 0 && $sumagbpaudbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpaud[$i] }}
-                      @elseif (
-                          ($sumagbpaudbuy_array[$i] != $sumagbpaudsell_array[$i] && $sumagbpaudsell_array[$i] < 0 && $sumagbpaudbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_gbpaud[$i] }}
+                    @php
+                        $sumabuy_sell = $sumagbpaudbuy_array[$i] + $sumagbpaudsell_array[$i];
+                    @endphp
+                    @if ($volgbpaud_sell_array[$i] == $volgbpaud_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpaud[$i] }}
+                        </td>
+                    @elseif($volgbpaud_sell_array[$i] != $volgbpaud_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpaud[$i] }}
+                        @elseif ($volgbpaud_sell_array[$i] != $volgbpaud_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_gbpaud[$i] }}
+                        @elseif ($volgbpaud_sell_array[$i] == $volgbpaud_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpaud[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpaud[$i] }}</td>
                     @endif
@@ -1823,25 +2876,23 @@
             <tr>
                 <td data-priority="0" scope="col">GBPNZD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumagbpnzdbuy_array[$i] + $sumagbpnzdsell_array[$i];
-                @endphp
-                      @if ($sumagbpnzdbuy_array[$i] == $sumagbpnzdsell_array[$i] && $sumagbpnzdbuy_array[$i] > 0 && $sumagbpnzdsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}</td>
-                  @elseif ($sumagbpnzdbuy_array[$i] == $sumagbpnzdsell_array[$i] && $sumagbpnzdbuy_array[$i] != 0 && $sumagbpnzdsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}</td>
-                  @elseif(
-                      ($sumagbpnzdbuy_array[$i] != $sumagbpnzdsell_array[$i] && $sumagbpnzdsell_array[$i] > 0 && $sumagbpnzdbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}
-                      @elseif (
-                          ($sumagbpnzdbuy_array[$i] != $sumagbpnzdsell_array[$i] && $sumagbpnzdsell_array[$i] < 0 && $sumagbpnzdbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_gbpnzd[$i] }}
+                    @php
+                        $sumabuy_sell = $sumagbpnzdbuy_array[$i] + $sumagbpnzdsell_array[$i];
+                    @endphp
+                    @if ($volgbpnzd_sell_array[$i] == $volgbpnzd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}
+                        </td>
+                    @elseif($volgbpnzd_sell_array[$i] != $volgbpnzd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}
+                        @elseif ($volgbpnzd_sell_array[$i] != $volgbpnzd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_gbpnzd[$i] }}
+                        @elseif ($volgbpnzd_sell_array[$i] == $volgbpnzd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpnzd[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpnzd[$i] }}</td>
                     @endif
@@ -1852,25 +2903,23 @@
             <tr>
                 <td data-priority="0" scope="col">AUDNZD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaaudnzdbuy_array[$i] + $sumaaudnzdsell_array[$i];
-                @endphp
-                      @if ($sumaaudnzdbuy_array[$i] == $sumaaudnzdsell_array[$i] && $sumaaudnzdbuy_array[$i] > 0 && $sumaaudnzdsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audnzd[$i] }}</td>
-                  @elseif ($sumaaudnzdbuy_array[$i] == $sumaaudnzdsell_array[$i] && $sumaaudnzdbuy_array[$i] != 0 && $sumaaudnzdsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_audnzd[$i] }}</td>
-                  @elseif(
-                      ($sumaaudnzdbuy_array[$i] != $sumaaudnzdsell_array[$i] && $sumaaudnzdsell_array[$i] > 0 && $sumaaudnzdbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_audnzd[$i] }}
-                      @elseif (
-                          ($sumaaudnzdbuy_array[$i] != $sumaaudnzdsell_array[$i] && $sumaaudnzdsell_array[$i] < 0 && $sumaaudnzdbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_audnzd[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaaudnzdbuy_array[$i] + $sumaaudnzdsell_array[$i];
+                    @endphp
+                    @if ($volaudnzd_sell_array[$i] == $volaudnzd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audnzd[$i] }}
+                        </td>
+                    @elseif($volaudnzd_sell_array[$i] != $volaudnzd_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audnzd[$i] }}
+                        @elseif ($volaudnzd_sell_array[$i] != $volaudnzd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_audnzd[$i] }}
+                        @elseif ($volaudnzd_sell_array[$i] == $volaudnzd_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audnzd[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_audnzd[$i] }}</td>
                     @endif
@@ -1881,25 +2930,23 @@
             <tr>
                 <td data-priority="0" scope="col">EURCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaeurcadbuy_array[$i] + $sumaeurcadsell_array[$i];
-                @endphp
-                      @if ($sumaeurcadbuy_array[$i] == $sumaeurcadsell_array[$i] && $sumaeurcadbuy_array[$i] > 0 && $sumaeurcadsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurcad[$i] }}</td>
-                  @elseif ($sumaeurcadbuy_array[$i] == $sumaeurcadsell_array[$i] && $sumaeurcadbuy_array[$i] != 0 && $sumaeurcadsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurcad[$i] }}</td>
-                  @elseif(
-                      ($sumaeurcadbuy_array[$i] != $sumaeurcadsell_array[$i] && $sumaeurcadsell_array[$i] > 0 && $sumaeurcadbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_eurcad[$i] }}
-                      @elseif (
-                          ($sumaeurcadbuy_array[$i] != $sumaeurcadsell_array[$i] && $sumaeurcadsell_array[$i] < 0 && $sumaeurcadbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_eurcad[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaeurcadbuy_array[$i] + $sumaeurcadsell_array[$i];
+                    @endphp
+                    @if ($voleurcad_sell_array[$i] == $voleurcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurcad[$i] }}
+                        </td>
+                    @elseif($voleurcad_sell_array[$i] != $voleurcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurcad[$i] }}
+                        @elseif ($voleurcad_sell_array[$i] != $voleurcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_eurcad[$i] }}
+                        @elseif ($voleurcad_sell_array[$i] == $voleurcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurcad[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurcad[$i] }}</td>
                     @endif
@@ -1910,25 +2957,23 @@
             <tr>
                 <td data-priority="0" scope="col">EURCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaeurchfbuy_array[$i] + $sumaeurchfsell_array[$i];
-                @endphp
-                     @if ($sumaeurchfbuy_array[$i] == $sumaeurchfsell_array[$i] && $sumaeurchfbuy_array[$i] > 0 && $sumaeurchfsell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurchf[$i] }}</td>
-                 @elseif ($sumaeurchfbuy_array[$i] == $sumaeurchfsell_array[$i] && $sumaeurchfbuy_array[$i] != 0 && $sumaeurchfsell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurchf[$i] }}</td>
-                 @elseif(
-                     ($sumaeurchfbuy_array[$i] != $sumaeurchfsell_array[$i] && $sumaeurchfsell_array[$i] > 0 && $sumaeurchfbuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{ $array_eurchf[$i] }}
-                     @elseif (
-                         ($sumaeurchfbuy_array[$i] != $sumaeurchfsell_array[$i] && $sumaeurchfsell_array[$i] < 0 && $sumaeurchfbuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_eurchf[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaeurchfbuy_array[$i] + $sumaeurchfsell_array[$i];
+                    @endphp
+                    @if ($voleurchf_sell_array[$i] == $voleurchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurchf[$i] }}
+                        </td>
+                    @elseif($voleurchf_sell_array[$i] != $voleurchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurchf[$i] }}
+                        @elseif ($voleurchf_sell_array[$i] != $voleurchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_eurchf[$i] }}
+                        @elseif ($voleurchf_sell_array[$i] == $voleurchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurchf[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurchf[$i] }}</td>
                     @endif
@@ -1939,25 +2984,23 @@
             <tr>
                 <td data-priority="0" scope="col">EURJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaeurjpybuy_array[$i] + $sumaeurjpysell_array[$i];
-                @endphp
-                       @if ($sumaeurjpybuy_array[$i] == $sumaeurjpysell_array[$i] && $sumaeurjpybuy_array[$i] > 0 && $sumaeurjpysell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurjpy[$i] }}</td>
-                  @elseif ($sumaeurjpybuy_array[$i] == $sumaeurjpysell_array[$i] && $sumaeurjpybuy_array[$i] != 0 && $sumaeurjpysell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurjpy[$i] }}</td>
-                  @elseif(
-                      ($sumaeurjpybuy_array[$i] != $sumaeurjpysell_array[$i] && $sumaeurjpysell_array[$i] > 0 && $sumaeurjpybuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_eurjpy[$i] }}
-                      @elseif (
-                          ($sumaeurjpybuy_array[$i] != $sumaeurjpysell_array[$i] && $sumaeurjpysell_array[$i] < 0 && $sumaeurjpybuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_eurjpy[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaeurjpybuy_array[$i] + $sumaeurjpysell_array[$i];
+                    @endphp
+                    @if ($voleurjpy_sell_array[$i] == $voleurjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_eurjpy[$i] }}
+                        </td>
+                    @elseif($voleurjpy_sell_array[$i] != $voleurjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_eurjpy[$i] }}
+                        @elseif ($voleurjpy_sell_array[$i] != $voleurjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_eurjpy[$i] }}
+                        @elseif ($voleurjpy_sell_array[$i] == $voleurjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_eurjpy[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_eurjpy[$i] }}</td>
                     @endif
@@ -1968,25 +3011,23 @@
             <tr>
                 <td data-priority="0" scope="col">GBPCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumagbpcadbuy_array[$i] + $sumagbpcadsell_array[$i];
-                @endphp
-                     @if ($sumagbpcadbuy_array[$i] == $sumagbpcadsell_array[$i] && $sumagbpcadbuy_array[$i] > 0 && $sumagbpcadsell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpcad[$i] }}</td>
-                 @elseif ($sumagbpcadbuy_array[$i] == $sumagbpcadsell_array[$i] && $sumagbpcadbuy_array[$i] != 0 && $sumagbpcadsell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpcad[$i] }}</td>
-                 @elseif(
-                     ($sumagbpcadbuy_array[$i] != $sumagbpcadsell_array[$i] && $sumagbpcadsell_array[$i] > 0 && $sumagbpcadbuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpcad[$i] }}
-                     @elseif (
-                         ($sumagbpcadbuy_array[$i] != $sumagbpcadsell_array[$i] && $sumagbpcadsell_array[$i] < 0 && $sumagbpcadbuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_gbpcad[$i] }}
+                    @php
+                        $sumabuy_sell = $sumagbpcadbuy_array[$i] + $sumagbpcadsell_array[$i];
+                    @endphp
+                    @if ($volgbpcad_sell_array[$i] == $volgbpcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpcad[$i] }}
+                        </td>
+                    @elseif($volgbpcad_sell_array[$i] != $volgbpcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpcad[$i] }}
+                        @elseif ($volgbpcad_sell_array[$i] != $volgbpcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_gbpcad[$i] }}
+                        @elseif ($volgbpcad_sell_array[$i] == $volgbpcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpcad[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpcad[$i] }}</td>
                     @endif
@@ -1997,25 +3038,23 @@
             <tr>
                 <td data-priority="0" scope="col">GBPCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumagbpchfbuy_array[$i] + $sumagbpchfsell_array[$i];
-                @endphp
-                     @if ($sumagbpchfbuy_array[$i] == $sumagbpchfsell_array[$i] && $sumagbpchfbuy_array[$i] > 0 && $sumagbpchfsell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpchf[$i] }}</td>
-                 @elseif ($sumagbpchfbuy_array[$i] == $sumagbpchfsell_array[$i] && $sumagbpchfbuy_array[$i] != 0 && $sumagbpchfsell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpchf[$i] }}</td>
-                 @elseif(
-                     ($sumagbpchfbuy_array[$i] != $sumagbpchfsell_array[$i] && $sumagbpchfsell_array[$i] > 0 && $sumagbpchfbuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpchf[$i] }}
-                     @elseif (
-                         ($sumagbpchfbuy_array[$i] != $sumagbpchfsell_array[$i] && $sumagbpchfsell_array[$i] < 0 && $sumagbpchfbuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_gbpchf[$i] }}
+                    @php
+                        $sumabuy_sell = $sumagbpchfbuy_array[$i] + $sumagbpchfsell_array[$i];
+                    @endphp
+                    @if ($volgbpchf_sell_array[$i] == $volgbpchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpchf[$i] }}
+                        </td>
+                    @elseif($volgbpchf_sell_array[$i] != $volgbpchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpchf[$i] }}
+                        @elseif ($volgbpchf_sell_array[$i] != $volgbpchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_gbpchf[$i] }}
+                        @elseif ($volgbpchf_sell_array[$i] == $volgbpchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpchf[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpchf[$i] }}</td>
                     @endif
@@ -2026,25 +3065,23 @@
             <tr>
                 <td data-priority="0" scope="col">GBPJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumagbpjpybuy_array[$i] + $sumagbpjpysell_array[$i];
-                @endphp
-                     @if ($sumagbpjpybuy_array[$i] == $sumagbpjpysell_array[$i] && $sumagbpjpybuy_array[$i] > 0 && $sumagbpjpysell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}</td>
-                 @elseif ($sumagbpjpybuy_array[$i] == $sumagbpjpysell_array[$i] && $sumagbpjpybuy_array[$i] != 0 && $sumagbpjpysell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}</td>
-                 @elseif(
-                     ($sumagbpjpybuy_array[$i] != $sumagbpjpysell_array[$i] && $sumagbpjpysell_array[$i] > 0 && $sumagbpjpybuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}
-                     @elseif (
-                         ($sumagbpjpybuy_array[$i] != $sumagbpjpysell_array[$i] && $sumagbpjpysell_array[$i] < 0 && $sumagbpjpybuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_gbpjpy[$i] }}
+                    @php
+                        $sumabuy_sell = $sumagbpjpybuy_array[$i] + $sumagbpjpysell_array[$i];
+                    @endphp
+                    @if ($volgbpjpy_sell_array[$i] == $volgbpjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}
+                        </td>
+                    @elseif($volgbpjpy_sell_array[$i] != $volgbpjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}
+                        @elseif ($volgbpjpy_sell_array[$i] != $volgbpjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_gbpjpy[$i] }}
+                        @elseif ($volgbpjpy_sell_array[$i] == $volgbpjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_gbpjpy[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_gbpjpy[$i] }}</td>
                     @endif
@@ -2055,25 +3092,23 @@
             <tr>
                 <td data-priority="0" scope="col">AUDCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaaudcadbuy_array[$i] + $sumaaudcadsell_array[$i];
-                @endphp
-                      @if ($sumaaudcadbuy_array[$i] == $sumaaudcadsell_array[$i] && $sumaaudcadbuy_array[$i] > 0 && $sumaaudcadsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{  $array_audcad[$i] }}</td>
-                  @elseif ($sumaaudcadbuy_array[$i] == $sumaaudcadsell_array[$i] && $sumaaudcadbuy_array[$i] != 0 && $sumaaudcadsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{  $array_audcad[$i] }}</td>
-                  @elseif(
-                      ($sumaaudcadbuy_array[$i] != $sumaaudcadsell_array[$i] && $sumaaudcadsell_array[$i] > 0 && $sumaaudcadbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{  $array_audcad[$i] }}
-                      @elseif (
-                          ($sumaaudcadbuy_array[$i] != $sumaaudcadsell_array[$i] && $sumaaudcadsell_array[$i] < 0 && $sumaaudcadbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_audcad[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaaudcadbuy_array[$i] + $sumaaudcadsell_array[$i];
+                    @endphp
+                    @if ($volaudcad_sell_array[$i] == $volaudcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audcad[$i] }}
+                        </td>
+                    @elseif($volaudcad_sell_array[$i] != $volaudcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audcad[$i] }}
+                        @elseif ($volaudcad_sell_array[$i] != $volaudcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_audcad[$i] }}
+                        @elseif ($volaudcad_sell_array[$i] == $volaudcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audcad[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_audcad[$i] }}</td>
                     @endif
@@ -2084,25 +3119,23 @@
             <tr>
                 <td data-priority="0" scope="col">AUDCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaaudchfbuy_array[$i] + $sumaaudchfsell_array[$i];
-                @endphp
-                     @if ($sumaaudchfbuy_array[$i] == $sumaaudchfsell_array[$i] && $sumaaudchfbuy_array[$i] > 0 && $sumaaudchfsell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audchf[$i] }}</td>
-                 @elseif ($sumaaudchfbuy_array[$i] == $sumaaudchfsell_array[$i] && $sumaaudchfbuy_array[$i] != 0 && $sumaaudchfsell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_audchf[$i] }}</td>
-                 @elseif(
-                     ($sumaaudchfbuy_array[$i] != $sumaaudchfsell_array[$i] && $sumaaudchfsell_array[$i] > 0 && $sumaaudchfbuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{ $array_audchf[$i] }}
-                     @elseif (
-                         ($sumaaudchfbuy_array[$i] != $sumaaudchfsell_array[$i] && $sumaaudchfsell_array[$i] < 0 && $sumaaudchfbuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_audchf[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaaudchfbuy_array[$i] + $sumaaudchfsell_array[$i];
+                    @endphp
+                    @if ($volaudchf_sell_array[$i] == $volaudchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audchf[$i] }}
+                        </td>
+                    @elseif($volaudchf_sell_array[$i] != $volaudchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audchf[$i] }}
+                        @elseif ($volaudchf_sell_array[$i] != $volaudchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_audchf[$i] }}
+                        @elseif ($volaudchf_sell_array[$i] == $volaudchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audchf[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_audchf[$i] }}</td>
                     @endif
@@ -2113,25 +3146,23 @@
             <tr>
                 <td data-priority="0" scope="col">AUDJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumaaudjpybuy_array[$i] + $sumaaudjpysell_array[$i];
-                @endphp
-                     @if ($sumaaudjpybuy_array[$i] == $sumaaudjpysell_array[$i] && $sumaaudjpybuy_array[$i] > 0 && $sumaaudjpysell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audjpy[$i] }}</td>
-                 @elseif ($sumaaudjpybuy_array[$i] == $sumaaudjpysell_array[$i] && $sumaaudjpybuy_array[$i] != 0 && $sumaaudjpysell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_audjpy[$i] }}</td>
-                 @elseif(
-                     ($sumaaudjpybuy_array[$i] != $sumaaudjpysell_array[$i] && $sumaaudjpysell_array[$i] > 0 && $sumaaudjpybuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{ $array_audjpy[$i] }}
-                     @elseif (
-                         ($sumaaudjpybuy_array[$i] != $sumaaudjpysell_array[$i] && $sumaaudjpysell_array[$i] < 0 && $sumaaudjpybuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_audjpy[$i] }}
+                    @php
+                        $sumabuy_sell = $sumaaudjpybuy_array[$i] + $sumaaudjpysell_array[$i];
+                    @endphp
+                    @if ($volaudjpy_sell_array[$i] == $volaudjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_audjpy[$i] }}
+                        </td>
+                    @elseif($volaudjpy_sell_array[$i] != $volaudjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_audjpy[$i] }}
+                        @elseif ($volaudjpy_sell_array[$i] != $volaudjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_audjpy[$i] }}
+                        @elseif ($volaudjpy_sell_array[$i] == $volaudjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_audjpy[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_audjpy[$i] }}</td>
                     @endif
@@ -2142,25 +3173,23 @@
             <tr>
                 <td data-priority="0" scope="col">NZDCAD</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumanzdcadbuy_array[$i] + $sumanzdcadsell_array[$i];
-                @endphp
-                      @if ($sumanzdcadbuy_array[$i] == $sumanzdcadsell_array[$i] && $sumanzdcadbuy_array[$i] > 0 && $sumanzdcadsell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdcad[$i] }}</td>
-                  @elseif ($sumanzdcadbuy_array[$i] == $sumanzdcadsell_array[$i] && $sumanzdcadbuy_array[$i] != 0 && $sumanzdcadsell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdcad[$i] }}</td>
-                  @elseif(
-                      ($sumanzdcadbuy_array[$i] != $sumanzdcadsell_array[$i] && $sumanzdcadsell_array[$i] > 0 && $sumanzdcadbuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdcad[$i] }}
-                      @elseif (
-                          ($sumanzdcadbuy_array[$i] != $sumanzdcadsell_array[$i] && $sumanzdcadsell_array[$i] < 0 && $sumanzdcadbuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_nzdcad[$i] }}
+                    @php
+                        $sumabuy_sell = $sumanzdcadbuy_array[$i] + $sumanzdcadsell_array[$i];
+                    @endphp
+                    @if ($volnzdcad_sell_array[$i] == $volnzdcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdcad[$i] }}
+                        </td>
+                    @elseif($volnzdcad_sell_array[$i] != $volnzdcad_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdcad[$i] }}
+                        @elseif ($volnzdcad_sell_array[$i] != $volnzdcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_nzdcad[$i] }}
+                        @elseif ($volnzdcad_sell_array[$i] == $volnzdcad_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdcad[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_nzdcad[$i] }}</td>
                     @endif
@@ -2171,25 +3200,23 @@
             <tr>
                 <td data-priority="0" scope="col">NZDCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumanzdchfbuy_array[$i] + $sumanzdchfsell_array[$i];
-                @endphp
-                       @if ($sumanzdchfbuy_array[$i] == $sumanzdchfsell_array[$i] && $sumanzdchfbuy_array[$i] > 0 && $sumanzdchfsell_array[$i] > 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdchf[$i] }}</td>
-                   @elseif ($sumanzdchfbuy_array[$i] == $sumanzdchfsell_array[$i] && $sumanzdchfbuy_array[$i] != 0 && $sumanzdchfsell_array[$i] != 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdchf[$i] }}</td>
-                   @elseif(
-                       ($sumanzdchfbuy_array[$i] != $sumanzdchfsell_array[$i] && $sumanzdchfsell_array[$i] > 0 && $sumanzdchfbuy_array[$i] > 0) ||
-                           $sumabuy_sell > 0)
-                       <td data-priority="0" scope="col"
-                           style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdchf[$i] }}
-                       @elseif (
-                           ($sumanzdchfbuy_array[$i] != $sumanzdchfsell_array[$i] && $sumanzdchfsell_array[$i] < 0 && $sumanzdchfbuy_array[$i] < 0) ||
-                               $sumabuy_sell < 0)
-                       <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                           {{ $array_nzdchf[$i] }}
+                    @php
+                        $sumabuy_sell = $sumanzdchfbuy_array[$i] + $sumanzdchfsell_array[$i];
+                    @endphp
+                    @if ($volnzdchf_sell_array[$i] == $volnzdchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdchf[$i] }}
+                        </td>
+                    @elseif($volnzdchf_sell_array[$i] != $volnzdchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdchf[$i] }}
+                        @elseif ($volnzdchf_sell_array[$i] != $volnzdchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_nzdchf[$i] }}
+                        @elseif ($volnzdchf_sell_array[$i] == $volnzdchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdchf[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_nzdchf[$i] }}</td>
                     @endif
@@ -2200,25 +3227,23 @@
             <tr>
                 <td data-priority="0" scope="col">NZDJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumanzdjpybuy_array[$i] + $sumanzdjpysell_array[$i];
-                @endphp
-                      @if ($sumanzdjpybuy_array[$i] == $sumanzdjpysell_array[$i] && $sumanzdjpybuy_array[$i] > 0 && $sumanzdjpysell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{$array_nzdjpy[$i] }}</td>
-                  @elseif ($sumanzdjpybuy_array[$i] == $sumanzdjpysell_array[$i] && $sumanzdjpybuy_array[$i] != 0 && $sumanzdjpysell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{$array_nzdjpy[$i] }}</td>
-                  @elseif(
-                      ($sumanzdjpybuy_array[$i] != $sumanzdjpysell_array[$i] && $sumanzdjpysell_array[$i] > 0 && $sumanzdjpybuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{$array_nzdjpy[$i] }}
-                      @elseif (
-                          ($sumanzdjpybuy_array[$i] != $sumanzdjpysell_array[$i] && $sumanzdjpysell_array[$i] < 0 && $sumanzdjpybuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_nzdjpy[$i] }}
+                    @php
+                        $sumabuy_sell = $sumanzdjpybuy_array[$i] + $sumanzdjpysell_array[$i];
+                    @endphp
+                    @if ($volnzdjpy_sell_array[$i] == $volnzdjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_nzdjpy[$i] }}
+                        </td>
+                    @elseif($volnzdjpy_sell_array[$i] != $volnzdjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_nzdjpy[$i] }}
+                        @elseif ($volnzdjpy_sell_array[$i] != $volnzdjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_nzdjpy[$i] }}
+                        @elseif ($volnzdjpy_sell_array[$i] == $volnzdjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_nzdjpy[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_nzdjpy[$i] }}</td>
                     @endif
@@ -2229,25 +3254,23 @@
             <tr>
                 <td data-priority="0" scope="col">CADCHF</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumacadchfbuy_array[$i] + $sumacadchfsell_array[$i];
-                @endphp
-                     @if ($sumacadchfbuy_array[$i] == $sumacadchfsell_array[$i] && $sumacadchfbuy_array[$i] > 0 && $sumacadchfsell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{$array_cadchf[$i] }}</td>
-                 @elseif ($sumacadchfbuy_array[$i] == $sumacadchfsell_array[$i] && $sumacadchfbuy_array[$i] != 0 && $sumacadchfsell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{$array_cadchf[$i] }}</td>
-                 @elseif(
-                     ($sumacadchfbuy_array[$i] != $sumacadchfsell_array[$i] && $sumacadchfsell_array[$i] > 0 && $sumacadchfbuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{$array_cadchf[$i] }}
-                     @elseif (
-                         ($sumacadchfbuy_array[$i] != $sumacadchfsell_array[$i] && $sumacadchfsell_array[$i] < 0 && $sumacadchfbuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_cadchf[$i] }}
+                    @php
+                        $sumabuy_sell = $sumacadchfbuy_array[$i] + $sumacadchfsell_array[$i];
+                    @endphp
+                    @if ($volcadchf_sell_array[$i] == $volcadchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_cadchf[$i] }}
+                        </td>
+                    @elseif($volcadchf_sell_array[$i] != $volcadchf_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_cadchf[$i] }}
+                        @elseif ($volcadchf_sell_array[$i] != $volcadchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_cadchf[$i] }}
+                        @elseif ($volcadchf_sell_array[$i] == $volcadchf_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_cadchf[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_cadchf[$i] }}</td>
                     @endif
@@ -2258,25 +3281,23 @@
             <tr>
                 <td data-priority="0" scope="col">CADJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumacadjpybuy_array[$i] + $sumacadjpysell_array[$i];
-                @endphp
-                     @if ($sumacadjpybuy_array[$i] == $sumacadjpysell_array[$i] && $sumacadjpybuy_array[$i] > 0 && $sumacadjpysell_array[$i] > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #FF6000; color:white; font-weight:500">{{ $array_cadjpy[$i] }}</td>
-                 @elseif ($sumacadjpybuy_array[$i] == $sumacadjpysell_array[$i] && $sumacadjpybuy_array[$i] != 0 && $sumacadjpysell_array[$i] != 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #D21312; color:white; font-weight:500">{{ $array_cadjpy[$i] }}</td>
-                 @elseif(
-                     ($sumacadjpybuy_array[$i] != $sumacadjpysell_array[$i] && $sumacadjpysell_array[$i] > 0 && $sumacadjpybuy_array[$i] > 0) ||
-                         $sumabuy_sell > 0)
-                     <td data-priority="0" scope="col"
-                         style="background-color: #285430; color:white; font-weight:500">{{ $array_cadjpy[$i] }}
-                     @elseif (
-                         ($sumacadjpybuy_array[$i] != $sumacadjpysell_array[$i] && $sumacadjpysell_array[$i] < 0 && $sumacadjpybuy_array[$i] < 0) ||
-                             $sumabuy_sell < 0)
-                     <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                         {{ $array_cadjpy[$i] }}
+                    @php
+                        $sumabuy_sell = $sumacadjpybuy_array[$i] + $sumacadjpysell_array[$i];
+                    @endphp
+                    @if ($volcadjpy_sell_array[$i] == $volcadjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_cadjpy[$i] }}
+                        </td>
+                    @elseif($volcadjpy_sell_array[$i] != $volcadjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_cadjpy[$i] }}
+                        @elseif ($volcadjpy_sell_array[$i] != $volcadjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_cadjpy[$i] }}
+                        @elseif ($volcadjpy_sell_array[$i] == $volcadjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_cadjpy[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_cadjpy[$i] }}</td>
                     @endif
@@ -2287,25 +3308,23 @@
             <tr>
                 <td data-priority="0" scope="col">CHFJPY</td>
                 @for ($i = 0; $i < 9; $i++)
-                @php
-                $sumabuy_sell = $sumachfjpybuy_array[$i] + $sumachfjpysell_array[$i];
-                @endphp
-                      @if ($sumachfjpybuy_array[$i] == $sumachfjpysell_array[$i] && $sumachfjpybuy_array[$i] > 0 && $sumachfjpysell_array[$i] > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #FF6000; color:white; font-weight:500">{{$array_chfjpy[$i] }}</td>
-                  @elseif ($sumachfjpybuy_array[$i] == $sumachfjpysell_array[$i] && $sumachfjpybuy_array[$i] != 0 && $sumachfjpysell_array[$i] != 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #D21312; color:white; font-weight:500">{{$array_chfjpy[$i] }}</td>
-                  @elseif(
-                      ($sumachfjpybuy_array[$i] != $sumachfjpysell_array[$i] && $sumachfjpysell_array[$i] > 0 && $sumachfjpybuy_array[$i] > 0) ||
-                          $sumabuy_sell > 0)
-                      <td data-priority="0" scope="col"
-                          style="background-color: #285430; color:white; font-weight:500">{{$array_chfjpy[$i] }}
-                      @elseif (
-                          ($sumachfjpybuy_array[$i] != $sumachfjpysell_array[$i] && $sumachfjpysell_array[$i] < 0 && $sumachfjpybuy_array[$i] < 0) ||
-                              $sumabuy_sell < 0)
-                      <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
-                          {{ $array_chfjpy[$i] }}
+                    @php
+                        $sumabuy_sell = $sumachfjpybuy_array[$i] + $sumachfjpysell_array[$i];
+                    @endphp
+                    @if ($volchfjpy_sell_array[$i] == $volchfjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #FF6000; color:white; font-weight:500">{{ $array_chfjpy[$i] }}
+                        </td>
+                    @elseif($volchfjpy_sell_array[$i] != $volchfjpy_buy_array[$i] && $sumabuy_sell > 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #285430; color:white; font-weight:500">{{ $array_chfjpy[$i] }}
+                        @elseif ($volchfjpy_sell_array[$i] != $volchfjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col" style="background-color: #FFEA20; font-weight:500">
+                            {{ $array_chfjpy[$i] }}
+                        @elseif ($volchfjpy_sell_array[$i] == $volchfjpy_buy_array[$i] && $sumabuy_sell < 0)
+                        <td data-priority="0" scope="col"
+                            style="background-color: #D21312; color:white; font-weight:500">{{ $array_chfjpy[$i] }}
+                        </td>
                     @else
                         <td data-priority="0" scope="col">{{ $array_chfjpy[$i] }}</td>
                     @endif
@@ -2314,6 +3333,10 @@
             </tr>
         </tbody>
     </table>
+    <div class="text-center">
+        <a class="btn principal-button mb-3 new" id="imprimirAnalisis"><i
+                class="bi bi-printer-fill me-1"></i>Imprimir PDF</a>
+    </div>
 @else
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="info-fill" fill="#fff" viewBox="0 0 16 16">

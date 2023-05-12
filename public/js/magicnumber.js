@@ -4,23 +4,28 @@ var separador = url.split("/");
 var traderID = separador[separador.length - 1];
 var numero = 0;
 
+
 const tableStatus = () => {
     if (numero == 403) {
-        url = `/admin/showStatusmagic403?id=${traderID}`;
+        url = `/admin/showStatusmagic403?id=${traderID}&numero=${numero}`;
     } else if(numero == 404) {
-        url = `/admin/showStatusmagic404?id=${traderID}`;
+        url = `/admin/showStatusmagic404?id=${traderID}&numero=${numero}`;
     } else if(numero == 405) {
-        url = `/admin/showStatusmagic405?id=${traderID}`;
-    }
-    else{
-        url=`/admin/showStatusmagic?id=${traderID}`;
+        url = `/admin/showStatusmagic405?id=${traderID}&numero=${numero}`;
+    }else{
+        url=`/admin/showStatusmagic?id=${traderID}&numero=${numero}`;
     }
     $.get({
         url: url,
         success: function (response) {
             $("#contTabla").empty();
             $("#contTabla").html(response);
-
+            if(numero == 0){
+                $("#seriemagic_number").html('Todas las series');
+            }else{
+                $("#seriemagic_number").html(numero);
+            } 
+            
             table = $("#status").DataTable({
                 language: {
                     processing: "Procesando...",
@@ -215,6 +220,7 @@ const tableStatus = () => {
             console.log(error);
         },
     });
+
 };
 
 $(document).on("click", "#obtener403", () => {
@@ -241,8 +247,36 @@ $(document).on("click", "#obtener405", () => {
 $(document).on("click", "#obtenerTodos", () => {
     table.destroy();
     numero=0;
-    console.log('404')
+    console.log('403,4,5')
     tableStatus();
+});
+
+$(document).on("click", "#imprimirAnalisis", function () {
+
+    if(numero==0){
+    window.open(
+        `/admin/magicnumber-analysis?id=${traderID}&numero=${numero}`,
+        "_blank"
+    );
+    }
+    else if(numero==403){
+        window.open(
+        `/admin/magicnumber403-analysis?id=${traderID}&numero=${numero}`,
+        "_blank"
+        );
+    }
+    else if(numero==404){
+        window.open(
+        `/admin/magicnumber404-analysis?id=${traderID}&numero=${numero}`,
+        "_blank"
+        );
+    }
+    else if(numero==405){
+        window.open(
+        `/admin/magicnumber405-analysis?id=${traderID}&numero=${numero}`,
+        "_blank"
+        );
+    }
 });
 
 tableStatus();
@@ -250,4 +284,4 @@ tableStatus();
 setInterval(function () {
     table.destroy();
     tableStatus();
-}, 50000);
+}, 300000);
