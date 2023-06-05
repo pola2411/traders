@@ -162,3 +162,21 @@ Route::get('/admin/cleoTabla', [App\Http\Controllers\StatusGraficaController::cl
 Route::get('/admin/cleoTablaShow', [App\Http\Controllers\StatusGraficaController::class, 'cleoTablaShow'])->middleware('auth');
 
 Route::get('/admin/transmision', [App\Http\Controllers\TransmisionController::class, 'index'])->middleware('auth');
+
+Route::get('/admin/botones', [App\Http\Controllers\BotonController::class, 'index'])->middleware('auth');
+Route::get('/admin/boton1', [App\Http\Controllers\BotonController::class, 'boton1'])->middleware('auth');
+Route::get('/admin/boton2', [App\Http\Controllers\BotonController::class, 'boton2'])->middleware('auth');
+Route::get('/admin/boton3', [App\Http\Controllers\BotonController::class, 'boton3'])->middleware('auth');
+Route::get('/admin/boton4', [App\Http\Controllers\BotonController::class, 'boton4'])->middleware('auth');
+Route::get('/admin/boton5', [App\Http\Controllers\BotonController::class, 'boton5'])->middleware('auth');
+Route::get('/admin/boton6', [App\Http\Controllers\BotonController::class, 'boton6'])->middleware('auth');
+Route::get('/admin/boton7', [App\Http\Controllers\BotonController::class, 'boton7'])->middleware('auth');
+Route::get('/admin/boton8', [App\Http\Controllers\BotonController::class, 'boton8'])->middleware('auth');
+Route::get('/admin/boton9', [App\Http\Controllers\BotonController::class, 'boton9'])->middleware('auth');
+Route::get('/admin/boton10', [App\Http\Controllers\BotonController::class, 'boton10'])->middleware('auth');
+Route::get('/admin/boton11', [App\Http\Controllers\BotonController::class, 'boton11'])->middleware('auth');
+Route::get('/admin/boton12', [App\Http\Controllers\BotonController::class, 'boton12'])->middleware('auth');
+Route::get('/admin/boton13', [App\Http\Controllers\BotonController::class, 'boton13'])->middleware('auth');
+Route::get('/admin/boton14', [App\Http\Controllers\BotonController::class, 'boton14'])->middleware('auth');
+Route::get('/admin/boton15', [App\Http\Controllers\BotonController::class, 'boton15'])->middleware('auth');
+Route::get('/admin/boton16', [App\Http\Controllers\BotonController::class, 'boton16'])->middleware('auth');

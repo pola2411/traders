@@ -131,6 +131,15 @@
                 <span>Traders</span>
             </a>
         </li>
+
+        
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/botones')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/botones') }}">
+                <i class="bi bi-currency-exchange"></i>
+                <span>Botones</span>
+            </a>
+        </li>
+       
          
         {{--}}
         <li class="nav-item">
