@@ -363,6 +363,21 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#estudio-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-file-earmark-spreadsheet"></i><span>Estudio Eficiencia</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="estudio-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @foreach ($valores_moneda as $moneda)
+                    <li>
+                        <a class="ps-2" href="/admin/estudio-data/{{$moneda}}">
+                            <i class="bi bi-circle"></i><span>{{$moneda}}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </li>
+
         {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#ejemplo-nav" data-bs-toggle="collapse" href="#">

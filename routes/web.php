@@ -103,6 +103,12 @@ Route::get('/admin/traders-data-apertura/{id}', [App\Http\Controllers\TradersDat
 Route::get('/admin/getInfoApertura', [App\Http\Controllers\TradersDataAperturaController::class, 'getInfo'])->middleware('auth');
 Route::get('/admin/traders-analysis-apertura/{id}', [App\Http\Controllers\TradersDataAperturaController::class, 'getPDF'])->middleware('auth');
 
+
+//Estudio Eficiencia
+Route::get('/admin/estudio-data/{par}', [App\Http\Controllers\EstudioController::class, 'index'])->middleware('auth');
+Route::get('/admin/getInfoEstudio', [App\Http\Controllers\EstudioController::class, 'getInfoEstudio'])->middleware('auth');
+Route::get('/admin/estudio-analysis/{id}', [App\Http\Controllers\EstudioController::class, 'getPDF'])->middleware('auth');
+
 //Traders
 Route::get('/admin/traders', [App\Http\Controllers\TraderController::class, 'index'])->middleware('auth');
 Route::get('/admin/showTraders', [App\Http\Controllers\TraderController::class, 'getTrader'])->middleware('auth');
