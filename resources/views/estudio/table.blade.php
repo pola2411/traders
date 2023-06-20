@@ -120,10 +120,13 @@
 
                     {{-- Mejor Balance --}}
                     @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
-                    <td>{{ number_format($mejorBalance, 2) }}</td>
-
-
-
+                    @if ($mejorBalance >= 56)
+                        <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                    @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                        <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                    @else 
+                        <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                    @endif
                 </tr>
             @endif
         @endforeach
@@ -131,5 +134,5 @@
 </table>
 
 <div class="text-center">
-    {{-- <a class="btn principal-button mb-3 new" data-id="{{ $tradersNombre->id }}" data-fechaini="{{ $fecha_inicio }}" data-fechafin="{{ $fecha_fin }}" id="imprimirAnalisis"><i class="bi bi-printer-fill me-1"></i>Imprimir PDF</a> --}}
+    {{-- <a class="btn principal-button mb-3 new" id="imprimirAnalisis"><i class="bi bi-printer-fill me-1"></i>Imprimir PDF</a> --}}
 </div>

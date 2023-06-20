@@ -36,9 +36,14 @@
                             <div class="col-md-4 col-12">
                                 <div class="form-floating mb-3 me-3">
                                     <select class="form-select" aria-label="Default select example" id="variant">
-                                     
-                                        <option value="1">Trend</option>
-                                        <option value="2">Spectrum</option>
+                                     @php
+                                        $variantes = DB::table('estudio_lista')->get();
+                                        foreach ($variantes as $variante) {
+                                            echo '<option value="'.$variante->id.'">'.$variante->id .' - '.$variante->nombre.'</option>';
+                                        }
+                                     @endphp
+                                        {{-- <option value="1">Trend</option>
+                                        <option value="2">Spectrum</option> --}}
                                       </select>
                                 </div>
                             </div>

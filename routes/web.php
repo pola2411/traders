@@ -107,7 +107,14 @@ Route::get('/admin/traders-analysis-apertura/{id}', [App\Http\Controllers\Trader
 //Estudio Eficiencia
 Route::get('/admin/estudio-data/{par}', [App\Http\Controllers\EstudioController::class, 'index'])->middleware('auth');
 Route::get('/admin/getInfoEstudio', [App\Http\Controllers\EstudioController::class, 'getInfoEstudio'])->middleware('auth');
-Route::get('/admin/estudio-analysis/{id}', [App\Http\Controllers\EstudioController::class, 'getPDF'])->middleware('auth');
+Route::get('/admin/estudio-analysis/{par}', [App\Http\Controllers\EstudioController::class, 'getPDF'])->middleware('auth');
+
+//Estudio lista
+Route::get('/admin/estudioLista', [App\Http\Controllers\EstudioListaController::class, 'index'])->middleware('auth');
+Route::get('/admin/showLista', [App\Http\Controllers\EstudioListaController::class, 'getLista'])->middleware('auth');
+Route::post('/admin/addEstudio', [App\Http\Controllers\EstudioListaController::class, 'addEstudio'])->middleware('auth');
+Route::post('/admin/editEstudio', [App\Http\Controllers\EstudioListaController::class, 'editEstudio'])->middleware('auth');
+Route::post('/admin/deleteEstudio', [App\Http\Controllers\EstudioListaController::class, 'deleteEstudio']);
 
 //Traders
 Route::get('/admin/traders', [App\Http\Controllers\TraderController::class, 'index'])->middleware('auth');

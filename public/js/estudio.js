@@ -520,12 +520,12 @@ am5.ready(function () {
     });
 
     $(document).on("click", "#imprimirAnalisis", function () {
-        let id = $(this).data("id");
-        let fecha_inicio = $(this).data("fechaini");
-        let fecha_fin = $(this).data("fechafin");
+        // let id = $(this).data("id");
+        // let fecha_inicio = $(this).data("fechaini");
+        // let fecha_fin = $(this).data("fechafin");
 
         window.open(
-            `/admin/traders-analysis/${id}?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`,
+            `/admin/estudio-analysis/${par}`,
             "_blank"
         );
     });

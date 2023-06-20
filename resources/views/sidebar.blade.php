@@ -364,6 +364,13 @@
         </li>
 
         <li class="nav-item">
+            <a class="@if (request()->is('/admin/estudioLista')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/estudioLista') }}">
+                <i class="bi bi-list"></i>
+                <span>Lista de estudios</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#estudio-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-file-earmark-spreadsheet"></i><span>Estudio Eficiencia</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>

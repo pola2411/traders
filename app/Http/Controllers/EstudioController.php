@@ -50,14 +50,21 @@ class EstudioController extends Controller
         $tradersNombre = DB::table('traders_data')->select('id', 'Signal', 'Balance')->where('id', $request->id)->first();
         $pares = array("EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY", "EURGBP", "EURAUD", "EURNZD", "GBPAUD", "GBPNZD", "AUDNZD", "EURCAD", "EURCHF", "EURJPY", "GBPCAD", "GBPCHF", "GBPJPY", "AUDCAD", "AUDCHF", "AUDJPY", "NZDCAD", "NZDCHF", "NZDJPY", "CADCHF", "CADJPY", "CHFJPY");
 
+        $par = $request->par;
+        $tr = $request->tr;
+        $variant = $request->variant;
+
         $fecha_inicio = \Carbon\Carbon::parse($request->fecha_inicio)->format('Y-m-d H:i:s');
         $fecha_fin = \Carbon\Carbon::parse($request->fecha_fin)->format('Y-m-d H:i:s');
 
+        $estudios = DB::table('estudio')->where('pair', $par)->get();
+
         $data = array(
-            "tradersNombre" => $tradersNombre,
-            "fecha_inicio" => $fecha_inicio,
-            "fecha_fin" => $fecha_fin,
-            "monedas" => $pares
+            "par" => $par,
+            "monedas" => $pares,
+            "tr" => $tr,
+            "variant" => $variant,
+            "estudios" => $estudios,
         );
 
         $pdf = PDF::loadView('estudio.imprimir', $data)->setPaper('a4', 'landscape');
