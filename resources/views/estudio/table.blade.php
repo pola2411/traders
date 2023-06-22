@@ -1,10 +1,25 @@
 @php
-   $datapairs= DB::table('estudio')
-                    ->where('pair', $par)
-                    ->where('time', $tr)
-                    ->where('variant', $variant)
-                    ->orderBy('value', 'asc')
-                    ->get();
+    $datapairs = DB::table('estudio')
+        ->where('time', $tr)
+        ->where('variant', $variant)
+        ->orderByRaw("FIELD(pair , 'EURUSD', 'GBPUSD', 'AUDUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'USDJPY', 'EURGBP', 'EURAUD', 'EURNZD', 'GBPAUD', 'GBPNZD', 'AUDNZD', 'EURCAD', 'EURCHF', 'EURJPY', 'GBPCAD', 'GBPCHF', 'GBPJPY', 'AUDCAD', 'AUDCHF', 'AUDJPY', 'NZDCAD', 'NZDCHF', 'NZDJPY', 'CADCHF', 'CADJPY', 'CHFJPY') ASC")
+        ->orderBy('value', 'asc')
+        ->get();
+    
+    $registros = DB::table('estudio')
+        ->where('pair', $monedas)
+        ->count();
+    
+    $redaccion = DB::table('estudio_lista')
+        ->where('id', $variant)
+        ->get();
+    
+    $datafilter = DB::table('estudio')
+        ->where('pair', $monedas)
+        ->where('time', $tr)
+        ->where('variant', $variant)
+        ->orderBy('value', 'asc')
+        ->count();
 @endphp
 
 <table class="table table-striped table-bordered nowrap"
@@ -12,17 +27,28 @@
     <thead class="text-center sticky-top"
         style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
-            <th data-priority="0" scope="col" colspan="20">{{ $par }}
-                <br>
-                <small>Reporte eficiencia señal {{\Carbon\Carbon::parse(strtotime($datapairs[0]->date))->format('d-m-Y'); }}</small>
-                <br>
-                <small>Periodo de estudio {{\Carbon\Carbon::parse(strtotime($datapairs[0]->date_ranges1 ))->format('d-m-Y'); }} y {{\Carbon\Carbon::parse(strtotime($datapairs[0]->date_ranges1 ))->format('d-m-Y'); }}</small>
-            </th>
-
+            @if ($datafilter > 0)
+                <th data-priority="0" scope="col" colspan="20">
+                    <br>
+                    <small>Reporte eficiencia señal
+                        {{ \Carbon\Carbon::parse(strtotime($datapairs[0]->date))->format('d-m-Y') }}</small>
+                    <br>
+                    <small>Periodo de estudio
+                        {{ \Carbon\Carbon::parse(strtotime($datapairs[0]->date_ranges1))->format('d-m-Y') }} y
+                        {{ \Carbon\Carbon::parse(strtotime($datapairs[0]->date_ranges1))->format('d-m-Y') }}</small>
+                    <br>
+                    <small>{{ $redaccion[0]->redaccion }}</small>
+                </th>
+            @elseif ($datafilter == 0)
+                <th data-priority="0" scope="col" colspan="20" style="color: grey;">
+                    No hay registros
+                </th>
+            @endif
 
         </tr>
 
         <tr>
+            <th data-priority="0" scope="col" colspan="1" rowspan="3">Par</th>
             <th data-priority="0" scope="col" colspan="1" rowspan="3">Valor</th>
             <th data-priority="0" scope="col" colspan="8">Compras</th>
             <th data-priority="0" scope="col" colspan="8">Ventas</th>
@@ -63,73 +89,1882 @@
 
     </thead>
     <tbody style="vertical-align: middle !important; text-align: center !important; padding: 5px !important">
-        @foreach($datapairs as $datapair)
+        @foreach ($datapairs as $datapair)
+
 
             @php
-                
                 $registros = DB::table('estudio')
-                    ->where('pair', $par)
+                    ->where('pair', $monedas)
                     ->count();
                 
-              
+                //     $datafilter = DB::table('estudio')
+                //     ->where('pair', $par)
+                //     ->where('time', $tr)
+                //     ->where('variant', $variant)
+                //     ->orderBy('value', 'asc')
+                //     ->count();
+                
+                // $redaccion = DB::table('estudio_lista')
+                //     ->where('id', $variant)
+                //     ->get();
+                
             @endphp
 
-            @if ($registros > 0)
+            @if ($datafilter > 0)
+                @if ($datapair->pair == 'EURUSD')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                        <script>
+                            document.getElementById('par').style.backgroundColor = "blue";
+                        </script>
+                        @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'GBPUSD')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                    <script>
+                        document.getElementById('par').style.backgroundColor = "blue";
+                    </script>
+                    @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'AUDUSD')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                    <script>
+                        document.getElementById('par').style.backgroundColor = "blue";
+                    </script>
+                    @endif --}}
+
+
+                    </tr>
+                @endif
+
+
+                @if ($datapair->pair == 'NZDUSD')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                    <script>
+                        document.getElementById('par').style.backgroundColor = "blue";
+                    </script>
+                    @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'USDCAD')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                    <script>
+                        document.getElementById('par').style.backgroundColor = "blue";
+                    </script>
+                    @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'USDCHF')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                     <script>
+                         document.getElementById('par').style.backgroundColor = "blue";
+                     </script>
+                     @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'USDJPY')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                      <script>
+                          document.getElementById('par').style.backgroundColor = "blue";
+                      </script>
+                      @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'EURGBP')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                       <script>
+                           document.getElementById('par').style.backgroundColor = "blue";
+                       </script>
+                       @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'EURAUD')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                        <script>
+                            document.getElementById('par').style.backgroundColor = "blue";
+                        </script>
+                        @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'EURNZD')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                         <script>
+                             document.getElementById('par').style.backgroundColor = "blue";
+                         </script>
+                         @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'GBPAUD')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                          <script>
+                              document.getElementById('par').style.backgroundColor = "blue";
+                          </script>
+                          @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'GBPNZD')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                           <script>
+                               document.getElementById('par').style.backgroundColor = "blue";
+                           </script>
+                           @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'AUDNZD')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                          <script>
+                              document.getElementById('par').style.backgroundColor = "blue";
+                          </script>
+                          @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'EURCAD')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                           <script>
+                               document.getElementById('par').style.backgroundColor = "blue";
+                           </script>
+                           @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'EURCHF')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                            <script>
+                                document.getElementById('par').style.backgroundColor = "blue";
+                            </script>
+                            @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'EURJPY')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                             <script>
+                                 document.getElementById('par').style.backgroundColor = "blue";
+                             </script>
+                             @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'GBPCAD')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                              <script>
+                                  document.getElementById('par').style.backgroundColor = "blue";
+                              </script>
+                              @endif --}}
+
+
+                    </tr>
+                @endif
+
+
+                @if ($datapair->pair == 'GBPCHF')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                               <script>
+                                   document.getElementById('par').style.backgroundColor = "blue";
+                               </script>
+                               @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'GBPJPY')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                       
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'AUDCAD')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                 <script>
+                                     document.getElementById('par').style.backgroundColor = "blue";
+                                 </script>
+                                 @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'AUDCHF')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                  <script>
+                                      document.getElementById('par').style.backgroundColor = "blue";
+                                  </script>
+                                  @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'AUDJPY')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                   <script>
+                                       document.getElementById('par').style.backgroundColor = "blue";
+                                   </script>
+                                   @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'NZDCAD')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                    <script>
+                                        document.getElementById('par').style.backgroundColor = "blue";
+                                    </script>
+                                    @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'NZDCHF')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                     <script>
+                                         document.getElementById('par').style.backgroundColor = "blue";
+                                     </script>
+                                     @endif --}}
+
+
+                    </tr>
+                @endif
+
+
+                @if ($datapair->pair == 'NZDJPY')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                      <script>
+                                          document.getElementById('par').style.backgroundColor = "blue";
+                                      </script>
+                                      @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'CADCHF')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                       <script>
+                                           document.getElementById('par').style.backgroundColor = "blue";
+                                       </script>
+                                       @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'CADJPY')
+                    <tr style="background-color: Oldlace">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                        <script>
+                                            document.getElementById('par').style.backgroundColor = "blue";
+                                        </script>
+                                        @endif --}}
+
+
+                    </tr>
+                @endif
+
+                @if ($datapair->pair == 'CHFJPY')
+                    <tr style="background-color: Whitesmoke">
+                        {{-- Par --}}
+                        <td>{{ $datapair->pair }}</td>
+
+                        {{-- Value --}}
+
+                        <td>{{ $datapair->value }}</td>
+
+                        {{-- Compras Ganadas --}}
+
+                        <td>{{ $datapair->bw_n }}</td>
+                        <td>{{ $datapair->bw_r1 }}</td>
+                        <td>{{ $datapair->bw_r2 }}</td>
+                        <td>{{ $datapair->bw_r3 }}</td>
+
+
+                        {{-- Compras Perdidas --}}
+                        <td>{{ $datapair->bl_n }}</td>
+                        <td>{{ $datapair->bl_r1 }}</td>
+                        <td>{{ $datapair->bl_r2 }}</td>
+                        <td>{{ $datapair->bl_r3 }}</td>
+
+
+                        {{-- Ventas Ganadas --}}
+                        <td>{{ $datapair->sw_n }}</td>
+                        <td>{{ $datapair->sw_r1 }}</td>
+                        <td>{{ $datapair->sw_r2 }}</td>
+                        <td>{{ $datapair->sw_r3 }}</td>
+
+
+                        {{-- Ventas Perdidas --}}
+                        <td>{{ $datapair->sl_n }}</td>
+                        <td>{{ $datapair->sl_r1 }}</td>
+                        <td>{{ $datapair->sl_r2 }}</td>
+                        <td>{{ $datapair->sl_r3 }}</td>
+
+                        {{-- Eficiencia Compras --}}
+                        @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaCompras, 2) }}</td>
+
+
+                        {{-- Eficiencia Ventas --}}
+                        @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
+                        <td>{{ number_format($eficienciaVentas, 2) }}</td>
+
+                        {{-- Mejor Balance --}}
+                        @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
+                        @if ($mejorBalance >= 56)
+                            <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
+                        @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
+                            <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
+                        @else
+                            <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
+                        @endif
+
+                        {{-- @if ($loop->iteration % 2 == 0)
+                                         <script>
+                                             document.getElementById('par').style.backgroundColor = "blue";
+                                         </script>
+                                         @endif --}}
+
+
+                    </tr>
+                @endif
+            @elseif ($registros == 0)
                 <tr>
-                    {{-- Value --}}
-
-
-                    <td>{{ $datapair->value }}</td>
-
-                    {{-- Compras Ganadas --}}
-
-                    <td>{{ $datapair->bw_n }}</td>
-                    <td>{{ $datapair->bw_r1 }}</td>
-                    <td>{{ $datapair->bw_r2 }}</td>
-                    <td>{{ $datapair->bw_r3 }}</td>
-
-
-                    {{-- Compras Perdidas --}}
-                    <td>{{ $datapair->bl_n }}</td>
-                    <td>{{ $datapair->bl_r1 }}</td>
-                    <td>{{ $datapair->bl_r2 }}</td>
-                    <td>{{ $datapair->bl_r3 }}</td>
-
-
-                    {{-- Ventas Ganadas --}}
-                    <td>{{ $datapair->sw_n }}</td>
-                    <td>{{ $datapair->sw_r1 }}</td>
-                    <td>{{ $datapair->sw_r2 }}</td>
-                    <td>{{ $datapair->sw_r3 }}</td>
-
-
-                    {{-- Ventas Perdidas --}}
-                    <td>{{ $datapair->sl_n }}</td>
-                    <td>{{ $datapair->sl_r1 }}</td>
-                    <td>{{ $datapair->sl_r2 }}</td>
-                    <td>{{ $datapair->sl_r3 }}</td>
-
-                    {{-- Eficiencia Compras --}}
-                    @php $eficienciaCompras = ($datapair->bw_n / ($datapair->bw_n + $datapair->bl_n))*100 @endphp
-                    <td>{{ number_format($eficienciaCompras, 2) }}</td>
-
-
-                    {{-- Eficiencia Ventas --}}
-                    @php $eficienciaVentas = ($datapair->sw_n / ($datapair->sw_n + $datapair->sl_n))*100 @endphp
-                    <td>{{ number_format($eficienciaVentas, 2) }}</td>
-
-                    {{-- Mejor Balance --}}
-                    @php $mejorBalance = ($eficienciaCompras + $eficienciaVentas) / 2 @endphp
-                    @if ($mejorBalance >= 56)
-                        <td style="background-color: #3f9d50">{{ number_format($mejorBalance, 2) }}</td>
-                    @elseif ($mejorBalance >= 50 && $mejorBalance < 56)
-                        <td style="background-color: #F2C94C">{{ number_format($mejorBalance, 2) }}</td>
-                    @else 
-                        <td style="background-color: #ea5651">{{ number_format($mejorBalance, 2) }}</td>
-                    @endif
+                    <td colspan="20">No hay registros</td>
                 </tr>
             @endif
+
+
         @endforeach
+
     </tbody>
 </table>
 
