@@ -107,7 +107,8 @@ Route::get('/admin/traders-analysis-apertura/{id}', [App\Http\Controllers\Trader
 //Estudio Eficiencia
 Route::get('/admin/estudio-data', [App\Http\Controllers\EstudioController::class, 'index'])->middleware('auth');
 Route::get('/admin/getInfoEstudio', [App\Http\Controllers\EstudioController::class, 'getInfoEstudio'])->middleware('auth');
-Route::get('/admin/estudio-analysis/{par}', [App\Http\Controllers\EstudioController::class, 'getPDF'])->middleware('auth');
+Route::get('/admin/estudio-analysis', [App\Http\Controllers\EstudioController::class, 'getPDF'])->middleware('auth');
+Route::post('/admin/deleteReporte', [App\Http\Controllers\EstudioController::class, 'deleteReporte'])->middleware('auth');
 
 //Estudio lista
 Route::get('/admin/estudioLista', [App\Http\Controllers\EstudioListaController::class, 'index'])->middleware('auth');

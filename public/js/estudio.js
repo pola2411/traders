@@ -1,11 +1,11 @@
 
 am5.ready(function () {
     var tabla_data = "";
-    var tabla_analysis = "";
-    
+
 
     const tablas = () => {
 
+      
         tabla_data = $("#trader_data").DataTable({
             language: {
                 processing: "Procesando...",
@@ -190,11 +190,12 @@ am5.ready(function () {
                 info: "Mostrando de _START_ a _END_ de _TOTAL_ datos",
             },
             lengthMenu: [
-                [50, 100, 150, -1],
-                [50, 100, 150, "Todo"],
+                [10, 20, 50, 100, 150, -1],
+                [10, 20, 50, 100, 150, "Todo"],
             ],
-            pageLength: 50,
+            pageLength: 20,
             aaSorting: [],
+           
         });
 
     };
@@ -266,6 +267,11 @@ am5.ready(function () {
    
     
 
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
 
     $.get({
         url: "/admin/getInfoEstudio",
@@ -278,7 +284,6 @@ am5.ready(function () {
             $("#contTable").html(response);
 
             tabla_data.destroy();
-            tabla_analysis.destroy();
 
             tablas();
         },
@@ -292,7 +297,10 @@ am5.ready(function () {
         
         let tr = $("#time_range").val();
         let  variant = $("#variant").val();
-        console.log(tr, variant);
+        let test = $("#test").val();
+
+        console.log(tr, variant, test);
+
         if (tr > 0 && variant > 0) {
             if (tr && variant < 0) {
                 Swal.fire({
@@ -311,6 +319,7 @@ am5.ready(function () {
                     data: {
                        tr: tr,
                        variant: variant,
+                       test: test
                     },
                     success: function (response) {
                         $("#contTable").empty();
@@ -340,17 +349,55 @@ am5.ready(function () {
     });
 
     $(document).on("click", "#imprimirAnalisis", function () {
-        // let id = $(this).data("id");
-        // let fecha_inicio = $(this).data("fechaini");
-        // let fecha_fin = $(this).data("fechafin");
-
+      
         window.open(
-            `/admin/estudio-analysis/`,
+            `/admin/estudio-analysis`,
             "_blank"
         );
     });
 
-    $(document).on("click", ".verOficina", function () {
-        oficinaID = $(this).data("id");
+    $(document).on("click", ".delete", function (e) {
+        $("#alertMessage").text("");
+        e.preventDefault();
+        var id = $(this).data("id");
+        var conf;
+
+        Swal.fire({
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Eliminar Estudio</h1>',
+            html: '<p style="font-family: Poppins">¿Estás seguro de eliminar este estudio? esta opción no se puede deshacer</p>',
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: '<a style="font-family: Poppins">Eliminar</a>',
+            confirmButtonColor: "#01bbcc",
+            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+            cancelButtonColor: "#dc3545",
+        }).then((result) => {
+            if (result.value) {
+                $.post("/admin/deleteReporte", { id: id }, function () {
+                    $('#obtenerRegistros').trigger('click');
+                    Swal.fire({
+                        icon: "success",
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Estudio eliminado</h1>',
+                        html: '<p style="font-family: Poppins">El estudio se ha eliminado correctamente</p>',
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                    html: '<p style="font-family: Poppins">El Estudio no se ha eliminado</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            }
+        });
     });
+
+
+
 });

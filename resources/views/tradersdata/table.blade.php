@@ -4,12 +4,16 @@
         ->where('trader', $tradersNombre->id)
         ->where('advance', '!=', 999999)
         ->where('retracement', '!=', 999999)
+        ->where('value', $value)
+        ->where('variant', $variant)
         ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
         ->first();
 @endphp
 
-<table class="table table-striped table-bordered nowrap" style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;" id="trader_data">
-    <thead class="text-center sticky-top" style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
+<table class="table table-striped table-bordered nowrap"
+    style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;" id="trader_data">
+    <thead class="text-center sticky-top"
+        style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
             <th data-priority="0" scope="col" colspan="7">{{ $tradersNombre->Signal }}</th>
             <th data-priority="0" scope="col" colspan="3">Lotes</th>
@@ -57,6 +61,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -67,6 +73,8 @@
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
                     ->where('pips', '>', 0)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -77,6 +85,8 @@
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
                     ->where('pips', '<', 0)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -86,6 +96,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -95,6 +107,8 @@
                     ->where('type', 'Buy')
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -104,6 +118,8 @@
                     ->where('type', 'Sell')
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -112,6 +128,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->avg('volume');
                 
@@ -121,6 +139,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -130,6 +150,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -138,6 +160,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->avg('advance');
                 
@@ -147,6 +171,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -156,6 +182,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -164,6 +192,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->avg('retracement');
                 
@@ -173,6 +203,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -182,6 +214,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -190,6 +224,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->avg('pips');
                 
@@ -199,6 +235,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -208,6 +246,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -217,6 +257,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -225,6 +267,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->avg('minutes');
                 
@@ -234,6 +278,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -243,6 +289,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -252,6 +300,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->first();
                 
@@ -301,8 +351,10 @@
     <div id="contTable2" style="overflow-x: auto;"></div>
 </div>
 
-<table class="table table-striped table-bordered nowrap" style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;" id="trader_analysis">
-    <thead class="text-center sticky-top" style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
+<table class="table table-striped table-bordered nowrap"
+    style="width: 100% !important; margin-left: 0px !important; margin-right: 0px !important;" id="trader_analysis">
+    <thead class="text-center sticky-top"
+        style="z-index: 999; background-color:white; vertical-align: middle !important; text-align: center !important">
         <tr>
             <th data-priority="0" scope="col" colspan="2">{{ $tradersNombre->Signal }}</th>
             <th data-priority="0" scope="col" colspan="3">Lotes</th>
@@ -329,6 +381,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -338,6 +392,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -347,6 +403,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -361,6 +419,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('volume', '>=', 0)
                     ->where('volume', '<', $volmin)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->orderBy('volume', 'asc')
                     ->count();
@@ -372,6 +432,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('volume', '>=', $volmin)
                     ->where('volume', '<', $mitadvol)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -382,6 +444,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('volume', '>=', $mitadvol)
                     ->where('volume', '<=', $volmax)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -391,6 +455,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -400,6 +466,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -415,6 +483,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('advance', '>=', 0)
                     ->where('advance', '<', $advamax)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->orderBy('advance', 'asc')
                     ->count();
@@ -426,6 +496,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('advance', '>=', $advamin)
                     ->where('advance', '<', $mitadadv)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -436,6 +508,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('advance', '>=', $mitadadv)
                     ->where('advance', '<', $mitad2adv)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -446,6 +520,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('advance', '>=', $mitad2adv)
                     ->where('advance', '<=', $advamax)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -455,6 +531,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -464,6 +542,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -479,6 +559,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('retracement', '>=', 0)
                     ->where('retracement', '<', $retrmin)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->orderBy('retracement', 'asc')
                     ->count();
@@ -490,6 +572,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('retracement', '>=', $retrmin)
                     ->where('retracement', '<', $mitadret)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -500,6 +584,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('retracement', '>=', $mitadret)
                     ->where('retracement', '<', $mitad2ret)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -510,6 +596,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('retracement', '>=', $mitad2ret)
                     ->where('retracement', '<=', $retrmax)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -519,6 +607,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -528,6 +618,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -543,6 +635,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('pips', '>=', $pipsmin)
                     ->where('pips', '<', 0)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->orderBy('pips', 'asc')
                     ->count();
@@ -554,6 +648,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('pips', '>=', 0)
                     ->where('pips', '<', $mitadpip)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -564,6 +660,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('pips', '>=', $mitadpip)
                     ->where('pips', '<', $mitad2pip)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -574,6 +672,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('pips', '>=', $mitad2pip)
                     ->where('pips', '<=', $pipmaximo)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -583,6 +683,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -592,6 +694,8 @@
                     ->where('trader', $tradersNombre->id)
                     ->where('advance', '!=', 999999)
                     ->where('retracement', '!=', 999999)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->get();
                 
@@ -607,6 +711,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('minutes', '>=', 0)
                     ->where('minutes', '<', $minmin)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->orderBy('minutes', 'asc')
                     ->count();
@@ -618,6 +724,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('minutes', '>=', $minmin)
                     ->where('minutes', '<', $mitadmin)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -628,6 +736,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('minutes', '>=', $mitadmin)
                     ->where('minutes', '<', $mitad2min)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -638,6 +748,8 @@
                     ->where('retracement', '!=', 999999)
                     ->where('minutes', '>=', $mitad2min)
                     ->where('minutes', '<=', $maxmin)
+                    ->where('value', $value)
+                    ->where('variant', $variant)
                     ->whereBetween('time_1', [$fecha_inicio, $fecha_fin])
                     ->count();
                 
@@ -705,5 +817,7 @@
 </table>
 
 <div class="text-center">
-    <a class="btn principal-button mb-3 new" data-id="{{ $tradersNombre->id }}" data-fechaini="{{ $fecha_inicio }}" data-fechafin="{{ $fecha_fin }}" id="imprimirAnalisis"><i class="bi bi-printer-fill me-1"></i>Imprimir PDF</a>
+    <a class="btn principal-button mb-3 new" data-id="{{ $tradersNombre->id }}" data-fechaini="{{ $fecha_inicio }}"
+        data-fechafin="{{ $fecha_fin }}" data-variant="{{$variant}}" data-value="{{$value}}" id="imprimirAnalisis"><i class="bi bi-printer-fill me-1"></i>Imprimir
+        PDF</a>
 </div>

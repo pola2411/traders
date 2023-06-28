@@ -470,6 +470,10 @@ am5.ready(function () {
     $(document).on("click", "#obtenerRegistros", () => {
         let fecha_inicio = $("#fechaDesdeInput").val();
         let fecha_fin = $("#fechaHastaInput").val();
+        let value = $("#value").val();
+        let variant = $("#variant").val();
+
+        console.log(variant, value);
 
         if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
             if (fecha_inicio > fecha_fin) {
@@ -492,10 +496,18 @@ am5.ready(function () {
                         id: traderID,
                         fecha_inicio: fecha_inicio,
                         fecha_fin: fecha_fin,
+                        value: value,
+                        variant: variant,
                     },
                     success: function (response) {
                         $("#contTable").empty();
                         $("#contTable").html(response);
+                        
+            
+                        tabla_data.destroy();
+                        tabla_analysis.destroy();
+            
+                        tablas();
                     },
                     error: function (error) {
                         console.log(error);
@@ -519,9 +531,12 @@ am5.ready(function () {
         let id = $(this).data("id");
         let fecha_inicio = $(this).data("fechaini");
         let fecha_fin = $(this).data("fechafin");
+        let value = $(this).data("value");
+        let variant = $(this).data("variant");
+
 
         window.open(
-            `/admin/traders-analysis/${id}?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`,
+            `/admin/traders-analysis/${id}?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&value=${value}&variant=${variant}`,
             "_blank"
         );
     });

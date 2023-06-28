@@ -24,23 +24,59 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <div class="row d-flex align-items-center">
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-3 col-12">
                                 <div class="form-floating mb-3 me-3">
                                     <input type="datetime-local" class="form-control" id="fechaDesdeInput" required>
                                     <label for="fechaDesdeInput">A partir de:</label>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-3 col-12">
                                 <div class="form-floating mb-3 me-3">
                                     <input type="datetime-local" class="form-control" id="fechaHastaInput" required>
                                     <label for="fechaHastaInput">Hasta:</label>
                                 </div>
                             </div>
                             <div class="col-md-3 col-12">
+                                <div class="form-floating mb-3 me-3">
+                                  
+                                    <select class="form-select" aria-label="Default select example" id="variant">
+                                     @php
+                                        $variantes = DB::table('estudio_lista')->get();
+                                        echo '<option value="0">Ninguno</option>';
+                                        foreach ($variantes as $variante) {
+                                            echo '<option value="'.$variante->id.'">'.$variante->id .' - '.$variante->nombre.'</option>';
+                                        }
+                                     @endphp
+                                        {{-- <option value="1">Trend</option>
+                                        <option value="2">Spectrum</option> --}}
+                                      </select>
+                                      <label for="variant">Variant</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-12">
+                                <div class="form-floating mb-3 me-3">
+                                    <select class="form-select" aria-label="Default select example" id="value">
+                                        <option value="0">0</option>
+                                       <option value="0.8">0.8</option>
+                                        <option value="1">1</option>
+                                        <option value="1.2">1.2</option>
+                                        <option value="1.4">1.4</option>
+                                        <option value="1.6">1.6</option>
+                                        <option value="1.8">1.8</option>
+                                        <option value="2">2</option>
+                                        <option value="2.2">2.2</option>
+                                        <option value="2.4">2.4</option>
+                                        <option value="2.6">2.6</option>
+                                      </select>
+                                      <label for="value">Value</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-12">
                                 <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar información</button>
                             </div>
                         </div>
                         <div id="contTable" style="overflow-x: auto;"></div>
+
                         <!--<div class="col-12 mt-5">-->
                         <!--    <div id="chartdiv"></div>-->
                         <!--</div>-->

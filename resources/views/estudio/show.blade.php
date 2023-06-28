@@ -24,7 +24,7 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <div class="row d-flex align-items-center">
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-3 col-12">
                                 <div class="form-floating mb-3 me-3">
                                     <select class="form-select" aria-label="Default select example" id="time_range">
                                        
@@ -33,7 +33,7 @@
                                       </select>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-3 col-12">
                                 <div class="form-floating mb-3 me-3">
                                     <select class="form-select" aria-label="Default select example" id="variant">
                                      @php
@@ -47,7 +47,15 @@
                                       </select>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-3 col-12">
+                                <div class="form-floating mb-3 me-3">
+                                    <select class="form-select" aria-label="Default select example" id="test">
+                                        <option value="sindatos">Sin datos en test</option>
+                                        <option value="datos">Datos en test</option>
+                                      </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-12">
                                 <button class="btn btn-primary mb-3" id="obtenerRegistros">Generar información</button>
                             </div>
                         </div>

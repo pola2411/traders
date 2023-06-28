@@ -49,6 +49,8 @@
 <p class="font-weight-bold" style="text-align: right;">Fecha Inicio: <span style="font-weight:400">{{ $fecha_inicio }} </span></p>
 <p class="font-weight-bold" style="text-align: right;">Fecha Fin: <span style="font-weight:400">{{ $fecha_fin }} </span></p>
 <p class="font-weight-bold" style="text-align: right;">Trader: <span style="font-weight:400">{{ $tradersNombre->Signal }} </span></p>
+<p class="font-weight-bold" style="text-align: right;">Value: <span style="font-weight:400">{{ $value }} </span></p>
+<p class="font-weight-bold" style="text-align: right;">Variant: <span style="font-weight:400">{{ $variant }} </span></p>
 
 
 

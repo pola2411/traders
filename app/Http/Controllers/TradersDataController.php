@@ -25,11 +25,16 @@ class TradersDataController extends Controller
         $fecha_inicio = \Carbon\Carbon::parse($request->fecha_inicio)->format('Y-m-d H:i:s');
         $fecha_fin = \Carbon\Carbon::parse($request->fecha_fin)->format('Y-m-d H:i:s');
 
+        $value = $request->value;
+        $variant = $request->variant;
+
         $data = array(
             "tradersNombre" => $tradersNombre,
             "fecha_inicio" => $fecha_inicio,
             "fecha_fin" => $fecha_fin,
-            "monedas" => $pares
+            "monedas" => $pares,
+            "value" => $value,
+            "variant" => $variant
         );
 
         return response()->view('tradersdata.table', $data, 200);
@@ -45,12 +50,21 @@ class TradersDataController extends Controller
         $fecha_inicio = \Carbon\Carbon::parse($request->fecha_inicio)->format('Y-m-d H:i:s');
         $fecha_fin = \Carbon\Carbon::parse($request->fecha_fin)->format('Y-m-d H:i:s');
 
+
+        $value = $request->value;
+        $variant = $request->variant;
+ 
+
         $data = array(
             "tradersNombre" => $tradersNombre,
             "fecha_inicio" => $fecha_inicio,
             "fecha_fin" => $fecha_fin,
-            "monedas" => $pares
+            "monedas" => $pares,
+            "value" => $value,
+            "variant" => $variant
         );
+        ini_set('max_execution_time', 180); //3 minutes
+
     
         $pdf = PDF::loadView('tradersdata.imprimir', $data)->setPaper('a4', 'landscape');
         return $pdf->stream('traders-analysis.pdf');

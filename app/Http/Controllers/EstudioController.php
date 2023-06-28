@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\General;
 use App\Models\Trader;
+use App\Models\Reporte;
 use App\Models\Box;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,7 @@ class EstudioController extends Controller
 
         $tr = $request->tr;
         $variant = $request->variant;
+        $test = $request->test;
 
         $fecha_inicio = \Carbon\Carbon::parse($request->fecha_inicio)->format('Y-m-d H:i:s');
         $fecha_fin = \Carbon\Carbon::parse($request->fecha_fin)->format('Y-m-d H:i:s');
@@ -35,6 +37,7 @@ class EstudioController extends Controller
             "monedas" => $monedas,
             "tr" => $tr,
             "variant" => $variant,
+            "test" => $test,
         );
 
 
@@ -59,10 +62,22 @@ class EstudioController extends Controller
             "monedas" => $monedas,
             "tr" => $tr,
             "variant" => $variant,
-            "estudios" => $estudios,
         );
+        
+        ini_set('max_execution_time', 180); //3 minutes
 
         $pdf = PDF::loadView('estudio.imprimir', $data)->setPaper('a4', 'landscape');
         return $pdf->stream('estudio-analysis.pdf');
+
+    }
+
+    public function deleteReporte(Request $request)
+    {
+        if ($request->ajax()) {
+            $reporte_id = $request->id;
+
+            Reporte::destroy($request->id);
+            
+        }
     }
 }
