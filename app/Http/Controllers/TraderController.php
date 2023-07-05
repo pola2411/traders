@@ -13,12 +13,22 @@ class TraderController extends Controller
     public function index()
     {
         $traders = DB::table("traders")
-        ->where("id", "!=", 998)
-        ->where("id", "!=", 999)
-        ->where("id", "!=", 1000)
-        ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();
+        ->where('id','=',99999)
+        ->orWhere('id','=',99998)
+        ->orWhere('id','=',99997)
+        ->orderByDesc(DB::raw('FIELD(id, 99997, 99998, 99999)'))->get();
 
         return view('traders.show', compact('traders'));
+    }
+
+    public function getClave(Request $request)
+    {
+        $clave = DB::table('users')->where("id", "=", auth()->user()->id)->first();
+        if (\Hash::check($request->clave, $clave->password)) {                
+            return response("success");
+        }else{
+            return response("error");
+        }
     }
 
     public function editStatus(Request $request)
@@ -71,11 +81,17 @@ class TraderController extends Controller
             $solicitud->save();
         }
 
+        // $traders = DB::table("traders")
+        // ->where("id", "!=", 998)
+        // ->where("id", "!=", 999)
+        // ->where("id", "!=", 1000)
+        // ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();
+
         $traders = DB::table("traders")
-        ->where("id", "!=", 998)
-        ->where("id", "!=", 999)
-        ->where("id", "!=", 1000)
-        ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();
+        ->where('id','=',99999)
+        ->orWhere('id','=',99998)
+        ->orWhere('id','=',99997)
+        ->orderByDesc(DB::raw('FIELD(id, 99997, 99998, 99999)'))->get();
 
         return response()->view('traders.buttons', compact('traders'));
     }
@@ -92,11 +108,17 @@ class TraderController extends Controller
 
     public function getTrader(Request $request)
     {
+        // $traders = DB::table("traders")
+        // ->where("id", "!=", 998)
+        // ->where("id", "!=", 999)
+        // ->where("id", "!=", 1000)
+        // ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();
+
         $traders = DB::table("traders")
-        ->where("id", "!=", 998)
-        ->where("id", "!=", 999)
-        ->where("id", "!=", 1000)
-        ->orderByDesc(DB::raw('FIELD(id, 22, 99998, 99999)'))->get();
+        ->where('id','=',99999)
+        ->orWhere('id','=',99998)
+        ->orWhere('id','=',99997)
+        ->orderByDesc(DB::raw('FIELD(id, 99997, 99998, 99999)'))->get();
 
         return response()->view('traders.buttons', compact('traders'));
     }

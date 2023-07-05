@@ -354,7 +354,6 @@ $(document).ready(function () {
         var form = $(this).serialize();
         var url = $(this).attr("action");
         $("#alertMessage").text("");
-
         $.ajax({
             type: "POST",
             url: url,
@@ -363,10 +362,12 @@ $(document).ready(function () {
             contentType: false,
             cache: false,
             processData: false,
+          
             success: function () {
                 $("#formModal").modal("hide");
                 $("#estudioForm")[0].reset();
                 table.ajax.reload(null, false);
+              
                 if (acc == "new") {
                     Swal.fire({
                         icon: "success",

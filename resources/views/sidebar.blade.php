@@ -70,13 +70,46 @@
                 <span>Mi cuenta</span>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/traders')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/traders') }}">
+                <i class="bi bi-person-workspace"></i>
+                <span>Panel de control</span>
+            </a>
+        </li>
+
         
         <li class="nav-item">
             <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/dashboard') }}">
                 <i class="bi bi-grid"></i>
-                <span>Panel de control</span>
+                <span>Saldos</span>
             </a>
-        </li>        
+        </li>       
+        
+        <li class="nav-item">
+
+            <a class="nav-link collapsed" data-bs-target="#live_sidebar" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-camera-video"></i><span>Transmisión</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+
+            <ul id="live_sidebar" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="@if (request()->is('/admin/transmision')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/transmision') }}">
+                        <i class="bi bi-circle"></i>
+                        <span>Agregar transmisión</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="@if (request()->is('/admin/transmisionLive')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/transmisionLive') }}">
+                        <i class="bi bi-circle"></i>
+                        <span>Visualizar transmisión</span>
+                    </a>
+                </li>
+            </ul>
+
+           
+        </li>
+
 
         {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/operacion')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/operacion') }}">
@@ -125,13 +158,7 @@
             </a>
         </li> --}}
 
-        <li class="nav-item">
-            <a class="@if (request()->is('/admin/traders')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/traders') }}">
-                <i class="bi bi-person-workspace"></i>
-                <span>Traders</span>
-            </a>
-        </li>
-
+      
         
         <li class="nav-item">
             <a class="@if (request()->is('/admin/botones')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/botones') }}">
@@ -376,6 +403,33 @@
                 <span>Estudio Eficiencia</span>
             </a>
         </li>
+
+       
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#status-magic-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-magic"></i><span>Magic Number</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="status-magic-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="ps-2" href="/admin/statusMagic/99999">
+                        <i class="bi bi-circle"></i><span>MAM</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ps-2" href="/admin/statusMagic/99998">
+                        <i class="bi bi-circle"></i><span>POOL I</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="ps-2" href="/admin/statusMagic/99997">
+                        <i class="bi bi-circle"></i><span>POOL II</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#ejemplo-nav" data-bs-toggle="collapse" href="#">

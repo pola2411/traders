@@ -122,6 +122,7 @@ Route::get('/admin/traders', [App\Http\Controllers\TraderController::class, 'ind
 Route::get('/admin/showTraders', [App\Http\Controllers\TraderController::class, 'getTrader'])->middleware('auth');
 Route::post('/admin/addTrader', [App\Http\Controllers\TraderController::class, 'addTrader'])->middleware('auth');
 Route::get('/admin/editStatus', [App\Http\Controllers\TraderController::class, 'editStatus'])->middleware('auth');
+Route::get('/admin/showClave', [App\Http\Controllers\TraderController::class, 'getClave']);
 
 //consultar momento
 Route::get('/admin/momento/{id}', [App\Http\Controllers\MomentoController::class, 'index'])->name('momento')->middleware('auth');
@@ -176,6 +177,11 @@ Route::get('/admin/cleoTabla', [App\Http\Controllers\StatusGraficaController::cl
 Route::get('/admin/cleoTablaShow', [App\Http\Controllers\StatusGraficaController::class, 'cleoTablaShow'])->middleware('auth');
 
 Route::get('/admin/transmision', [App\Http\Controllers\TransmisionController::class, 'index'])->middleware('auth');
+Route::get('/admin/showTransmision', [App\Http\Controllers\TransmisionController::class, 'getLive'])->middleware('auth');
+Route::post('/admin/addLive', [App\Http\Controllers\TransmisionController::class, 'addLive'])->middleware('auth');
+Route::post('/admin/deleteLive', [App\Http\Controllers\TransmisionController::class, 'deleteLive'])->middleware('auth');
+
+Route::get('/admin/transmisionLive', [App\Http\Controllers\LiveController::class, 'index'])->middleware('auth');
 
 Route::get('/admin/botones', [App\Http\Controllers\BotonController::class, 'index'])->middleware('auth');
 Route::get('/admin/boton1', [App\Http\Controllers\BotonController::class, 'boton1'])->middleware('auth');
