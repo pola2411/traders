@@ -1,6 +1,7 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+
 * {
     font-family: "Poppins";
 }
@@ -2038,6 +2039,8 @@ pre {
     object-fit: cover;
     border-radius: 50%;
 }
+
+
 
 .file-upload {
     background-color: #ffffff;

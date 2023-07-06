@@ -1,4 +1,5 @@
 function verPass() {
+    
     var input = $("#passwordInput");
 
     var label = $("#textCheck");

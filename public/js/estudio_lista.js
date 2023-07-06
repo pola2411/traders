@@ -372,7 +372,7 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: "success",
                         title: '<h1 style="font-family: Poppins; font-weight: 700;">Estudio añadido</h1>',
-                        html: '<p style="font-family: Poppins">El estudio ha sido añadido correctamente</p>',
+                        html: '<p style="font-ffamily: Poppins">El estudio ha sido añadido correctamente</p>',
                         confirmButtonText:
                             '<a style="font-family: Poppins">Aceptar</a>',
                         confirmButtonColor: "#01bbcc",

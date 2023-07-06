@@ -2064,6 +2064,20 @@ a:hover {
     border-radius: 50%;
 }
 
+#imgPerfil {
+    width: 250px;
+    height: 250px;
+    border-radius: 100%;
+}
+
+#statusActivo {
+    border-left: 30px solid #18d26e;
+}
+
+#statusInactivo {
+    border-left: 30px solid #888;
+}
+
 .file-upload {
     background-color: #ffffff;
     width: 100%;

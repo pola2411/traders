@@ -183,6 +183,16 @@ Route::post('/admin/deleteLive', [App\Http\Controllers\TransmisionController::cl
 
 Route::get('/admin/transmisionLive', [App\Http\Controllers\LiveController::class, 'index'])->middleware('auth');
 
+//Rutas de logs
+Route::get('/admin/historialCambios', [App\Http\Controllers\LogController::class, 'index'])->name('logs');
+Route::get('/admin/showCambios', [App\Http\Controllers\LogController::class, 'getLogs']);
+Route::post('/admin/deleteCambio', [App\Http\Controllers\LogController::class, 'deleteCambio']);
+
+//Rutas de bitácora de acceso/admin/bitacoraAcceso
+Route::get('/admin/bitacoraAcceso', [App\Http\Controllers\BitacoraAccesoController::class, 'index'])->name('bitacoraacceso');
+Route::get('/admin/getDetallesBitacora', [App\Http\Controllers\BitacoraAccesoController::class, 'getDetallesBitacora']);
+
+
 Route::get('/admin/botones', [App\Http\Controllers\BotonController::class, 'index'])->middleware('auth');
 Route::get('/admin/boton1', [App\Http\Controllers\BotonController::class, 'boton1'])->middleware('auth');
 Route::get('/admin/boton2', [App\Http\Controllers\BotonController::class, 'boton2'])->middleware('auth');
@@ -200,3 +210,4 @@ Route::get('/admin/boton13', [App\Http\Controllers\BotonController::class, 'boto
 Route::get('/admin/boton14', [App\Http\Controllers\BotonController::class, 'boton14'])->middleware('auth');
 Route::get('/admin/boton15', [App\Http\Controllers\BotonController::class, 'boton15'])->middleware('auth');
 Route::get('/admin/boton16', [App\Http\Controllers\BotonController::class, 'boton16'])->middleware('auth');
+

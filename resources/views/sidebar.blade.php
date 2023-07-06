@@ -1,8 +1,11 @@
 @php
-    $traders = DB::table("traders")->where("activado", "activado")->orderBy("id", "DESC")->get();        
+    $traders = DB::table('traders')
+        ->where('activado', 'activado')
+        ->orderBy('id', 'DESC')
+        ->get();
     $traders_data = DB::table('traders_data')->get();
-    $valores_moneda = array("EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY", "EURGBP", "EURAUD", "EURNZD", "GBPAUD", "GBPNZD", "AUDNZD", "EURCAD", "EURCHF", "EURJPY", "GBPCAD", "GBPCHF", "GBPJPY", "AUDCAD", "AUDCHF", "AUDJPY", "NZDCAD", "NZDCHF", "NZDJPY", "CADCHF", "CADJPY", "CHFJPY");
-@endphp        
+    $valores_moneda = ['EURUSD', 'GBPUSD', 'AUDUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'USDJPY', 'EURGBP', 'EURAUD', 'EURNZD', 'GBPAUD', 'GBPNZD', 'AUDNZD', 'EURCAD', 'EURCHF', 'EURJPY', 'GBPCAD', 'GBPCHF', 'GBPJPY', 'AUDCAD', 'AUDCHF', 'AUDJPY', 'NZDCAD', 'NZDCHF', 'NZDJPY', 'CADCHF', 'CADJPY', 'CHFJPY'];
+@endphp
 
 <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -22,13 +25,13 @@
         <ul class="d-flex align-items-center">
             <li class="nav-item dropdown pe-3">
 
-                <?php $foto = auth()->user()->foto_perfil;  ?>
+                <?php $foto = auth()->user()->foto_perfil; ?>
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                     <img src="{{ asset("img/usuarios/$foto") }}" id="imgPerfilNav" alt="Foto de perfil"
                         class="rounded-circle profilephoto2">
                     <span id="nombreSide" class="d-none d-md-block dropdown-toggle ps-2">
-                        {{ auth()->user()->nombre }} 
+                        {{ auth()->user()->nombre }}
                     </span>
                 </a>
 
@@ -65,27 +68,30 @@
         <li class="nav-heading">Menú</li>
 
         <li class="nav-item">
-            <a class="@if (request()->is('admin/perfil')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/perfil') }}">
+            <a class="@if (request()->is('admin/perfil')) nav-link @else nav-link collapsed @endif"
+                href="{{ URL::to('admin/perfil') }}">
                 <i class="bi bi-person"></i>
                 <span>Mi cuenta</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/traders')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/traders') }}">
+            <a class="@if (request()->is('/admin/traders')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/traders') }}">
                 <i class="bi bi-person-workspace"></i>
                 <span>Panel de control</span>
             </a>
         </li>
 
-        
+
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/dashboard') }}">
+            <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/dashboard') }}">
                 <i class="bi bi-grid"></i>
                 <span>Saldos</span>
             </a>
-        </li>       
-        
+        </li>
+
         <li class="nav-item">
 
             <a class="nav-link collapsed" data-bs-target="#live_sidebar" data-bs-toggle="collapse" href="#">
@@ -94,20 +100,22 @@
 
             <ul id="live_sidebar" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a class="@if (request()->is('/admin/transmision')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/transmision') }}">
+                    <a class="@if (request()->is('/admin/transmision')) nav-link @else nav-link collapsed @endif"
+                        href="{{ url('/admin/transmision') }}">
                         <i class="bi bi-circle"></i>
                         <span>Agregar transmisión</span>
                     </a>
                 </li>
                 <li>
-                    <a class="@if (request()->is('/admin/transmisionLive')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/transmisionLive') }}">
+                    <a class="@if (request()->is('/admin/transmisionLive')) nav-link @else nav-link collapsed @endif"
+                        href="{{ url('/admin/transmisionLive') }}">
                         <i class="bi bi-circle"></i>
                         <span>Visualizar transmisión</span>
                     </a>
                 </li>
             </ul>
 
-           
+
         </li>
 
 
@@ -117,7 +125,7 @@
                 <span>Operaciones</span>
             </a>
         </li> --}}
-        
+
         {{--
         <li class="nav-item">
             <a class="@if (request()->is('/admin/boxes')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/boxes') }}">
@@ -127,21 +135,22 @@
         </li>
         --}}
 
-        
+
         {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/boxes2')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/boxes2') }}">
                 <i class="bi bi-box-seam"></i>
                 <span>Boxes 2</span>
             </a>
         </li> --}}
-        
+
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/indexUSD') }}">
+            <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/indexUSD') }}">
                 <i class="bi bi-currency-exchange"></i>
                 <span>Index USD</span>
             </a>
         </li>
-        
+
         {{--
         <li class="nav-item">
             <a class="@if (request()->is('/admin/indexUSDCADCHF')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/indexUSDCADCHF') }}">
@@ -158,24 +167,25 @@
             </a>
         </li> --}}
 
-      
-        
+
+
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/botones')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/botones') }}">
+            <a class="@if (request()->is('/admin/botones')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/botones') }}">
                 <i class="bi bi-currency-exchange"></i>
                 <span>Botones</span>
             </a>
         </li>
-       
-         
-        {{--}}
+
+
+        {{-- }}
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-table"></i><span>Traders Data Apertura</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="tradersdata-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders_data as $trader)
-                    @if(strlen($trader->Signal) > 0)
+                    @if (strlen($trader->Signal) > 0)
                         <li>
                             <a class="ps-2" href="/admin/traders-data-apertura/{{$trader->id}}">
                                 <i class="bi bi-circle"></i><span>Trader {{ $trader->id }} ({{$trader->Signal}})</span>
@@ -194,10 +204,11 @@
             </a>
             <ul id="tradersdata-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders_data as $trader)
-                    @if(strlen($trader->Signal) > 0)
+                    @if (strlen($trader->Signal) > 0)
                         <li>
-                            <a class="ps-2" href="/admin/traders-data/{{$trader->id}}">
-                                <i class="bi bi-circle"></i><span>Trader {{ $trader->id }} ({{$trader->Signal}})</span>
+                            <a class="ps-2" href="/admin/traders-data/{{ $trader->id }}">
+                                <i class="bi bi-circle"></i><span>Trader {{ $trader->id }}
+                                    ({{ $trader->Signal }})</span>
                             </a>
                         </li>
                     @endif
@@ -213,7 +224,7 @@
             </a>
             <ul id="momento-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders_data as $trader)
-                    @if(strlen($trader->Signal) > 0)
+                    @if (strlen($trader->Signal) > 0)
                         <li>
                             <a class="ps-2" href="/admin/momento/{{$trader->id}}">
                                 <i class="bi bi-circle"></i><span>Trader {{ $trader->id }} ({{$trader->Signal}})</span>
@@ -228,20 +239,21 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#equitybalance-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-bar-chart-line"></i><span>Equity/Balance</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-bar-chart-line"></i><span>Equity/Balance</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="equitybalance-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($traders as $trader)
-                <li>
-                    <a class="ps-2" href="/admin/equityBalance/{{$trader->id}}">
-                        <i class="bi bi-circle"></i><span>{{$trader->nombre}}</span>
-                    </a>
-                </li>
+                    <li>
+                        <a class="ps-2" href="/admin/equityBalance/{{ $trader->id }}">
+                            <i class="bi bi-circle"></i><span>{{ $trader->nombre }}</span>
+                        </a>
+                    </li>
                 @endforeach
             </ul>
-        </li>        
+        </li>
 
-         
+
         {{--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#margen-nav" data-bs-toggle="collapse" href="#">
@@ -283,9 +295,10 @@
             </ul>
         </li>
 
-        
+
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#status-magic-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link collapsed" data-bs-target="#status-magic-nav" data-bs-toggle="collapse"
+                href="#">
                 <i class="bi bi-magic"></i><span>Magic Number</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="status-magic-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
@@ -375,8 +388,8 @@
             <ul id="cleo-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @foreach ($valores_moneda as $moneda)
                     <li>
-                        <a class="ps-2" href="/admin/cleo-data/{{$moneda}}">
-                            <i class="bi bi-circle"></i><span>{{$moneda}}</span>
+                        <a class="ps-2" href="/admin/cleo-data/{{ $moneda }}">
+                            <i class="bi bi-circle"></i><span>{{ $moneda }}</span>
                         </a>
                     </li>
                 @endforeach
@@ -384,49 +397,48 @@
         </li>
 
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/cleoTabla')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/cleoTabla') }}">
+            <a class="@if (request()->is('/admin/cleoTabla')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/cleoTabla') }}">
                 <i class="bi bi-discord"></i>
                 <span>Cleo tabla</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/estudioLista')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/estudioLista') }}">
+            <a class="@if (request()->is('/admin/estudioLista')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/estudioLista') }}">
                 <i class="bi bi-list"></i>
                 <span>Lista de estudios</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/estudio-data')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/estudio-data') }}">
+            <a class="@if (request()->is('/admin/estudio-data')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/estudio-data') }}">
                 <i class="bi bi-clipboard-data"></i>
                 <span>Estudio Eficiencia</span>
             </a>
         </li>
 
-       
+
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#status-magic-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-magic"></i><span>Magic Number</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link collapsed" data-bs-target="#control-status" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-clock"></i><span>Control</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="status-magic-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <ul id="control-status" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a class="ps-2" href="/admin/statusMagic/99999">
-                        <i class="bi bi-circle"></i><span>MAM</span>
+                    <a class="ps-2" href="/admin/bitacoraAcceso">
+                        <i class="bi bi-circle"></i><span>Bitácora de accesos</span>
                     </a>
                 </li>
-                <li>
-                    <a class="ps-2" href="/admin/statusMagic/99998">
-                        <i class="bi bi-circle"></i><span>POOL I</span>
-                    </a>
-                </li>
+                    {{-- <li>
+                        <a class="ps-2" href="/admin/bitacoraAcceso">
+                            <i class="bi bi-circle"></i><span>Historial de cambios</span>
+                        </a>
+                    </li> --}}
 
-                <li>
-                    <a class="ps-2" href="/admin/statusMagic/99997">
-                        <i class="bi bi-circle"></i><span>POOL II</span>
-                    </a>
-                </li>
+
             </ul>
         </li>
 
@@ -471,7 +483,7 @@
             </ul>
         </li>
         --}}
-        
+
         {{-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#monitoreo-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-tv"></i><span>Monitoreo</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -496,7 +508,8 @@
         </li> --}}
 
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/logs')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/logs') }}">
+            <a class="@if (request()->is('/admin/logs')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/logs') }}">
                 <i class="bi bi-book-half"></i>
                 <span>Logs</span>
             </a>
