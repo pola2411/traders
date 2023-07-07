@@ -432,13 +432,11 @@
                         <i class="bi bi-circle"></i><span>Bitácora de accesos</span>
                     </a>
                 </li>
-                    {{-- <li>
-                        <a class="ps-2" href="/admin/bitacoraAcceso">
-                            <i class="bi bi-circle"></i><span>Historial de cambios</span>
-                        </a>
-                    </li> --}}
-
-
+                <li>
+                    <a class="ps-2" href="/admin/historialCambios">
+                        <i class="bi bi-circle"></i><span>Historial de cambios</span>
+                    </a>
+                </li>
             </ul>
         </li>
 

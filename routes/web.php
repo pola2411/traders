@@ -184,9 +184,9 @@ Route::post('/admin/deleteLive', [App\Http\Controllers\TransmisionController::cl
 Route::get('/admin/transmisionLive', [App\Http\Controllers\LiveController::class, 'index'])->middleware('auth');
 
 //Rutas de logs
-Route::get('/admin/historialCambios', [App\Http\Controllers\LogController::class, 'index'])->name('logs');
-Route::get('/admin/showCambios', [App\Http\Controllers\LogController::class, 'getLogs']);
-Route::post('/admin/deleteCambio', [App\Http\Controllers\LogController::class, 'deleteCambio']);
+Route::get('/admin/historialCambios', [App\Http\Controllers\TablaLogsController::class, 'index'])->name('tablalogs');
+Route::get('/admin/showCambios', [App\Http\Controllers\TablaLogsController::class, 'getTablaLogs']);
+Route::post('/admin/deleteCambio', [App\Http\Controllers\TablaLogsController::class, 'deleteTablaLogs']);
 
 //Rutas de bitácora de acceso/admin/bitacoraAcceso
 Route::get('/admin/bitacoraAcceso', [App\Http\Controllers\BitacoraAccesoController::class, 'index'])->name('bitacoraacceso');

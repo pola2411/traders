@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\General;
 use App\Models\Solicitud;
+use App\Models\TablaLog;
 use App\Models\Trader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,17 @@ class TraderController extends Controller
         ->orWhere('id','=',99997)
         ->orderByDesc(DB::raw('FIELD(id, 99997, 99998, 99999)'))->get();
 
+        $trader_id = $trader->id;
+        $bitacora_id = session('bitacora_id');
+        
+        $log = new TablaLog;
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Traders";
+        $log->id_tabla = $trader_id;
+        $log->bitacora_id = $bitacora_id;
+        $log->save();
+
+
         return response()->view('traders.buttons', compact('traders'));
     }
 
@@ -102,6 +114,16 @@ class TraderController extends Controller
         $trader->id = $request->numero;
         $trader->nombre = "Trader ".$request->numero;
         $trader->save();
+
+        // $trader_id = $trader->id;
+        // $bitacora_id = session('bitacora_id');
+        
+        // $log = new TablaLog;
+        // $log->tipo_accion = "Inserción";
+        // $log->tabla = "Traders";
+        // $log->id_tabla = $trader_id;
+        // $log->bitacora_id = $bitacora_id;
+        // $log->save();
 
         return($trader);
     }
