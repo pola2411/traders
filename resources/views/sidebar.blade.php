@@ -253,6 +253,14 @@
             </ul>
         </li>
 
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/market')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/market') }}">
+                <i class="bi bi-list"></i>
+                <span>Gráfica Market</span>
+            </a>
+        </li>
+
 
         {{--
         <li class="nav-item">

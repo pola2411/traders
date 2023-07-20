@@ -23,6 +23,11 @@ Route::get('/admin/getPruebasVida', [App\Http\Controllers\DashboardController::c
 Route::get('/admin/equityBalance/{id}', [App\Http\Controllers\GraficaController::class, 'index'])->middleware('auth');
 Route::get('/admin/getTrader', [App\Http\Controllers\GraficaController::class, 'getTrader'])->middleware('auth');
 
+// Rutas para gráficas Market
+Route::get('/admin/market', [App\Http\Controllers\MarketController::class, 'index'])->middleware('auth');
+Route::get('/admin/getMarket', [App\Http\Controllers\MarketController::class, 'getMarket'])->middleware('auth');
+
+
 // Rutas de login y registro
 Route::get('/', [App\Http\Controllers\SessionController::class, 'create'])->name('login');
 Route::post('/', [App\Http\Controllers\SessionController::class, 'store'])->name('login.store');
