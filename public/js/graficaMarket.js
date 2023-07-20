@@ -49,7 +49,7 @@ am5.ready(function () {
             stroke: "#5D9C59",
             fill: "#539165",
             tooltip: am5.Tooltip.new(root, {
-                labelText: "Margin: {valueY}",
+                labelText: "Ask: {valueY}",
             }),
         })
     );
@@ -142,6 +142,7 @@ am5.ready(function () {
                     data.push({
                         date: new Date(par.time).getTime(),
                         open: par.bid,
+                        close: par.ask,
                     });
                 });
 
@@ -298,6 +299,7 @@ am5.ready(function () {
                 response.market.map(function (par) {
                     data.push({
                         date: new Date(par.time).getTime(),
+                        open: par.ask,
                         close: par.bid,
                     });
                 });
