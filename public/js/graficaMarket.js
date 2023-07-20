@@ -64,7 +64,7 @@ am5.ready(function () {
             stroke: "#F7C04A",
             fill: "#E7B10A",
             tooltip: am5.Tooltip.new(root, {
-                labelText: "Bid: {valueY}",
+                labelText: "Spread: {valueY}",
             }),
         })
     );
@@ -120,6 +120,8 @@ am5.ready(function () {
         .subtract(1, "minutes")
         .format("YYYY-MM-DD HH:mm:ss");
 
+    
+
     $("#fechaDesdeInput").val(inicio_semana);
     $("#fechaHastaInput").val(fin_semana);
     let par = $("#par").val();
@@ -141,8 +143,8 @@ am5.ready(function () {
                 response.market.map(function (par) {
                     data.push({
                         date: new Date(par.time).getTime(),
-                        open: par.bid,
-                        close: par.ask,
+                        open: par.spread,
+                      
                     });
                 });
 
@@ -299,13 +301,14 @@ am5.ready(function () {
                 response.market.map(function (par) {
                     data.push({
                         date: new Date(par.time).getTime(),
-                        open: par.ask,
-                        close: par.bid,
+                        // open: par.ask,
+                        // close: par.bid,
+                        close: par.spread,
                     });
                 });
 
-                series1.data.setAll(data);
                 series2.data.setAll(data);
+                series1.data.setAll(data);
             },
             error: function (error) {
                 console.log(error);
@@ -316,11 +319,14 @@ am5.ready(function () {
     $(document).on("click", "#obtenerRegistros", () => {
         let fecha_inicio = $("#fechaDesdeInput").val();
         let fecha_fin = $("#fechaHastaInput").val();
+        let par = $("#par").val();
+
 
         if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
             if (fecha_inicio > fecha_fin) {
                 $("#fechaDesdeInput").val(0);
                 $("#fechaHastaInput").val(0);
+                $("#par").val(0);
                 Swal.fire({
                     icon: "warning",
                     title: '<h1 style="font-family: Poppins; font-weight: 700;">Error en fechas</h1>',
