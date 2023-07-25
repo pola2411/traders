@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Botones')
+@section('title', 'Equity')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
@@ -8,12 +8,18 @@
 @endsection
 
 @section('content')
+    <style>
+        button {
+            margin: 5px 5px 5px 5px;
+            width: 8rem;
+        }
+    </style>
     <div class="pagetitle">
-        <h1>Botones</h1>
+        <h1>Equity</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
-                <li class="breadcrumb-item active">Botones</li>
+                <li class="breadcrumb-item active">Equity</li>
             </ol>
         </nav>
     </div>
@@ -23,33 +29,298 @@
             <div class="col-lg-12">
 
                 <div class="card">
-                    <div class="card-body mt-3">
+                    <div class="card-body mt-3" id="contBotonesSwitcher">
                         <div class="row justify-content-center">
-                            <div class="col-md-10 col-12 text-center">
-                                <button id="boton1" class="btn btn-success m-2">Botón 1</button>
-                                <button id="boton2" class="btn btn-success m-2">Botón 2</button>
-                                <button id="boton3" class="btn btn-success m-2">Botón 3</button>
-                                <button id="boton4" class="btn btn-success m-2">Botón 4</button>
-                                <button id="boton5" class="btn btn-success m-2">Botón 5</button>
-                                <button id="boton6" class="btn btn-success m-2">Botón 6</button>
-                                <button id="boton7" class="btn btn-success m-2">Botón 7</button>
-                                <button id="boton8" class="btn btn-success m-2">Botón 8</button>
+                            <div class="col-md-12 col-12 text-center">
+
+
+
+
+                                @foreach ($switchers as $switcher)
+                                    @php
+                                        if ($switcher->modificable == 'activado') {
+                                            $clase_modificable = '';
+                                        } else {
+                                            $clase_modificable = 'btn-danger';
+                                        }
+                                        
+                                        $clase = 'btn-success';
+                                        
+                                    @endphp
+                                    <div class="table-responsive">
+                                        <table class="table">
+
+                                            <tbody>
+
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        @php
+                                                            $sumausd = $switcher->usdchf + $switcher->usdjpy + $switcher->usdcad;
+                                                        @endphp
+                                                        {{ $sumausd }}
+                                                    </td>
+
+                                                    <td>
+                                                        @php
+                                                            $sumaeur = $switcher->eurusd + $switcher->eurgbp + $switcher->euraud + $switcher->eurnzd + $switcher->eurcad + $switcher->eurchf + $switcher->eurjpy;
+                                                        @endphp
+                                                        {{ $sumaeur }}
+                                                    </td>
+
+                                                    <td>
+                                                        @php
+                                                            $sumagbp = $switcher->gbpusd + $switcher->gbpaud + $switcher->gbpnzd + $switcher->gbpcad + $switcher->gbpchf + $switcher->gbpjpy;
+                                                        @endphp
+                                                        {{ $sumagbp }}
+                                                    </td>
+
+                                                    <td>@php
+                                                        $sumaaud = $switcher->audusd + $switcher->audnzd + $switcher->audcad + $switcher->audchf + $switcher->audjpy;
+                                                    @endphp
+                                                        {{ $sumaaud }}</td>
+
+                                                    <td>@php
+                                                        $sumanzd = $switcher->nzdusd + $switcher->nzdcad + $switcher->nzdchf + $switcher->nzdjpy;
+                                                    @endphp
+                                                        {{ $sumanzd }}</td>
+
+                                                    <td>@php
+                                                        $sumacad = $switcher->cadchf + $switcher->cadjpy;
+                                                    @endphp
+                                                        {{ $sumacad }}</td>
+
+                                                    <td>@php
+                                                        $sumachf = $switcher->chfjpy;
+                                                    @endphp
+                                                        {{ $sumachf }}</td>
+
+                                                    <td>@php
+                                                        
+                                                    @endphp
+                                                        0</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><button id="botonUSDH" class="btn btn-light m-2">USD</button></td>
+                                                    <td><button id="botonEURH" class="btn btn-light m-2">EUR</button></td>
+                                                    <td><button id="botonGBPH" class="btn btn-light m-2">GBP</button></td>
+                                                    <td><button id="botonAUDH" class="btn btn-light m-2">AUD</button></td>
+                                                    <td><button id="botonNZDH" class="btn btn-light m-2">NZD</button></td>
+                                                    <td><button id="botonCADH" class="btn btn-light m-2">CAD</button></td>
+                                                    <td><button id="botonCHFH" class="btn btn-light m-2">CHF</button></td>
+                                                    <td><button id="botonJPYH" class="btn btn-light m-2">JPY</button></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> @php
+                                                        $sumausdv = $switcher->eurusd + $switcher->gbpusd + $switcher->audusd + $switcher->nzdusd;
+                                                    @endphp
+                                                        {{ $sumausdv }}</td>
+                                                    <td><button id="botonUSDV" class="btn btn-light m-2">USD</button></td>
+                                                    <td></td>
+                                                    <td><button id="boton1"
+                                                            class="btn {{ $switcher->eurusd > 0 ? $clase : ($switcher->eurusd < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->eurusd }}</button>
+                                                    </td>
+                                                    <td><button id="boton2"
+                                                            class="btn {{ $switcher->gbpusd > 0 ? $clase : ($switcher->gbpusd < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->gbpusd }}</button>
+                                                    </td>
+                                                    <td><button id="boton3"
+                                                            class="btn {{ $switcher->audusd > 0 ? $clase : ($switcher->audusd < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->audusd }}</button>
+                                                    </td>
+                                                    <td><button id="boton4"
+                                                            class="btn {{ $switcher->nzdusd > 0 ? $clase : ($switcher->nzdusd < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->nzdusd }}</button>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td>0</td>
+                                                    <td><button id="botonEURV" class="btn btn-light m-2">EUR</button></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>@php
+                                                        $sumagbpv = $switcher->eurgbp;
+                                                    @endphp
+                                                        {{ $sumagbpv }}</td>
+                                                    <td><button id="botonGBPV" class="btn btn-light m-2">GBP</button></td>
+                                                    <td></td>
+                                                    <td><button id="boton5"
+                                                            class="btn {{ $switcher->eurgbp > 0 ? $clase : ($switcher->eurgbp < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->eurgbp }}</button>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td>@php
+                                                        $sumaaudv = $switcher->euraud + $switcher->gbpaud;
+                                                    @endphp
+                                                        {{ $sumaaudv }}</td>
+                                                    <td><button id="botonAUDV" class="btn btn-light m-2">AUD</button></td>
+                                                    <td></td>
+                                                    <td><button id="boton6"
+                                                            class="btn {{ $switcher->euraud > 0 ? $clase : ($switcher->euraud < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->euraud }}</button>
+                                                    </td>
+                                                    <td><button id="boton7"
+                                                            class="btn {{ $switcher->gbpaud > 0 ? $clase : ($switcher->gbpaud < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->gbpaud }}</button>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td>@php
+                                                        $sumanzdv = $switcher->eurnzd + $switcher->gbpnzd + $switcher->audnzd;
+                                                    @endphp
+                                                        {{ $sumanzdv }}</td>
+                                                    <td><button id="botonNZDV" class="btn btn-light m-2">NZD</button></td>
+                                                    <td></td>
+                                                    <td><button id="boton8"
+                                                            class="btn {{ $switcher->eurnzd > 0 ? $clase : ($switcher->eurnzd < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->eurnzd }}</button>
+                                                    </td>
+                                                    <td><button id="boton9"
+                                                            class="btn {{ $switcher->gbpnzd > 0 ? $clase : ($switcher->gbpnzd < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->gbpnzd }}</button>
+                                                    </td>
+                                                    <td><button id="boton10"
+                                                            class="btn {{ $switcher->audnzd > 0 ? $clase : ($switcher->audnzd < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->audnzd }}</button>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td>@php
+                                                        $sumacadv = $switcher->usdcad + $switcher->eurcad + $switcher->gbpcad + $switcher->audcad + $switcher->nzdcad;
+                                                    @endphp
+                                                        {{ $sumacadv }}</td>
+                                                    <td><button id="botonCADV" class="btn btn-light m-2">CAD</button></td>
+                                                    <td><button id="boton11"
+                                                            class="btn {{ $switcher->usdcad > 0 ? $clase : ($switcher->usdcad < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->usdcad }}</button>
+                                                    </td>
+                                                    <td><button id="boton12"
+                                                            class="btn {{ $switcher->eurcad > 0 ? $clase : ($switcher->eurcad < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->eurcad }}</button>
+                                                    </td>
+                                                    <td><button id="boton13"
+                                                            class="btn {{ $switcher->gbpcad > 0 ? $clase : ($switcher->gbpcad < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->gbpcad }}</button>
+                                                    </td>
+                                                    <td><button id="boton14"
+                                                            class="btn {{ $switcher->audcad > 0 ? $clase : ($switcher->audcad < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->audcad }}</button>
+                                                    </td>
+                                                    <td><button id="boton15"
+                                                            class="btn {{ $switcher->nzdcad > 0 ? $clase : ($switcher->nzdcad < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->nzdcad }}</button>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td>@php
+                                                        $sumachfv = $switcher->usdchf + $switcher->eurchf + $switcher->gbpchf + $switcher->audchf + $switcher->nzdchf + $switcher->cadchf;
+                                                    @endphp
+                                                        {{ $sumachfv }}</td>
+                                                    <td><button id="botonCHFV" class="btn btn-light m-2">CHF</button></td>
+                                                    <td><button id="boton16"
+                                                            class="btn {{ $switcher->usdchf > 0 ? $clase : ($switcher->usdchf < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->usdchf }}</button>
+                                                    </td>
+                                                    <td><button id="boton17"
+                                                            class="btn {{ $switcher->eurchf > 0 ? $clase : ($switcher->eurchf < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->eurchf }}</button>
+                                                    </td>
+                                                    <td><button id="boton18"
+                                                            class="btn {{ $switcher->gbpchf > 0 ? $clase : ($switcher->gbpchf < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->gbpchf }}</button>
+                                                    </td>
+                                                    <td><button id="boton19"
+                                                            class="btn {{ $switcher->audchf > 0 ? $clase : ($switcher->audchf < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->audchf }}</button>
+                                                    </td>
+                                                    <td><button id="boton20"
+                                                            class="btn {{ $switcher->nzdchf > 0 ? $clase : ($switcher->nzdchf < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->nzdchf }}</button>
+                                                    </td>
+                                                    <td><button id="boton21"
+                                                            class="btn {{ $switcher->cadchf > 0 ? $clase : ($switcher->cadchf < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->cadchf }}</button>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td>@php
+                                                        $sumajpyv = $switcher->usdjpy + $switcher->eurjpy + $switcher->gbpjpy + $switcher->audjpy + $switcher->nzdjpy + $switcher->cadjpy + $switcher->chfjpy;
+                                                    @endphp
+                                                        {{ $sumajpyv }}</td>
+                                                    <td><button id="botonJPYV" class="btn btn-light m-2">JPY</button></td>
+                                                    <td><button id="boton22"
+                                                            class="btn {{ $switcher->usdjpy > 0 ? $clase : ($switcher->usdjpy < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->usdjpy }}</button>
+                                                    </td>
+                                                    <td><button id="boton23"
+                                                            class="btn {{ $switcher->eurjpy > 0 ? $clase : ($switcher->eurjpy < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->eurjpy }}</button>
+                                                    </td>
+                                                    <td><button id="boton24"
+                                                            class="btn {{ $switcher->gbpjpy > 0 ? $clase : ($switcher->gbpjpy < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->gbpjpy }}</button>
+                                                    </td>
+                                                    <td><button id="boton25"
+                                                            class="btn {{ $switcher->audjpy > 0 ? $clase : ($switcher->audjpy < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->audjpy }}</button>
+                                                    </td>
+                                                    <td><button id="boton26"
+                                                            class="btn {{ $switcher->nzdjpy > 0 ? $clase : ($switcher->nzdjpy < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->nzdjpy }}</button>
+                                                    </td>
+                                                    <td><button id="boton27"
+                                                            class="btn {{ $switcher->cadjpy > 0 ? $clase : ($switcher->cadjpy < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->cadjpy }}</button>
+                                                    </td>
+                                                    <td><button id="boton28"
+                                                            class="btn {{ $switcher->chfjpy > 0 ? $clase : ($switcher->chfjpy < 0 ? 'btn-danger' : 'btn-light') }}  m-2">{{ $switcher->chfjpy }}</button>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                @endforeach
+
                             </div>
-                            <div class="col-md-10 col-12 text-center">
-                                <button id="boton9" class="btn btn-success m-2">Botón 9</button>
-                                <button id="boton10" class="btn btn-success m-2">Botón 10</button>
-                                <button id="boton11" class="btn btn-success m-2">Botón 11</button>
-                                <button id="boton12" class="btn btn-success m-2">Botón 12</button>
-                                <button id="boton13" class="btn btn-success m-2">Botón 13</button>
-                                <button id="boton14" class="btn btn-success m-2">Botón 14</button>
-                                <button id="boton15" class="btn btn-success m-2">Botón 15</button>
-                                <button id="boton16" class="btn btn-success m-2">Botón 16</button>
-                            </div>
+
+
+
+                        </div>
+                        <div class="col-md-10 col-12 text-center">
+
                         </div>
                     </div>
                 </div>
-
             </div>
+
+        </div>
         </div>
     </section>
 @endsection
