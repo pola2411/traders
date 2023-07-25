@@ -91,6 +91,17 @@
                 <span>Saldos</span>
             </a>
         </li>
+       
+        
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/fundamentales')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/fundamentales') }}">
+                <i class="bi bi-graph-up"></i>
+                <span>Fundamentales</span>
+            </a>
+        </li>
+        
+        
 
         <li class="nav-item">
 
@@ -143,6 +154,31 @@
             </a>
         </li> --}}
 
+      
+
+         
+
+             
+        <li class="nav-item">
+
+            <a class="nav-link collapsed" data-bs-target="#botones" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-bar-chart-steps"></i><span>Matriz</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+
+            <ul id="botones" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <li>
+                <a class="@if (request()->is('/admin/botones')) nav-link @else nav-link collapsed @endif"
+                    href="{{ url('/admin/botones') }}">
+                    <i class="bi bi-circle"></i>
+                    <span>Equity</span>
+                </a>
+          
+            </li>
+            </ul>
+
+          
+        </li>
+
         <li class="nav-item">
             <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif"
                 href="{{ url('/admin/indexUSD') }}">
@@ -150,15 +186,6 @@
                 <span>Index USD</span>
             </a>
         </li>
-
-        {{--
-        <li class="nav-item">
-            <a class="@if (request()->is('/admin/indexUSDCADCHF')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/indexUSDCADCHF') }}">
-                <i class="bi bi-currency-exchange"></i>
-                <span>Index USDCADCHF</span>
-            </a>
-        </li>
-        --}}
 
         {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/desbalanceo')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/desbalanceo') }}">
@@ -169,15 +196,7 @@
 
 
 
-        <li class="nav-item">
-            <a class="@if (request()->is('/admin/botones')) nav-link @else nav-link collapsed @endif"
-                href="{{ url('/admin/botones') }}">
-                <i class="bi bi-currency-exchange"></i>
-                <span>Botones</span>
-            </a>
-        </li>
-
-
+      
         {{-- }}
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
@@ -215,26 +234,6 @@
                 @endforeach
             </ul>
         </li>
-
-
-        {{--
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#momento-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-clock"></i><span>Momento</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="momento-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                @foreach ($traders_data as $trader)
-                    @if (strlen($trader->Signal) > 0)
-                        <li>
-                            <a class="ps-2" href="/admin/momento/{{$trader->id}}">
-                                <i class="bi bi-circle"></i><span>Trader {{ $trader->id }} ({{$trader->Signal}})</span>
-                            </a>
-                        </li>
-                    @endif
-                @endforeach
-            </ul>
-        </li>
-        --}}
 
 
         <li class="nav-item">

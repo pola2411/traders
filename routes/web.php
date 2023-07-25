@@ -197,7 +197,7 @@ Route::post('/admin/deleteCambio', [App\Http\Controllers\TablaLogsController::cl
 Route::get('/admin/bitacoraAcceso', [App\Http\Controllers\BitacoraAccesoController::class, 'index'])->name('bitacoraacceso');
 Route::get('/admin/getDetallesBitacora', [App\Http\Controllers\BitacoraAccesoController::class, 'getDetallesBitacora']);
 
-
+//Rutas de botones
 Route::get('/admin/botones', [App\Http\Controllers\BotonController::class, 'index'])->middleware('auth');
 Route::get('/admin/boton1', [App\Http\Controllers\BotonController::class, 'boton1'])->middleware('auth');
 Route::get('/admin/boton2', [App\Http\Controllers\BotonController::class, 'boton2'])->middleware('auth');
@@ -216,3 +216,7 @@ Route::get('/admin/boton14', [App\Http\Controllers\BotonController::class, 'boto
 Route::get('/admin/boton15', [App\Http\Controllers\BotonController::class, 'boton15'])->middleware('auth');
 Route::get('/admin/boton16', [App\Http\Controllers\BotonController::class, 'boton16'])->middleware('auth');
 
+Route::get('/admin/showClaveBoton', [App\Http\Controllers\BotonController::class, 'getClave']);
+
+//Fundamentales
+Route::get('/admin/fundamentales', [App\Http\Controllers\FundamentalController::class, 'index'])->middleware('auth');

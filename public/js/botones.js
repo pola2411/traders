@@ -1,4 +1,14 @@
 $(document).ready(function () {
+    
+    function estatusClaveIncorrecta(input) {
+        let estatus = $(input).data("boton13");
+        if (estatus == "activado") {
+            $(input).val("activado");
+        } else {
+            $(input).val("desactivado");
+        }
+    }
+
     $(document).on("click", "#boton1", function (e) {
         e.preventDefault();
 
@@ -14,7 +24,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton1",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -37,7 +47,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton2",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -60,7 +70,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton3",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -83,7 +93,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton4",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -106,7 +116,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton5",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -129,7 +139,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton6",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -152,7 +162,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton7",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -175,7 +185,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton8",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -198,7 +208,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton9",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -221,7 +231,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton10",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -244,7 +254,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton11",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -267,7 +277,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton12",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -275,26 +285,193 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("click", "#boton13", function (e) {
+    $(document).on("click", "#botonprueba", function (e) {
         e.preventDefault();
 
-        if ($("#boton13").hasClass("btn-success")) {
-            $("#boton13").removeClass("btn-success");
-            $("#boton13").addClass("btn-danger");
-        } else {
-            $("#boton13").removeClass("btn-danger");
-            $("#boton13").addClass("btn-success");
-        }
+        let input = this;
+        let id = $(this).data("id");
 
-        $.ajax({
-            type: "GET",
-            url: "/admin/boton13",
-            success: function (data) {
-               console.log(data);
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
             },
-            error: function (response) {
-                console.log(response);
+        });
+        Swal.fire({
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus</p>',
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+            cancelButtonColor: "#01bbcc",
+            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+            confirmButtonColor: "#198754",
+            input: "password",
+            showLoaderOnConfirm: true,
+            preConfirm: (clave) => {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/showClaveBoton",
+                    data: {
+                        clave: clave,
+                        id: id,
+                        campo: "modificable",
+                    },
+                    success: function (result) {
+                        if (result == "success") {
+                            $.get(
+                                "/admin/boton13",
+                                {
+                                    id: id,
+                                    campo: "modificable",
+                                },
+                                function (response) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Estatus actualizado",
+                                    });
+
+                                    if ($("#boton13").hasClass("btn-success")) {
+                                        $("#boton13").removeClass(
+                                            "btn-success"
+                                        );
+                                        $("#boton13").addClass("btn-danger");
+                                    } else {
+                                        $("#boton13").removeClass("btn-danger");
+                                        $("#boton13").addClass("btn-success");
+                                    }
+                                }
+                            );
+                        } else {
+                            estatusClaveIncorrecta(input);
+                            Toast.fire({
+                                icon: "error",
+                                title: "Clave incorrecta",
+                            });
+                        }
+                    },
+                    error: function () {
+                        estatusClaveIncorrecta(input);
+                        Toast.fire({
+                            icon: "error",
+                            title: "Clave incorrecta",
+                        });
+                    },
+                });
             },
+            allowOutsideClick: () => !Swal.isLoading(),
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                estatusClaveIncorrecta();
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                    html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            }
+        });
+    });
+
+    $(document).on("click", "#botonUSDH", function (e) {
+        e.preventDefault();
+
+        let input = this;
+        let id = $(this).data("id");
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+        });
+        Swal.fire({
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus</p>',
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+            cancelButtonColor: "#01bbcc",
+            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+            confirmButtonColor: "#198754",
+            input: "password",
+            showLoaderOnConfirm: true,
+            preConfirm: (clave) => {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/showClaveBoton",
+                    data: {
+                        clave: clave,
+                        id: id,
+                        campo: "modificable",
+                    },
+                    success: function (result) {
+                        if (result == "success") {
+                            $.get(
+                                "/admin/boton13",
+                                {
+                                    id: id,
+                                    campo: "modificable",
+                                },
+                                function (response) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Estatus actualizado",
+                                    });
+
+                                    if ($("#boton13").hasClass("btn-success")) {
+                                        $("#boton13").removeClass(
+                                            "btn-success"
+                                        );
+                                        $("#boton13").addClass("btn-danger");
+                                    } else {
+                                        $("#boton13").removeClass("btn-danger");
+                                        $("#boton13").addClass("btn-success");
+                                    }
+                                }
+                            );
+                        } else {
+                            estatusClaveIncorrecta(input);
+                            Toast.fire({
+                                icon: "error",
+                                title: "Clave incorrecta",
+                            });
+                        }
+                    },
+                    error: function () {
+                        estatusClaveIncorrecta(input);
+                        Toast.fire({
+                            icon: "error",
+                            title: "Clave incorrecta",
+                        });
+                    },
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                estatusClaveIncorrecta();
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                    html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            }
         });
     });
 
@@ -313,7 +490,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton14",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -336,7 +513,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton15",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
@@ -359,7 +536,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/boton16",
             success: function (data) {
-               console.log(data);
+                console.log(data);
             },
             error: function (response) {
                 console.log(response);
