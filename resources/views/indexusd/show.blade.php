@@ -1,12 +1,12 @@
 @extends('index')
 
 @section('css')
-<style>
+{{-- <style>
     #indexUSD {
         width: 100%;
         height: 500px;
     }
-</style>
+</style> --}}
 @endsection
 
 @section('title') INDEX USD @endsection
@@ -41,10 +41,10 @@
                                 </div>
                             </div>
                             <div class="col-md-3 col-12">
-                                <button class="btn btn-primary mb-3">Generar informaci贸n</button>
+                                <button class="btn btn-primary mb-3">Generar información</button>
                             </div>
                         </form>
-                        <div id="indexUSD"></div>
+                        <div id="spinner" class="text-center"></div>
                     </div>
                 </div>
 
@@ -73,8 +73,8 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js" integrity="sha512-wUYbRPLV5zs6IqvWd88HIqZU/b8TBx+I8LEioQ/UC0t5EMCLApqhIAnUg7EsAzdbhhdgW07TqYDdH3QEXRcPOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('/js/indexUSD.js') }}"></script>
 @endsection

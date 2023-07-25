@@ -1,240 +1,446 @@
-var root = null;
 $("#fechasForm").on("submit", function (e) {
     e.preventDefault();
 
-    if (root !== null) {
-        root.dispose();
-    }
-    am5.ready(function () {
-        // Create root element
-        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-        root = am5.Root.new("indexUSD");
+    var fecha_desde = $("#fechaDesdeInput").val();
+    var fecha_eje = $("#fechaEjeInput").val();
 
-        // Set themes
-        // https://www.amcharts.com/docs/v5/concepts/themes/
-        root.setThemes([am5themes_Animated.new(root)]);
+    let labels = [];
 
-        // Create chart
-        // https://www.amcharts.com/docs/v5/charts/xy-chart/
-        var chart = root.container.children.push(
-            am5xy.XYChart.new(root, {
-                panX: true,
-                panY: true,
-                wheelX: "panX",
-                wheelY: "zoomX",
-                maxTooltipDistance: 0,
-                pinchZoomX: true,
-            })
-        );
+    let valores_eurusd = [];
+    let valor_eurusd = 0;
 
-        // Create axes
-        // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-        var xAxis = chart.xAxes.push(
-            am5xy.DateAxis.new(root, {
-                maxDeviation: 0.2,
-                baseInterval: {
-                    timeUnit: "minute",
-                    count: 1,
-                },
-                renderer: am5xy.AxisRendererX.new(root, {}),
-                tooltip: am5.Tooltip.new(root, {}),
-            })
-        );
+    let valores_gbpusd = [];
+    let valor_gbpusd = 0;
 
-        var yAxis = chart.yAxes.push(
-            am5xy.ValueAxis.new(root, {
-                renderer: am5xy.AxisRendererY.new(root, {}),
-            })
-        );
+    let valores_audusd = [];
+    let valor_audusd = 0;
 
-        var series;
-        var eje;
-        var valor;
+    let valores_nzdusd = [];
+    let valor_nzdusd = 0;
 
-        var fecha_desde = $("#fechaDesdeInput").val();
-        var fecha_eje = $("#fechaEjeInput").val();
+    let valores_usdcad = [];
+    let valor_usdcad = 0;
 
-        function setData() {
+    let valores_usdchf = [];
+    let valor_usdchf = 0;
+
+    let valores_usdjpy = [];
+    let valor_usdjpy = 0;
+
+    $("#spinner").html(`
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando gráfica...</span>
+        </div>
+    `);
+
+    $.get({
+        url: "/admin/getIndexUSD",
+        data: {
+            fecha_desde: fecha_desde,
+            fecha_eje: fecha_eje,
+            moneda: "EURUSD",
+        },
+        success: function (response) {
+            response.currencies.map(function (currency, i, row) {
+                eje = response.valor_eje;
+
+                var moneda = currency.moneda;
+
+                if (moneda.substring(0, 3) == "USD") {
+                    valor_eurusd = (currency.valor / eje - 1) * 100 * -1;
+                } else {
+                    valor_eurusd = (currency.valor / eje - 1) * 100;
+                }
+
+                labels.push(moment(currency.hora).format("DD/MM/YYYY hh:mm a"));
+                valores_eurusd.push(valor_eurusd);
+            });
+
             $.get({
-                url: "/admin/getMonedas",
+                url: "/admin/getIndexUSD",
+                data: {
+                    fecha_desde: fecha_desde,
+                    fecha_eje: fecha_eje,
+                    moneda: "GBPUSD",
+                },
                 success: function (response) {
-                    response.monedas.map(function (moneda, i, row) {
-                        $.get({
-                            url: "/admin/getIndexUSD",
-                            data: {
-                                fecha_desde: fecha_desde,
-                                fecha_eje: fecha_eje,
-                                moneda: moneda.moneda,
-                            },
-                            success: function (response) {
-                                var data = [];
+                    response.currencies.map(function (currency, i, row) {
+                        eje = response.valor_eje;
 
-                                series = chart.series.push(
-                                    am5xy.LineSeries.new(root, {
-                                        name: moneda.moneda,
-                                        xAxis: xAxis,
-                                        yAxis: yAxis,
-                                        valueYField: "value",
-                                        valueXField: "date",
-                                        legendValueText: "{valueY}",
-                                        tooltip: am5.Tooltip.new(root, {
-                                            pointerOrientation: "horizontal",
-                                            labelText: "{valueY}",
-                                        }),
-                                    })
-                                );
+                        var moneda = currency.moneda;
 
-                                response.currencies.map(function (
-                                    currency,
-                                    i,
-                                    row
-                                ) {
-                                    eje = response.valor_eje;
+                        if (moneda.substring(0, 3) == "USD") {
+                            valor_gbpusd =
+                                (currency.valor / eje - 1) * 100 * -1;
+                        } else {
+                            valor_gbpusd = (currency.valor / eje - 1) * 100;
+                        }
 
-                                    var moneda = currency.moneda;
+                        valores_gbpusd.push(valor_gbpusd);
+                    });
 
-                                    if (moneda.substring(0, 3) == "USD") {
-                                        valor =
-                                            (currency.valor / eje - 1) *
-                                            100 *
-                                            -1;
-                                    } else {
-                                        valor =
-                                            (currency.valor / eje - 1) * 100;
-                                    }
+                    $.get({
+                        url: "/admin/getIndexUSD",
+                        data: {
+                            fecha_desde: fecha_desde,
+                            fecha_eje: fecha_eje,
+                            moneda: "AUDUSD",
+                        },
+                        success: function (response) {
+                            response.currencies.map(function (
+                                currency,
+                                i,
+                                row
+                            ) {
+                                eje = response.valor_eje;
 
-                                    data.push({
-                                        date: new Date(currency.hora).getTime(),
-                                        value: valor,
-                                    });
-                                });
+                                var moneda = currency.moneda;
 
-                                series.data.setAll(data);
+                                if (moneda.substring(0, 3) == "USD") {
+                                    valor_audusd =
+                                        (currency.valor / eje - 1) * 100 * -1;
+                                } else {
+                                    valor_audusd =
+                                        (currency.valor / eje - 1) * 100;
+                                }
 
-                                series.appear();
+                                valores_audusd.push(valor_audusd);
+                            });
 
-                                if (i + 1 === row.length) {
-                                    // Add cursor
-                                    // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
-                                    var cursor = chart.set(
-                                        "cursor",
-                                        am5xy.XYCursor.new(root, {
-                                            behavior: "none",
-                                        })
-                                    );
-                                    cursor.lineY.set("visible", false);
+                            $.get({
+                                url: "/admin/getIndexUSD",
+                                data: {
+                                    fecha_desde: fecha_desde,
+                                    fecha_eje: "2023-07-25 09:00:00",
+                                    moneda: "NZDUSD",
+                                },
+                                success: function (response) {
+                                    response.currencies.map(function (
+                                        currency,
+                                        i,
+                                        row
+                                    ) {
+                                        eje = response.valor_eje;
 
-                                    // Add scrollbar
-                                    // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
-                                    chart.set(
-                                        "scrollbarX",
-                                        am5.Scrollbar.new(root, {
-                                            orientation: "horizontal",
-                                        })
-                                    );
+                                        var moneda = currency.moneda;
 
-                                    chart.set(
-                                        "scrollbarY",
-                                        am5.Scrollbar.new(root, {
-                                            orientation: "vertical",
-                                        })
-                                    );
-
-                                    // Add legend
-                                    // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
-                                    var legend =
-                                        chart.rightAxesContainer.children.push(
-                                            am5.Legend.new(root, {
-                                                width: 200,
-                                                paddingLeft: 15,
-                                                height: am5.percent(100),
-                                            })
-                                        );
-
-                                    // When legend item container is hovered, dim all the series except the hovered one
-                                    legend.itemContainers.template.events.on(
-                                        "pointerover",
-                                        function (e) {
-                                            var itemContainer = e.target;
-
-                                            // As series list is data of a legend, dataContext is series
-                                            var series =
-                                                itemContainer.dataItem
-                                                    .dataContext;
-
-                                            chart.series.each(function (
-                                                chartSeries
-                                            ) {
-                                                if (chartSeries != series) {
-                                                    chartSeries.strokes.template.setAll(
-                                                        {
-                                                            strokeOpacity: 0.15,
-                                                            stroke: am5.color(
-                                                                0x000000
-                                                            ),
-                                                        }
-                                                    );
-                                                } else {
-                                                    chartSeries.strokes.template.setAll(
-                                                        {
-                                                            strokeWidth: 3,
-                                                        }
-                                                    );
-                                                }
-                                            });
+                                        if (moneda.substring(0, 3) == "USD") {
+                                            valor_nzdusd =
+                                                (currency.valor / eje - 1) *
+                                                100 *
+                                                -1;
+                                        } else {
+                                            valor_nzdusd =
+                                                (currency.valor / eje - 1) *
+                                                100;
                                         }
-                                    );
 
-                                    // When legend item container is unhovered, make all series as they are
-                                    legend.itemContainers.template.events.on(
-                                        "pointerout",
-                                        function (e) {
-                                            var itemContainer = e.target;
-                                            var series =
-                                                itemContainer.dataItem
-                                                    .dataContext;
+                                        valores_nzdusd.push(valor_nzdusd);
+                                    });
 
-                                            chart.series.each(function (
-                                                chartSeries
+                                    $.get({
+                                        url: "/admin/getIndexUSD",
+                                        data: {
+                                            fecha_desde: fecha_desde,
+                                            fecha_eje: fecha_eje,
+                                            moneda: "USDCAD",
+                                        },
+                                        success: function (response) {
+                                            response.currencies.map(function (
+                                                currency,
+                                                i,
+                                                row
                                             ) {
-                                                chartSeries.strokes.template.setAll(
-                                                    {
-                                                        strokeOpacity: 1,
-                                                        strokeWidth: 1,
-                                                        stroke: chartSeries.get(
-                                                            "fill"
-                                                        ),
-                                                    }
+                                                eje = response.valor_eje;
+
+                                                var moneda = currency.moneda;
+
+                                                if (
+                                                    moneda.substring(0, 3) ==
+                                                    "USD"
+                                                ) {
+                                                    valor_usdcad =
+                                                        (currency.valor / eje -
+                                                            1) *
+                                                        100 *
+                                                        -1;
+                                                } else {
+                                                    valor_usdcad =
+                                                        (currency.valor / eje -
+                                                            1) *
+                                                        100;
+                                                }
+
+                                                valores_usdcad.push(
+                                                    valor_usdcad
                                                 );
                                             });
-                                        }
-                                    );
 
-                                    legend.itemContainers.template.set(
-                                        "width",
-                                        am5.p100
-                                    );
-                                    legend.valueLabels.template.setAll({
-                                        width: am5.p100,
-                                        textAlign: "right",
+                                            $.get({
+                                                url: "/admin/getIndexUSD",
+                                                data: {
+                                                    fecha_desde: fecha_desde,
+                                                    fecha_eje: fecha_eje,
+                                                    moneda: "USDCHF",
+                                                },
+                                                success: function (response) {
+                                                    response.currencies.map(
+                                                        function (
+                                                            currency,
+                                                            i,
+                                                            row
+                                                        ) {
+                                                            eje =
+                                                                response.valor_eje;
+
+                                                            var moneda =
+                                                                currency.moneda;
+
+                                                            if (
+                                                                moneda.substring(
+                                                                    0,
+                                                                    3
+                                                                ) == "USD"
+                                                            ) {
+                                                                valor_usdchf =
+                                                                    (currency.valor /
+                                                                        eje -
+                                                                        1) *
+                                                                    100 *
+                                                                    -1;
+                                                            } else {
+                                                                valor_usdchf =
+                                                                    (currency.valor /
+                                                                        eje -
+                                                                        1) *
+                                                                    100;
+                                                            }
+
+                                                            valores_usdchf.push(
+                                                                valor_usdchf
+                                                            );
+                                                        }
+                                                    );
+
+                                                    $.get({
+                                                        url: "/admin/getIndexUSD",
+                                                        data: {
+                                                            fecha_desde:
+                                                                fecha_desde,
+                                                            fecha_eje:
+                                                                fecha_eje,
+                                                            moneda: "USDJPY",
+                                                        },
+                                                        success: function (
+                                                            response
+                                                        ) {
+                                                            response.currencies.map(
+                                                                function (
+                                                                    currency,
+                                                                    i,
+                                                                    row
+                                                                ) {
+                                                                    eje =
+                                                                        response.valor_eje;
+
+                                                                    var moneda =
+                                                                        currency.moneda;
+
+                                                                    if (
+                                                                        moneda.substring(
+                                                                            0,
+                                                                            3
+                                                                        ) ==
+                                                                        "USD"
+                                                                    ) {
+                                                                        valor_usdjpy =
+                                                                            (currency.valor /
+                                                                                eje -
+                                                                                1) *
+                                                                            100 *
+                                                                            -1;
+                                                                    } else {
+                                                                        valor_usdjpy =
+                                                                            (currency.valor /
+                                                                                eje -
+                                                                                1) *
+                                                                            100;
+                                                                    }
+
+                                                                    valores_usdjpy.push(
+                                                                        valor_usdjpy
+                                                                    );
+                                                                }
+                                                            );
+
+                                                            $("#spinner").html(`
+                                                                <button id="reset" class="btn btn-primary">Resetear zoom</button>
+                                                                <canvas id="myChart" class="mt-3"></canvas>
+                                                            `);
+
+                                                            const ctx =
+                                                                document.getElementById(
+                                                                    "myChart"
+                                                                );
+
+                                                            const data = {
+                                                                labels: labels,
+                                                                datasets: [
+                                                                    {
+                                                                        label: "EURUSD",
+                                                                        data: valores_eurusd,
+                                                                        borderColor:
+                                                                            "#A2FF86",
+                                                                        backgroundColor:
+                                                                            "#A2FF86",
+                                                                    },
+                                                                    {
+                                                                        label: "GBPUSD",
+                                                                        data: valores_gbpusd,
+                                                                        borderColor:
+                                                                            "#C51605",
+                                                                        backgroundColor:
+                                                                            "#C51605",
+                                                                    },
+                                                                    {
+                                                                        label: "AUDUSD",
+                                                                        data: valores_audusd,
+                                                                        borderColor:
+                                                                            "#0A6EBD",
+                                                                        backgroundColor:
+                                                                            "#0A6EBD",
+                                                                    },
+                                                                    {
+                                                                        label: "NZDUSD",
+                                                                        data: valores_nzdusd,
+                                                                        borderColor:
+                                                                            "#F1C93B",
+                                                                        backgroundColor:
+                                                                            "#F1C93B",
+                                                                    },
+                                                                    {
+                                                                        label: "USDCAD",
+                                                                        data: valores_usdcad,
+                                                                        borderColor:
+                                                                            "#97FEED",
+                                                                        backgroundColor:
+                                                                            "#97FEED",
+                                                                    },
+                                                                    {
+                                                                        label: "USDCHF",
+                                                                        data: valores_usdchf,
+                                                                        borderColor:
+                                                                            "#F86F03",
+                                                                        backgroundColor:
+                                                                            "#F86F03",
+                                                                    },
+                                                                    {
+                                                                        label: "USDJPY",
+                                                                        data: valores_usdjpy,
+                                                                        borderColor:
+                                                                            "#1A5D1A",
+                                                                        backgroundColor:
+                                                                            "#1A5D1A",
+                                                                    },
+                                                                ],
+                                                            };
+
+                                                            const config = {
+                                                                type: "line",
+                                                                data: data,
+                                                                options: {
+                                                                    responsive: true,
+                                                                    interaction:
+                                                                        {
+                                                                            mode: "index",
+                                                                            intersect: false,
+                                                                        },
+                                                                    stacked: false,
+                                                                    plugins: {
+                                                                        // legend: {
+                                                                        //     position:
+                                                                        //         "top",
+                                                                        // },
+                                                                        zoom: {
+                                                                            zoom: {
+                                                                                wheel: {
+                                                                                    enabled: true,
+                                                                                },
+                                                                                pinch: {
+                                                                                    enabled: true,
+                                                                                },
+                                                                                mode: "xy",
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                    scales: {
+                                                                        y: {
+                                                                            type: "linear",
+                                                                            display: true,
+                                                                            position:
+                                                                                "left",
+                                                                        },
+                                                                        y1: {
+                                                                            type: "linear",
+                                                                            display: true,
+                                                                            position:
+                                                                                "right",
+
+                                                                            // grid line settings
+                                                                            grid: {
+                                                                                drawOnChartArea: false, // only want the grid lines for one axis to show up
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            };
+
+                                                            let myChart =
+                                                                new Chart(
+                                                                    ctx,
+                                                                    config
+                                                                );
+
+                                                            $("#reset").click(
+                                                                function () {
+                                                                    myChart.resetZoom();
+                                                                }
+                                                            );
+                                                        },
+                                                        error: function (
+                                                            error
+                                                        ) {
+                                                            console.log(error);
+                                                        },
+                                                    });
+                                                },
+                                                error: function (error) {
+                                                    console.log(error);
+                                                },
+                                            });
+                                        },
+                                        error: function (error) {
+                                            console.log(error);
+                                        },
                                     });
-
-                                    // It's is important to set legend data after all the events are set on template, otherwise events won't be copied
-                                    legend.data.setAll(chart.series.values);
-                                }
-                            },
-                            error: function (error) {
-                                console.log(error);
-                            },
-                        });
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                },
+                            });
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        },
                     });
                 },
+                error: function (error) {
+                    console.log(error);
+                },
             });
-        }
-
-        setData();
-        // Make stuff animate on load
-        // https://www.amcharts.com/docs/v5/concepts/animations/
-        chart.appear(1000, 100);
+        },
+        error: function (error) {
+            console.log(error);
+        },
     });
 });

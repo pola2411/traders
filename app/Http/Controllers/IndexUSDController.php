@@ -25,6 +25,7 @@ class IndexUSDController extends Controller
             ->orwhere('moneda', 'USDCHF')
             ->orwhere('moneda', 'USDJPY')
             ->orwhere('moneda', 'USDMXN')
+            ->orderBY('moneda', 'ASC')
             // ->orderByDesc(DB::raw('FIELD(moneda, EURUSD, GBPUSD, AUDUSD, NZDUSD, USDCAD, USDCHF, USDJPY, USDMXN)'))
             ->get();
 
@@ -47,13 +48,14 @@ class IndexUSDController extends Controller
             ->get();
 
         $valor_eje = $fecha_eje_row[0]->valor;
+        $fecha = $fecha_eje_row[0]->hora;
 
         $currencies = DB::table('valores_moneda')
             ->where('hora', '>=', $fecha_desde)
             ->where('moneda', '=', $moneda)
             ->get();
 
-        return response(['currencies' => $currencies, 'valor_eje' => $valor_eje]);
+        return response(['currencies' => $currencies, 'valor_eje' => $valor_eje, 'fecha' => $fecha]);
     }
 
     public function getEje(Request $request)
