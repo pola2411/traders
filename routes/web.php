@@ -217,3 +217,6 @@ Route::get('/admin/boton15', [App\Http\Controllers\BotonController::class, 'boto
 Route::get('/admin/boton16', [App\Http\Controllers\BotonController::class, 'boton16'])->middleware('auth');
 
 Route::get('/admin/showClaveBoton', [App\Http\Controllers\BotonController::class, 'getClave']);
+
+//Fundamentales
+Route::get('/admin/fundamentales', [App\Http\Controllers\FundamentalController::class, 'index'])->middleware('auth');
