@@ -273,8 +273,9 @@ $("#fechasForm").on("submit", function (e) {
                                                                 }
                                                             );
 
+                                                            // <button id="reset" class="btn btn-primary">Resetear zoom</button>
+
                                                             $("#spinner").html(`
-                                                                <button id="reset" class="btn btn-primary">Resetear zoom</button>
                                                                 <canvas id="myChart" class="mt-3"></canvas>
                                                             `);
 
@@ -293,6 +294,8 @@ $("#fechasForm").on("submit", function (e) {
                                                                             "#A2FF86",
                                                                         backgroundColor:
                                                                             "#A2FF86",
+                                                                        pointRadius: 0.2,
+                                                                        borderWidth: 1,
                                                                     },
                                                                     {
                                                                         label: "GBPUSD",
@@ -301,6 +304,8 @@ $("#fechasForm").on("submit", function (e) {
                                                                             "#C51605",
                                                                         backgroundColor:
                                                                             "#C51605",
+                                                                        pointRadius: 0.2,
+                                                                        borderWidth: 1,
                                                                     },
                                                                     {
                                                                         label: "AUDUSD",
@@ -309,6 +314,8 @@ $("#fechasForm").on("submit", function (e) {
                                                                             "#0A6EBD",
                                                                         backgroundColor:
                                                                             "#0A6EBD",
+                                                                        pointRadius: 0.2,
+                                                                        borderWidth: 1,
                                                                     },
                                                                     {
                                                                         label: "NZDUSD",
@@ -317,6 +324,8 @@ $("#fechasForm").on("submit", function (e) {
                                                                             "#F1C93B",
                                                                         backgroundColor:
                                                                             "#F1C93B",
+                                                                        pointRadius: 0.2,
+                                                                        borderWidth: 1,
                                                                     },
                                                                     {
                                                                         label: "USDCAD",
@@ -325,6 +334,8 @@ $("#fechasForm").on("submit", function (e) {
                                                                             "#97FEED",
                                                                         backgroundColor:
                                                                             "#97FEED",
+                                                                        pointRadius: 0.2,
+                                                                        borderWidth: 1,
                                                                     },
                                                                     {
                                                                         label: "USDCHF",
@@ -333,6 +344,8 @@ $("#fechasForm").on("submit", function (e) {
                                                                             "#F86F03",
                                                                         backgroundColor:
                                                                             "#F86F03",
+                                                                        pointRadius: 0.2,
+                                                                        borderWidth: 1,
                                                                     },
                                                                     {
                                                                         label: "USDJPY",
@@ -341,6 +354,8 @@ $("#fechasForm").on("submit", function (e) {
                                                                             "#1A5D1A",
                                                                         backgroundColor:
                                                                             "#1A5D1A",
+                                                                        pointRadius: 0.2,
+                                                                        borderWidth: 1,
                                                                     },
                                                                 ],
                                                             };
@@ -356,23 +371,19 @@ $("#fechasForm").on("submit", function (e) {
                                                                             intersect: false,
                                                                         },
                                                                     stacked: false,
-                                                                    plugins: {
-                                                                        // legend: {
-                                                                        //     position:
-                                                                        //         "top",
-                                                                        // },
-                                                                        zoom: {
-                                                                            zoom: {
-                                                                                wheel: {
-                                                                                    enabled: true,
-                                                                                },
-                                                                                pinch: {
-                                                                                    enabled: true,
-                                                                                },
-                                                                                mode: "xy",
-                                                                            },
-                                                                        },
-                                                                    },
+                                                                    // plugins: {
+                                                                    //     zoom: {
+                                                                    //         zoom: {
+                                                                    //             wheel: {
+                                                                    //                 enabled: true,
+                                                                    //             },
+                                                                    //             pinch: {
+                                                                    //                 enabled: true,
+                                                                    //             },
+                                                                    //             mode: "xy",
+                                                                    //         },
+                                                                    //     },
+                                                                    // },
                                                                     scales: {
                                                                         y: {
                                                                             type: "linear",
