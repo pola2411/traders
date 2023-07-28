@@ -25,17 +25,17 @@ class AutorizacionS8AController extends Controller
 
 
 
-$autorizaciones8a = DB::table('autorizacion_s8a')
-->where("terminal", $request->terminal)
-->where("lotage", $request->PIP)
-->get();
+    $autorizaciones8a = DB::table('autorizacion_s8a')
+    ->where("terminal", $request->terminal)
+    // ->where("lotage", $request->PIP)
+    ->get();
 
 
-if(sizeof($autorizaciones8a) > 0){
-    $condicional = true;
-}else{
-    $condicional = false;
-}
+    if(sizeof($autorizaciones8a) > 0){
+        $condicional = true;
+    }else{
+        $condicional = false;
+    }
 
         $EURUSD = DB::table('market')
         ->select('swapshort', 'swaplong')
@@ -314,7 +314,15 @@ if(sizeof($autorizaciones8a) > 0){
            
         }
        
-        
+        $auth_id = 1;
+        $bitacora_id = session('bitacora_id');
+
+        $log = new TablaLog;
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Autorización S8A";
+        $log->id_tabla = $auth_id;
+        $log->bitacora_id = $bitacora_id;
+        $log->save();
                 
     }
 
@@ -327,8 +335,5 @@ if(sizeof($autorizaciones8a) > 0){
             return response("error");
         }
     }
-
-
-
 }
 

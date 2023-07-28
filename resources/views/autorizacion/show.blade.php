@@ -42,7 +42,7 @@ $auth = DB::table('autorizacion_s8a')
                                 </div>
                             </div>
                             
-                            <div class="col-md-3 col-12">
+                            <div class="col-md-3 col-12" style="display: none">
                                 <div class="form-floating mb-3 me-3">
                                     <div class="form-floating mb-3 me-3">
                                         <input type="number" class="form-control" id="inputPIP">
@@ -54,9 +54,9 @@ $auth = DB::table('autorizacion_s8a')
                             <div class="col-md-3 col-12">
                                 <div class="form-floating mb-3 me-3">
                                     @if ($auth[0]->status == "activado")
-                                    <button type="button" class="btn btn-success statusOp" data-status="{{$auth[0]->status}}">Activado</button>
+                                    <button type="button" class="btn btn-success statusOp" data-status="{{$auth[0]->status}}" value="{{$auth[0]->status}}">Activado</button>
                                     @elseif ($auth[0]->status == "desactivado")
-                                    <button type="button" class="btn btn-danger statusOp" data-status="{{$auth[0]->status}}">Desactivado</button>
+                                    <button type="button" class="btn btn-danger statusOp" data-status="{{$auth[0]->status}}" value="{{$auth[0]->status}}">Desactivado</button>
                                     @endif
 
                                 </div>

@@ -83,25 +83,25 @@
                             @php
                                 $i++;
                             @endphp
-                            <td data-priority="0" scope="col">{{ $value[0]->swapshort }}</td>
-                            <td data-priority="0" scope="col">{{ $value[0]->swaplong }}</td>
+                            <td data-priority="0" scope="col">{{ str_replace(",", ".", $value[0]->swapshort) }}</td>
+                            <td data-priority="0" scope="col">{{ str_replace(",", ".", $value[0]->swaplong)}}</td>
                         @endif
                     @endforeach
                     <td data-priority="0" scope="col">{{ $autorizacion->lotage }}</td>
 
 
                     <td>
+                      
+                        <a href="" data-id="{{ $autorizacion->id }}" type="button"
+                            title="{{ $autorizacion->id }}" class="btn {{ $autorizacion->action == 0 ? 'btn-success' : 'btn-secondary' }} btn-sm btn-icon nothing" id="nothing">N</a>
+                        <a href="" data-id="{{ $autorizacion->id }}" type="button"
+                            title="{{ $autorizacion->id }}" class="btn {{ $autorizacion->action == 1 ? 'btn-success' : 'btn-secondary' }} btn-sm btn-icon buy" id="buy">C</a>
 
                         <a href="" data-id="{{ $autorizacion->id }}" type="button"
-                            title="{{ $autorizacion->id }}" class="btn-secondary btn-sm btn-icon nothing">N</a>
-                        <a href="" data-id="{{ $autorizacion->id }}" type="button"
-                            title="{{ $autorizacion->id }}" class="btn-secondary btn-sm btn-icon buy">C</a>
+                            title="{{ $autorizacion->id }}" class="btn {{ $autorizacion->action == 2 ? 'btn-success' : 'btn-secondary' }} btn-sm btn-icon sell" id="sell">V</a>
 
                         <a href="" data-id="{{ $autorizacion->id }}" type="button"
-                            title="{{ $autorizacion->id }}" class="btn-secondary btn-sm btn-icon sell">V</a>
-
-                        <a href="" data-id="{{ $autorizacion->id }}" type="button"
-                            title="{{ $autorizacion->id }}" class="btn-secondary btn-sm btn-icon buy_sell">CyV</a>
+                            title="{{ $autorizacion->id }}" class="btn {{ $autorizacion->action == 3 ? 'btn-success' : 'btn-secondary' }} btn-sm btn-icon buy_sell" id="buy_sell">CyV</a>
 
                     </td>
 

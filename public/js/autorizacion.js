@@ -1,13 +1,18 @@
+$.ajaxSetup({
+    headers: {
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+    },
+});
 $(document).on("click", "#obtenerRegistros", () => {
     var table;
     var url = window.location + "";
     var separador = url.split("/");
     var terminal = $("#inputTerminal").val();
-    var PIP = $("#inputPIP").val();
+    //var PIP = $("#inputPIP").val();
 
     const tableStatus = () => {
         $.get({
-            url: `/admin/showAutorizacion?terminal=${terminal}&PIP=${PIP}`,
+            url: `/admin/showAutorizacion?terminal=${terminal}`,
             success: function (response) {
                 $("#contTablaAut").empty();
                 $("#contTablaAut").html(response);
@@ -209,246 +214,262 @@ $(document).on("click", "#obtenerRegistros", () => {
     };
 
     tableStatus();
-});
-$.ajaxSetup({
-    headers: {
-        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-    },
+   
+    
+    
 });
 
-$(document).on("click", ".nothing", function (e) {
-    e.preventDefault();
+let statusBTN = $(".statusOp").val();
+console.log(statusBTN);
 
-    var id = $(this).data("id");
+if (statusBTN == "activado") {
+    $(document).on("click", ".nothing", function (e) {
+        e.preventDefault();
 
-    Swal.fire({
-        title: "Actualizar acción",
-        text: "¿Estás seguro que quieres cambiar la acción?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Aceptar",
-        // confirmButtonColor: "#01bbcc",
-        cancelButtonText: "Cancelar",
-        cancelButtonColor: "#dc3545",
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                type: "POST",
-                url: "/admin/actionAuth",
-                data: {
-                    id: id,
-                    valor: 0,
-                },
-                cache: false,
-                success: function () {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Acción actualizada",
-                        text: "La acción se ha actualizado correctamente",
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                      if ($("#buy_sell").hasClass("btn btn-success")) {
-                        $("#buy_sell").removeClass("btn btn-success");
-                        $("#buy_sell").addClass("btn btn-secondary");
-                    }
-                    if ($("#buy").hasClass("btn btn-success")) {
-                        $("#buy").removeClass("btn btn-success");
-                        $("#buy").addClass("btn btn-secondary");
-                    }
-                    if ($("#sell").hasClass("btn btn-success")) {
-                        $("#sell").removeClass("btn btn-success");
-                        $("#sell").addClass("btn btn-secondary");
-                    }
-                    if ($("#nothing").hasClass("btn btn-success")) {
-                        $("#nothing").removeClass("btn btn-success");
-                        $("#nothing").addClass("btn btn-secondary");
-                    } else {
-                        $("#buy_sell").removeClass("btn btn-secondary");
-                        $("#buy_sell").addClass("btn btn-success");
-                    }
-                },
-            });
-        }
+        var id = $(this).data("id");
+
+        Swal.fire({
+            title: "Actualizar acción",
+            text: "¿Estás seguro que quieres cambiar la acción a NADA?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Aceptar",
+            // confirmButtonColor: "#01bbcc",
+            cancelButtonText: "Cancelar",
+            cancelButtonColor: "#dc3545",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/actionAuth",
+                    data: {
+                        id: id,
+                        valor: 0,
+                    },
+                    cache: false,
+                    success: function () {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Acción actualizada",
+                            text: "La acción se ha actualizado correctamente",
+                            confirmButtonText:
+                                '<a style="font-family: Poppins">Aceptar</a>',
+                            confirmButtonColor: "#01bbcc",
+                        });
+                        $( "#obtenerRegistros" ).trigger( "click" );
+                    },
+                });
+            }
+        });
     });
-});
 
-$(document).on("click", ".buy", function (e) {
-    e.preventDefault();
+    $(document).on("click", ".buy", function (e) {
+        e.preventDefault();
 
-    var id = $(this).data("id");
+        var id = $(this).data("id");
 
-    Swal.fire({
-        title: "Actualizar acción",
-        text: "¿Estás seguro que quieres cambiar la acción?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Aceptar",
-        // confirmButtonColor: "#01bbcc",
-        cancelButtonText: "Cancelar",
-        cancelButtonColor: "#dc3545",
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                type: "POST",
-                url: "/admin/actionAuth",
-                data: {
-                    id: id,
-                    valor: 1,
-                },
-                cache: false,
-                success: function () {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Acción actualizada",
-                        text: "La acción se ha actualizado correctamente",
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                    if ($("#buy_sell").hasClass("btn btn-success")) {
-                        $("#buy_sell").removeClass("btn btn-success");
-                        $("#buy_sell").addClass("btn btn-secondary");
-                    }
-                    if ($("#buy").hasClass("btn btn-success")) {
-                        $("#buy").removeClass("btn btn-success");
-                        $("#buy").addClass("btn btn-secondary");
-                    }
-                    if ($("#sell").hasClass("btn btn-success")) {
-                        $("#sell").removeClass("btn btn-success");
-                        $("#sell").addClass("btn btn-secondary");
-                    }
-                    if ($("#nothing").hasClass("btn btn-success")) {
-                        $("#nothing").removeClass("btn btn-success");
-                        $("#nothing").addClass("btn btn-secondary");
-                    } else {
-                        $("#buy_sell").removeClass("btn btn-secondary");
-                        $("#buy_sell").addClass("btn btn-success");
-                    }
-                },
-            });
-        }
+        Swal.fire({
+            title: "Actualizar acción",
+            text: "¿Estás seguro que quieres cambiar la acción a SOLO COMPRA?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Aceptar",
+            // confirmButtonColor: "#01bbcc",
+            cancelButtonText: "Cancelar",
+            cancelButtonColor: "#dc3545",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/actionAuth",
+                    data: {
+                        id: id,
+                        valor: 1,
+                    },
+                    cache: false,
+                    success: function () {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Acción actualizada",
+                            text: "La acción se ha actualizado correctamente",
+                            confirmButtonText:
+                                '<a style="font-family: Poppins">Aceptar</a>',
+                            confirmButtonColor: "#01bbcc",
+                        });
+                        $( "#obtenerRegistros" ).trigger( "click" );
+                    },
+                });
+            }
+        });
     });
-});
 
-$(document).on("click", ".sell", function (e) {
-    e.preventDefault();
+    $(document).on("click", ".sell", function (e) {
+        e.preventDefault();
 
-    var id = $(this).data("id");
+        var id = $(this).data("id");
 
-    Swal.fire({
-        title: "Actualizar acción",
-        text: "¿Estás seguro que quieres cambiar la acción?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Aceptar",
-        // confirmButtonColor: "#01bbcc",
-        cancelButtonText: "Cancelar",
-        cancelButtonColor: "#dc3545",
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                type: "POST",
-                url: "/admin/actionAuth",
-                data: {
-                    id: id,
-                    valor: 2,
-                },
-                cache: false,
-                success: function () {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Acción actualizada",
-                        text: "La acción se ha actualizado correctamente",
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                    if ($("#buy_sell").hasClass("btn btn-success")) {
-                        $("#buy_sell").removeClass("btn btn-success");
-                        $("#buy_sell").addClass("btn btn-secondary");
-                    }
-                    if ($("#buy").hasClass("btn btn-success")) {
-                        $("#buy").removeClass("btn btn-success");
-                        $("#buy").addClass("btn btn-secondary");
-                    }
-                    if ($("#sell").hasClass("btn btn-success")) {
-                        $("#sell").removeClass("btn btn-success");
-                        $("#sell").addClass("btn btn-secondary");
-                    }
-                    if ($("#nothing").hasClass("btn btn-success")) {
-                        $("#nothing").removeClass("btn btn-success");
-                        $("#nothing").addClass("btn btn-secondary");
-                    } else {
-                        $("#buy_sell").removeClass("btn btn-secondary");
-                        $("#buy_sell").addClass("btn btn-success");
-                    }
-                },
-            });
-        }
+        Swal.fire({
+            title: "Actualizar acción",
+            text: "¿Estás seguro que quieres cambiar la acción a SOLO VENTA?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Aceptar",
+            // confirmButtonColor: "#01bbcc",
+            cancelButtonText: "Cancelar",
+            cancelButtonColor: "#dc3545",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/actionAuth",
+                    data: {
+                        id: id,
+                        valor: 2,
+                    },
+                    cache: false,
+                    success: function () {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Acción actualizada",
+                            text: "La acción se ha actualizado correctamente",
+                            confirmButtonText:
+                                '<a style="font-family: Poppins">Aceptar</a>',
+                            confirmButtonColor: "#01bbcc",
+                        });
+                        $( "#obtenerRegistros" ).trigger( "click" );
+                    },
+                });
+            }
+        });
     });
-});
 
-$(document).on("click", ".buy_sell", function (e) {
-    e.preventDefault();
+    $(document).on("click", ".buy_sell", function (e) {
+        e.preventDefault();
 
-    var id = $(this).data("id");
+        var id = $(this).data("id");
 
-    Swal.fire({
-        title: "Actualizar acción",
-        text: "¿Estás seguro que quieres cambiar la acción?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Aceptar",
-        // confirmButtonColor: "#01bbcc",
-        cancelButtonText: "Cancelar",
-        cancelButtonColor: "#dc3545",
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                type: "POST",
-                url: "/admin/actionAuth",
-                data: {
-                    id: id,
-                    valor: 3,
-                },
-                cache: false,
-                success: function () {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Acción actualizada",
-                        text: "La acción se ha actualizado correctamente",
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-
-                    if ($("#buy_sell").hasClass("btn btn-success")) {
-                        $("#buy_sell").removeClass("btn btn-success");
-                        $("#buy_sell").addClass("btn btn-secondary");
-                    }
-                    if ($("#buy").hasClass("btn btn-success")) {
-                        $("#buy").removeClass("btn btn-success");
-                        $("#buy").addClass("btn btn-secondary");
-                    }
-                    if ($("#sell").hasClass("btn btn-success")) {
-                        $("#sell").removeClass("btn btn-success");
-                        $("#sell").addClass("btn btn-secondary");
-                    }
-                    if ($("#nothing").hasClass("btn btn-success")) {
-                        $("#nothing").removeClass("btn btn-success");
-                        $("#nothing").addClass("btn btn-secondary");
-                    } else {
-                        $("#buy_sell").removeClass("btn btn-secondary");
-                        $("#buy_sell").addClass("btn btn-success");
-                    }
-
-                },
-            });
-        }
+        Swal.fire({
+            title: "Actualizar acción",
+            text: "¿Estás seguro que quieres cambiar la acción a COMPRA Y VENTA?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Aceptar",
+            // confirmButtonColor: "#01bbcc",
+            cancelButtonText: "Cancelar",
+            cancelButtonColor: "#dc3545",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/actionAuth",
+                    data: {
+                        id: id,
+                        valor: 3,
+                    },
+                    cache: false,
+                    success: function () {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Acción actualizada",
+                            text: "La acción se ha actualizado correctamente",
+                            confirmButtonText:
+                                '<a style="font-family: Poppins">Aceptar</a>',
+                            confirmButtonColor: "#01bbcc",
+                        });
+                        $( "#obtenerRegistros" ).trigger( "click" );                  
+                    },
+                });
+            }
+        });
     });
-});
+}
+if (statusBTN == "desactivado") {
+    $(document).on("click", ".nothing", function (e) {
+        e.preventDefault();
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'error',
+            title: 'No tiene permitido realizar esta acción'
+          })
+       
+    });
+
+    $(document).on("click", ".buy", function (e) {
+        e.preventDefault();
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'error',
+            title: 'No tiene permitido realizar esta acción'
+          })
+       
+    });
+
+    $(document).on("click", ".sell", function (e) {
+        e.preventDefault();
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'error',
+            title: 'No tiene permitido realizar esta acción'
+          })
+       
+    });
+
+    $(document).on("click", ".buy_sell", function (e) {
+        e.preventDefault();
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'error',
+            title: 'No tiene permitido realizar esta acción'
+          })
+       
+    });
+}
+
+
 
 function estatusClaveIncorrecta(input) {
     let estatus = $(input).data("statusOp");
@@ -514,17 +535,23 @@ $(document).on("click", ".statusOp", function (e) {
                                     title: "Estatus actualizado",
                                 });
 
+                               
                                     if ($(".statusOp").hasClass("btn-success")) {
                                         $(".statusOp").removeClass(
                                             "btn-success"
                                         );
                                         $(".statusOp").addClass("btn-danger");
                                         $(".statusOp").text("Desactivado");
+                                      
+                                      
                                     } else {
                                         $(".statusOp").removeClass("btn-danger");
                                         $(".statusOp").addClass("btn-success");
                                         $(".statusOp").text("Activado");
                                     }
+
+                                    window.location.href = window.location.href;
+
                             }
                         );
                     } else {
@@ -558,5 +585,6 @@ $(document).on("click", ".statusOp", function (e) {
             });
         }
     });
+  
 });
 
