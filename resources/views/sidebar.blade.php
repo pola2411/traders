@@ -180,10 +180,27 @@
         </li>
 
         <li class="nav-item">
-            <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif"
-                href="{{ url('/admin/indexUSD') }}">
+            <a class="@if (request()->is('/admin/indexUSDCADCHF')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/indexUSDCADCHF') }}">
                 <i class="bi bi-currency-exchange"></i>
                 <span>Index USD</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/indexUSD') }}">
+            <i class="bi bi-cone-striped"></i>
+                <span>Index USD BETA</span>
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/autorizacion')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/autorizacion') }}">
+                <i class="bi bi-shield-lock"></i>
+                <span>Autorización S8A</span>
             </a>
         </li>
 

@@ -216,7 +216,24 @@ Route::get('/admin/boton14', [App\Http\Controllers\BotonController::class, 'boto
 Route::get('/admin/boton15', [App\Http\Controllers\BotonController::class, 'boton15'])->middleware('auth');
 Route::get('/admin/boton16', [App\Http\Controllers\BotonController::class, 'boton16'])->middleware('auth');
 
+Route::get('/admin/botonUSDH', [App\Http\Controllers\BotonController::class, 'botonUSDH'])->middleware('auth');
+Route::get('/admin/botonEURH', [App\Http\Controllers\BotonController::class, 'botonEURH'])->middleware('auth');
+Route::get('/admin/botonGBPH', [App\Http\Controllers\BotonController::class, 'botonGBPH'])->middleware('auth');
+Route::get('/admin/botonAUDH', [App\Http\Controllers\BotonController::class, 'botonAUDH'])->middleware('auth');
+Route::get('/admin/botonNZDH', [App\Http\Controllers\BotonController::class, 'botonNZDH'])->middleware('auth');
+Route::get('/admin/botonCADH', [App\Http\Controllers\BotonController::class, 'botonCADH'])->middleware('auth');
+Route::get('/admin/botonCHFH', [App\Http\Controllers\BotonController::class, 'botonCHFH'])->middleware('auth');
+Route::get('/admin/botonJPYH', [App\Http\Controllers\BotonController::class, 'botonJPYH'])->middleware('auth');
+
+
 Route::get('/admin/showClaveBoton', [App\Http\Controllers\BotonController::class, 'getClave']);
 
 //Fundamentales
 Route::get('/admin/fundamentales', [App\Http\Controllers\FundamentalController::class, 'index'])->middleware('auth');
+
+//Autorización S8A
+Route::get('/admin/autorizacion', [App\Http\Controllers\AutorizacionS8AController::class, 'index'])->name('status')->middleware('auth');
+Route::get('/admin/showAutorizacion', [App\Http\Controllers\AutorizacionS8AController::class, 'getDatos']);
+Route::post('/admin/actionAuth', [App\Http\Controllers\AutorizacionS8AController::class, 'actionAuth']);
+Route::get('/admin/showClaveOp', [App\Http\Controllers\AutorizacionS8AController::class, 'getClave']);
+Route::get('/admin/botonStatus', [App\Http\Controllers\AutorizacionS8AController::class, 'botonStatus']);
