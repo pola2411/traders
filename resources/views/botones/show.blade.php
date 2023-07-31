@@ -38,10 +38,52 @@
 
                                 @foreach ($switchers as $switcher)
                                     @php
-                                        if ($switcher->modificable == 'activado') {
-                                            $clase_modificable = '';
+                                        if ($switcher->status_usd == 'activado') {
+                                            $clase_modificable1 = 'bi-lock-fill';
                                         } else {
-                                            $clase_modificable = 'btn-danger';
+                                            $clase_modificable1 = 'bi-unlock-fill';
+                                        }
+                                        
+                                        if ($switcher->status_eur == 'activado') {
+                                            $clase_modificable2 = 'bi-lock-fill';
+                                        } else {
+                                            $clase_modificable2 = 'bi-unlock-fill';
+                                        }
+                                        
+                                        if ($switcher->status_gbp == 'activado') {
+                                            $clase_modificable3 = 'bi-lock-fill';
+                                        } else {
+                                            $clase_modificable3 = 'bi-unlock-fill';
+                                        }
+                                        
+                                        if ($switcher->status_aud == 'activado') {
+                                            $clase_modificable4 = 'bi-lock-fill';
+                                        } else {
+                                            $clase_modificable4 = 'bi-unlock-fill';
+                                        }
+                                        
+                                        if ($switcher->status_nzd == 'activado') {
+                                            $clase_modificable5 = 'bi-lock-fill';
+                                        } else {
+                                            $clase_modificable5 = 'bi-unlock-fill';
+                                        }
+                                        
+                                        if ($switcher->status_cad == 'activado') {
+                                            $clase_modificable6 = 'bi-lock-fill';
+                                        } else {
+                                            $clase_modificable6 = 'bi-unlock-fill';
+                                        }
+                                        
+                                        if ($switcher->status_chf == 'activado') {
+                                            $clase_modificable7 = 'bi-lock-fill';
+                                        } else {
+                                            $clase_modificable7 = 'bi-unlock-fill';
+                                        }
+                                        
+                                        if ($switcher->status_jpy == 'activado') {
+                                            $clase_modificable8 = 'bi-lock-fill';
+                                        } else {
+                                            $clase_modificable8 = 'bi-unlock-fill';
                                         }
                                         
                                         $clase = 'btn-success';
@@ -105,14 +147,38 @@
                                                 <tr>
                                                     <td></td>
                                                     <td></td>
-                                                    <td><button id="botonUSDH" class="btn btn-light m-2">USD</button></td>
-                                                    <td><button id="botonEURH" class="btn btn-light m-2">EUR</button></td>
-                                                    <td><button id="botonGBPH" class="btn btn-light m-2">GBP</button></td>
-                                                    <td><button id="botonAUDH" class="btn btn-light m-2">AUD</button></td>
-                                                    <td><button id="botonNZDH" class="btn btn-light m-2">NZD</button></td>
-                                                    <td><button id="botonCADH" class="btn btn-light m-2">CAD</button></td>
-                                                    <td><button id="botonCHFH" class="btn btn-light m-2">CHF</button></td>
-                                                    <td><button id="botonJPYH" class="btn btn-light m-2">JPY</button></td>
+                                                    <td><button id="botonUSDH" class="btn btn-dark m-2 "
+                                                            data-id="{{ $switcher->id }}">USD <i
+                                                                class="bi {{ $clase_modificable1 }} m-1"
+                                                                id="USDH"></i></button></td>
+                                                    <td><button id="botonEURH" class="btn btn-dark m-2"
+                                                            data-id="{{ $switcher->id }}">EUR <i
+                                                                class="bi {{ $clase_modificable2 }} m-1"
+                                                                id="EURH"></i></button></td>
+                                                    <td><button id="botonGBPH" class="btn btn-dark m-2"
+                                                            data-id="{{ $switcher->id }}">GBP <i
+                                                                class="bi {{ $clase_modificable3 }} m-1"
+                                                                id="GBPH"></i></button></td>
+                                                    <td><button id="botonAUDH" class="btn btn-dark m-2"
+                                                            data-id="{{ $switcher->id }}">AUD <i
+                                                                class="bi {{ $clase_modificable4 }} m-1"
+                                                                id="AUDH"></i></button></td>
+                                                    <td><button id="botonNZDH" class="btn btn-dark m-2"
+                                                            data-id="{{ $switcher->id }}">NZD <i
+                                                                class="bi {{ $clase_modificable5 }} m-1"
+                                                                id="NZDH"></i></button></td>
+                                                    <td><button id="botonCADH" class="btn btn-dark m-2"
+                                                            data-id="{{ $switcher->id }}">CAD <i
+                                                                class="bi {{ $clase_modificable6 }} m-1"
+                                                                id="CADH"></i></button></td>
+                                                    <td><button id="botonCHFH" class="btn btn-dark m-2"
+                                                            data-id="{{ $switcher->id }}">CHF <i
+                                                                class="bi {{ $clase_modificable7 }} m-1"
+                                                                id="CHFH"></i></button></td>
+                                                    <td><button id="botonJPYH" class="btn btn-dark m-2"
+                                                            data-id="{{ $switcher->id }}">JPY <i
+                                                                class="bi {{ $clase_modificable8 }} m-1"
+                                                                id="JPYH"></i></button></td>
                                                 </tr>
 
                                                 <tr>
@@ -346,6 +412,5 @@
 
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
     <script src="{{ asset('js/botones.js') }}"></script>
 @endsection
