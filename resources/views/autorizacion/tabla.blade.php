@@ -82,9 +82,12 @@
                         @if ($key == $autorizacion->symbol)
                             @php
                                 $i++;
+
+                                $swapshort = str_replace(",", ".", $value[0]->swapshort);
+                               $swaplong = str_replace(",", ".", $value[0]->swaplong);
                             @endphp
-                            <td data-priority="0" scope="col">{{ str_replace(",", ".", $value[0]->swapshort) }}</td>
-                            <td data-priority="0" scope="col">{{ str_replace(",", ".", $value[0]->swaplong)}}</td>
+                            <td data-priority="0" scope="col">{{ number_format($swapshort,2) }}</td>
+                            <td data-priority="0" scope="col">{{ number_format($swaplong,2) }}</td>
                         @endif
                     @endforeach
                     <td data-priority="0" scope="col">{{ $autorizacion->lotage }}</td>
