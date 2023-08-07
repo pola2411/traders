@@ -17,6 +17,8 @@ class TraderController extends Controller
         ->where('id','=',99999)
         ->orWhere('id','=',99998)
         ->orWhere('id','=',99997)
+        ->orWhere('id','=',21)
+        ->orWhere('id','=',22)
         ->orWhere('id','=',23)
         ->orWhere('id','=',24)
         ->orderByDesc(DB::raw('FIELD(id, 99997, 99998, 99999)'))->get();
@@ -94,9 +96,11 @@ class TraderController extends Controller
         ->where('id','=',99999)
         ->orWhere('id','=',99998)
         ->orWhere('id','=',99997)
+        ->orWhere('id','=',21)
+        ->orWhere('id','=',22)
         ->orWhere('id','=',23)
         ->orWhere('id','=',24)
-        ->orderByDesc(DB::raw('FIELD(id, 23, 24, 99997, 99998, 99999)'))->get();
+        ->orderByDesc(DB::raw('FIELD(id, 99997, 99998, 99999)'))->get();
 
         $trader_id = $trader->id;
         $bitacora_id = session('bitacora_id');
@@ -144,6 +148,8 @@ class TraderController extends Controller
         ->where('id','=',99999)
         ->orWhere('id','=',99998)
         ->orWhere('id','=',99997)
+        ->orWhere('id','=',21)
+        ->orWhere('id','=',22)
         ->orWhere('id','=',23)
         ->orWhere('id','=',24)
         ->orderByDesc(DB::raw('FIELD(id, 99997, 99998, 99999)'))->get();
