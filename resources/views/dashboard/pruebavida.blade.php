@@ -257,7 +257,7 @@
                                 <div class="row">
                                         <div class="col-12">
                                             <h2 class="d-flex align-items-center justify-content-center mb-0 cant-trader">
-                                                {{ $last_general->margin }}
+                                                {{ number_format($last_general->margin,2) }}
                                             </h2>
                                         </div>
                                     {{-- <div class="col-12 text-center">
