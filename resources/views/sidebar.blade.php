@@ -277,6 +277,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/portafolioGraph')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/portafolioGraph') }}">
+               <i class="bi bi-distribute-horizontal"></i>
+                <span>Gráfica Portafolios</span>
+            </a>
+        </li>
 
         {{--
         <li class="nav-item">
