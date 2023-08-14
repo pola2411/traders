@@ -8,6 +8,10 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class StatusGraficaController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
     // public function index(Request $request)
     // {
     //     return view('statusgrafica.show');

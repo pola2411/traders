@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class PerfilController extends Controller
 {
-
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
     public function index()
     {       
 
@@ -19,6 +22,7 @@ class PerfilController extends Controller
 
     public function editPerfil(Request $request)
     {
+        
         if ($request->ajax())
         {                                       
 

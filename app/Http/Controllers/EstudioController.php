@@ -13,7 +13,11 @@ use \PDF;
 
 class EstudioController extends Controller
 {
-
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
+    
     public function index(Request $request)
     {
         return view('estudio.show');

@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class LogsController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
     public function index()
     {
         return view('logs.show');

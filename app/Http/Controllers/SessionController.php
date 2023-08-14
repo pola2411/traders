@@ -15,6 +15,7 @@ use phpDocumentor\Reflection\Types\This;
 
 class SessionController extends Controller
 {
+   
     public function create()
     {
         if (Auth::check()) {
@@ -31,6 +32,7 @@ class SessionController extends Controller
                 'message' => 'Datos incorrectos, intenta de nuevo'
             ]);
         }
+        
         
         $fecha_entrada = Carbon::now();
         $fecha_entrada->toDateTimeString();

@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class FundamentalController extends Controller
 {
-   
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
     public function index()
     {
         return view('fundamentales.show');

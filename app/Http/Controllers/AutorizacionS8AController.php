@@ -13,6 +13,10 @@ use App\Models\TablaLog;
 
 class AutorizacionS8AController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
     public function index()
     {
         return view('autorizacion.show');

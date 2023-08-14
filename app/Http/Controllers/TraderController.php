@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class TraderController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
     public function index()
     {
         $traders = DB::table("traders")

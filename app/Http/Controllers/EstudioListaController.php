@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class EstudioListaController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
     public function index()
     {
         $estudio_lista = DB::table("estudio_lista")

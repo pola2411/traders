@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class GraficaController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth.admin');
+    }
+    
+    
     public function index()
     {
 
