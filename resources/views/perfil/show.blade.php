@@ -46,7 +46,7 @@
                                 <p class="mb-0">Privilegio</p>
                             </div>
                             <div class="col-sm-8">
-                                <p class="text-muted mb-0" id="perfilPrivilegio">administrador</p>
+                                <p class="text-muted mb-0" id="perfilPrivilegio">{{ auth()->user()->privilegio }}</p>
                             </div>
                         </div>                                                                                                   
                     </div>
