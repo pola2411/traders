@@ -66,9 +66,9 @@
                                             }
                                             
                                         @endphp
-                                        {{-- <option value="1">Trend</option>
-                                    <option value="2">Spectrum</option> --}}
+                                    
                                     </select>
+                                    <label for="portafolio">Portafolio</label>
                                 </div>
                             </div>
                             <div class="col-md-2 col-12">
