@@ -237,3 +237,24 @@ Route::get('/admin/showAutorizacion', [App\Http\Controllers\AutorizacionS8AContr
 Route::post('/admin/actionAuth', [App\Http\Controllers\AutorizacionS8AController::class, 'actionAuth']);
 Route::get('/admin/showClaveOp', [App\Http\Controllers\AutorizacionS8AController::class, 'getClave']);
 Route::get('/admin/botonStatus', [App\Http\Controllers\AutorizacionS8AController::class, 'botonStatus']);
+
+
+//Gráfico portafolios
+Route::get('/admin/portafolio', [App\Http\Controllers\PortafolioController::class, 'index'])->middleware('auth');
+Route::get('/admin/getPortafolio', [App\Http\Controllers\PortafolioController::class, 'getPortafolio'])->middleware('auth');
+
+//Gráfico portafolios rectangulares
+Route::get('/admin/portafolioGraph', [App\Http\Controllers\PortafoliosGraphController::class, 'index'])->middleware('auth');
+Route::get('/admin/getPortafolioGraph', [App\Http\Controllers\PortafoliosGraphController::class, 'getPortafolioGraph'])->middleware('auth');
+
+//Gráfico clave inversores
+Route::get('/admin/claveInversor', [App\Http\Controllers\ClaveInversorController::class, 'index'])->middleware('auth');
+Route::get('/admin/showClaveInversor', [App\Http\Controllers\ClaveInversorController::class, 'getClaveInversor'])->middleware('auth');
+Route::post('/admin/addClaveInversor', [App\Http\Controllers\ClaveInversorController::class, 'addClaveInversor'])->middleware('auth');
+Route::post('/admin/deleteClaveInversor', [App\Http\Controllers\ClaveInversorController::class, 'deleteClaveInversor'])->middleware('auth');
+
+//Historicos operaciones
+Route::get('/admin/historicos', [App\Http\Controllers\HistoricoOperacionesController::class, 'index'])->name('HistoricoOperaciones')->middleware('auth');
+Route::get('/admin/historicosShow', [App\Http\Controllers\HistoricoOperacionesController::class, 'getHistoricos'])->middleware('auth');
+Route::get('/admin/historicosShowFiltro', [App\Http\Controllers\HistoricoOperacionesController::class, 'getHistoricosFiltro'])->middleware('auth');
+
