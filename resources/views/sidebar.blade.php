@@ -129,6 +129,40 @@
 
         </li>
 
+        {{-- <li class="nav-item">
+
+            <a class="nav-link collapsed" data-bs-target="#puntosGraph" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-camera-video"></i><span>Gráfica Puntos Portafolios</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+
+            <ul id="puntosGraph" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="@if (request()->is('/admin/getPortafolioTable')) nav-link @else nav-link collapsed @endif"
+                        href="{{ url('/admin/getPortafolioTable') }}">
+                        <i class="bi bi-circle"></i>
+                        <span>Agregar puntos</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="@if (request()->is('/admin/portafolio')) nav-link @else nav-link collapsed @endif"
+                        href="{{ url('/admin/portafolio') }}">
+                        <i class="bi bi-circle"></i>
+                        <span>Visualizar gráfica</span>
+                    </a>
+                </li>
+            </ul>
+
+
+        </li> --}}
+
+        <li>
+            <a class="@if (request()->is('/admin/portafolio')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/portafolio') }}">
+                <i class="bi bi-bezier2"></i>
+                <span>Gráfica puntos portafolio</span>
+            </a>
+        </li>
+
 
         {{-- <li class="nav-item">
             <a class="@if (request()->is('/admin/operacion')) nav-link @else nav-link collapsed @endif" href="{{ url('/admin/operacion') }}">
