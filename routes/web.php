@@ -18,6 +18,12 @@ Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class,
 Route::get('/showTraders', [App\Http\Controllers\DashboardController::class, 'getTraders'])->middleware('auth');
 Route::get('/admin/getPruebasVida', [App\Http\Controllers\DashboardController::class, 'getPruebasVida'])->middleware('auth');
 
+// Rutas para portafolios activos
+Route::get('/admin/portafoliosActivos', [App\Http\Controllers\PortafoliosActivosController::class, 'index'])->middleware('auth');
+Route::get('/showPortafoliosActivos', [App\Http\Controllers\PortafoliosActivosController::class, 'getTraders'])->middleware('auth');
+Route::get('/admin/getPortafoliosActivos', [App\Http\Controllers\PortafoliosActivosController::class, 'getPruebasVida'])->middleware('auth');
+
+
 
 // Rutas para gráficas
 Route::get('/admin/equityBalance/{id}', [App\Http\Controllers\GraficaController::class, 'index'])->middleware('auth');
@@ -242,6 +248,9 @@ Route::get('/admin/botonStatus', [App\Http\Controllers\AutorizacionS8AController
 //Gráfico portafolios
 Route::get('/admin/portafolio', [App\Http\Controllers\PortafolioController::class, 'index'])->middleware('auth');
 Route::get('/admin/getPortafolio', [App\Http\Controllers\PortafolioController::class, 'getPortafolio'])->middleware('auth');
+Route::get('/admin/getPortafolioTable', [App\Http\Controllers\PortafolioController::class, 'index2'])->middleware('auth');
+Route::get('/admin/getPortafolioDots', [App\Http\Controllers\PortafolioController::class, 'getPortafolioTable'])->middleware('auth');
+Route::post('/admin/addPortafolioGraph', [App\Http\Controllers\PortafolioController::class, 'addPortafolioGraph'])->middleware('auth');
 
 //Gráfico portafolios rectangulares
 Route::get('/admin/portafolioGraph', [App\Http\Controllers\PortafoliosGraphController::class, 'index'])->middleware('auth');

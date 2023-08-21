@@ -91,7 +91,22 @@
                 <span>Saldos</span>
             </a>
         </li>
-       
+
+        <li>
+            <a class="@if (request()->is('/admin/portafoliosActivos')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/portafoliosActivos') }}">
+                <i class="bi bi-wallet2"></i>
+                <span>Portafolios Activos</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="@if (request()->is('/admin/portafolioGraph')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/portafolioGraph') }}">
+               <i class="bi bi-distribute-horizontal"></i>
+                <span>Gráfica Portafolios</span>
+            </a>
+        </li>
         
         <li class="nav-item">
             <a class="@if (request()->is('/admin/fundamentales')) nav-link @else nav-link collapsed @endif"
@@ -99,6 +114,22 @@
                 <i class="bi bi-graph-up"></i>
                 <span>Fundamentales</span>
             </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#equitybalance-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-bar-chart-line"></i><span>Equity/Balance</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="equitybalance-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @foreach ($traders as $trader)
+                    <li>
+                        <a class="ps-2" href="/admin/equityBalance/{{ $trader->id }}">
+                            <i class="bi bi-circle"></i><span>{{ $trader->nombre }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </li>
         
         
@@ -287,21 +318,7 @@
         </li>
 
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#equitybalance-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-bar-chart-line"></i><span>Equity/Balance</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="equitybalance-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                @foreach ($traders as $trader)
-                    <li>
-                        <a class="ps-2" href="/admin/equityBalance/{{ $trader->id }}">
-                            <i class="bi bi-circle"></i><span>{{ $trader->nombre }}</span>
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </li>
+   
 
         <li class="nav-item">
             <a class="@if (request()->is('/admin/market')) nav-link @else nav-link collapsed @endif"
@@ -309,15 +326,11 @@
                 <i class="bi bi-graph-down"></i>
                 <span>Gráfica Market</span>
             </a>
-        </li>
+        </li>  
+             
+    
 
-        <li class="nav-item">
-            <a class="@if (request()->is('/admin/portafolioGraph')) nav-link @else nav-link collapsed @endif"
-                href="{{ url('/admin/portafolioGraph') }}">
-               <i class="bi bi-distribute-horizontal"></i>
-                <span>Gráfica Portafolios</span>
-            </a>
-        </li>
+     
 
         {{--
         <li class="nav-item">
