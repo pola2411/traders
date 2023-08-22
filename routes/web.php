@@ -267,3 +267,5 @@ Route::get('/admin/historicos', [App\Http\Controllers\HistoricoOperacionesContro
 Route::get('/admin/historicosShow', [App\Http\Controllers\HistoricoOperacionesController::class, 'getHistoricos'])->middleware('auth');
 Route::get('/admin/historicosShowFiltro', [App\Http\Controllers\HistoricoOperacionesController::class, 'getHistoricosFiltro'])->middleware('auth');
 
+//Analisis de portafolios
+Route::get('/admin/analisis-portafolios/{id}', [App\Http\Controllers\AnalisisPortafolioController::class, 'index'])->name('analisis-portafolios')->middleware('auth');
