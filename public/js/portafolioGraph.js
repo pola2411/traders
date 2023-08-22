@@ -71,8 +71,7 @@ am5.ready(function () {
         })
     );
 
-    // make professional
-    series.columns.template.get("themeTags").push("pro");
+ 
 
     // Add cursor
     // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
