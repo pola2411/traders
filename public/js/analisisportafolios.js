@@ -309,7 +309,6 @@ $(document).ready(function () {
                 portfolio,
             },
             success: function (res) {
-                $("#formModal").modal("show");
                 $("#tbody").empty();
                 res.map((item) => {
                     let buy_sell = item.buy_sell == "buy" ? "Buy" : "Sell";
@@ -331,9 +330,7 @@ $(document).ready(function () {
                     $("#minimo").text(item.min_last);
                     $("#diferencia").text(item.difference);
                 });
-                // $("#collapseBtn").html(
-                //     `Desplegar información del usuario &nbsp;<b>${res[0].user_nombre}</b>`
-                // );
+                $("#formModal").modal("show");
             },
         });
     });

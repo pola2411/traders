@@ -21,7 +21,7 @@
                 $ratio = $profit / $risk;
                 $margin = App\Models\AnalisisPortafolio::where('value', $value)->where('portfolio', $analis->portfolio)->sum('margin');
                 $swap = App\Models\AnalisisPortafolio::where('value', $value)->where('portfolio', $analis->portfolio)->sum('swap');
-                $riesgo_apertura = App\Models\AnalisisPortafolio::where('value', $value)->where('portfolio', $analis->portfolio)->sum('riesgo_apertura');
+                $risk_opening = App\Models\AnalisisPortafolio::where('value', $value)->where('portfolio', $analis->portfolio)->sum('risk_opening');
             @endphp
             <tr>
                 <td>{{$analis->portfolio}}</td>
@@ -30,7 +30,7 @@
                 <td>{{number_format($ratio, 2)}}</td>
                 <td>{{number_format($margin, 2)}}</td>
                 <td>{{number_format($swap, 2)}}</td>
-                <td>{{number_format($riesgo_apertura, 2)}}</td>
+                <td>{{number_format($risk_opening, 2)}}</td>
                 <td>
                     <a href="" data-value="{{$value}}" data-portfolio="{{$analis->portfolio}}" type="button" class="btn btn-dark btn-sm btn-icon view">
                         <i class="bi bi-card-heading"></i>
