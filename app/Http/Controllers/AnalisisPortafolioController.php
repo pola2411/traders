@@ -19,7 +19,7 @@ class AnalisisPortafolioController extends Controller
 
     public function getAnalisis(Request $request)
     {
-        $analisis = AnalisisPortafolio::select('portfolio')->where("value", $request->value)->distinct('portfolio')->get();
+        $analisis = AnalisisPortafolio::select('portfolio', 'time')->where("value", $request->value)->distinct('portfolio')->get();
         $data = array( 'analisis' => $analisis, 'value' => $request->value );
 
         return response()->view('analisis.tabla', $data, 200);

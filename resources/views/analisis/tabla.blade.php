@@ -4,6 +4,7 @@
     <thead class="text-center">
         <tr>
             <th data-priority="0" scope="col">Portafolio</th>
+            <th data-priority="0" scope="col">Fecha</th>
             <th data-priority="0" scope="col">Beneficio</th>
             <th data-priority="0" scope="col">Riesgo</th>
             <th data-priority="0" scope="col">Ratio</th>
@@ -25,6 +26,7 @@
             @endphp
             <tr>
                 <td>{{$analis->portfolio}}</td>
+                <td>{{\Carbon\Carbon::parse($analis->time)->format("d/m/Y")}}</td>
                 <td>{{number_format($profit, 2)}}</td>
                 <td>{{number_format($risk, 2)}}</td>
                 <td>{{number_format($ratio, 2)}}</td>
