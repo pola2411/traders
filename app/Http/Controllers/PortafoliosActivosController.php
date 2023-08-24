@@ -26,15 +26,12 @@ class PortafoliosActivosController extends Controller
 
     public function getPruebasVida()
     {
-       $portafolios =  DB::table('portafolios')
+        $portafolios =  DB::table('portafolios')
 
         ->select('value')
         ->groupBy('value')
         ->orderBy('value','asc')
         ->get();
-      
-       
-
         $data = array(
             "portafolios" => $portafolios,
         );

@@ -599,6 +599,26 @@ h6 {
     color: #fff;
 }
 
+.l-bg-cashout {
+    background: linear-gradient(
+        to right,
+        #435334,
+      #9EB384,
+      #CEDEBD
+    ) !important;
+    color: #fff;
+}
+
+.l-bg-status {
+    background: linear-gradient(
+        to right,
+        #65451F,  
+        #765827,
+        #C8AE7D
+    ) !important;
+    color: #fff;
+}
+
 .l-bg-orange-dark {
     background: linear-gradient(to right, #a86008, #ffba56) !important;
     color: #fff;

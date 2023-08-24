@@ -107,6 +107,15 @@
                 <span>Gráfica Portafolios</span>
             </a>
         </li>
+
+        <li>
+            <a class="@if (request()->is('/admin/analisis-portafolios')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/analisis-portafolios') }}">
+                <i class="bi bi-file-text"></i>
+                <span>Análisis de portafolios</span>
+            </a>
+        </li>
+        
         
         <li class="nav-item">
             <a class="@if (request()->is('/admin/fundamentales')) nav-link @else nav-link collapsed @endif"

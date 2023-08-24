@@ -26,7 +26,7 @@
         
         $lastDate = Carbon\Carbon::createFromDate($last_general->time);
         $now = Carbon\Carbon::now();
-    
+        
         $diff = $lastDate->diffInMinutes($now);
     @endphp
 
@@ -36,7 +36,8 @@
             <div class="title-trader d-flex justify-content-between align-items-center">
                 <div>
                     @if ($diff > 0)
-                        <span class="badge bg-danger">ALERTA: El último dato recibido de {{ $portafoliosArray[0]->value}} fue
+                        <span class="badge bg-danger">ALERTA: El último dato recibido de
+                            {{ $portafoliosArray[0]->value }} fue
                             hace más de 1 minuto</span>
                     @endif
                 </div>
@@ -50,7 +51,7 @@
 
 
             <div class="row d-flex align-items-center">
-                <div class="col-xl-2">
+                <div class="col-xl-3">
                     <div class="card l-bg-blue shadow">
                         <div class="card-statistic-3 p-3">
                             <div class="card-icon card-icon-large">
@@ -66,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2">
+                <div class="col-xl-3">
                     <div class="card l-bg-blue-bal shadow">
                         <div class="card-statistic-3 p-3">
                             @if (0 == 0)
@@ -87,8 +88,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <h2
-                                        class="d-flex align-items-center justify-content-center mb-0 cant-trader fs-6">
+                                    <h2 class="d-flex align-items-center justify-content-center mb-0 cant-trader fs-6">
                                         {{ number_format($portafoliosArray[0]->close, 2) }}
                                     </h2>
                                 </div>
@@ -97,7 +97,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2">
+                <div class="col-xl-3">
+                    <div class="card l-bg-cashout shadow">
+                        <div class="card-statistic-3 p-3">
+                            @if (0 == 0)
+                                <div class="card-icon card-icon-large">
+                                    <i class="fas fa-arrow-right-arrow-left"></i>
+                                </div>
+                            @elseif(0 < 0)
+                                <div class="card-icon card-icon-large">
+                                    <i class="fas fa-arrow-trend-down"></i>
+                                </div>
+                            @elseif(0 > 0)
+                                <div class="card-icon card-icon-large">
+                                    <i class="fas fa-arrow-trend-up"></i>
+                                </div>
+                            @endif
+                            <div class="title-stats text-center">
+                                <h5 class="card-title text-light pt-0 pb-0">Cash Out</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h2 class="d-flex align-items-center justify-content-center mb-0 cant-trader fs-6">
+                                        {{ number_format($portafoliosArray[0]->cash_out, 2) }}
+                                    </h2>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3">
                     <div class="card l-bg-good shadow">
                         <div class="card-statistic-3 p-3">
                             @if (0 == 0)
@@ -127,7 +157,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2">
+
+                <div class="col-xl-3 ">
                     <div
                         class="card 
                     
@@ -161,7 +192,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2">
+                <div class="col-xl-3">
                     <div class="card l-bg-bad shadow">
                         <div class="card-statistic-3 p-3">
                             @if (0 == 0)
@@ -191,7 +222,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2">
+                <div class="col-xl-3">
                     <div class="card l-bg-up shadow">
                         <div class="card-statistic-3 p-3">
                             <div class="card-icon card-icon-large" style="font-size: 0px">
@@ -199,18 +230,86 @@
                             </div>
                             <div class="title-stats text-center">
                                 <h5 class="card-title text-dark pt-0 pb-0"># de Operaciones</h5>
+
                             </div>
                             <div class="row">
-                                <div class="col-12 text-center ">
-                                    <span> {{ $portafoliosArray[0]->operations_number }}</span>
 
+                                <div class="col-12">
+                                    <h2 class="d-flex align-items-center justify-content-center mb-0 cant-trader">
+                                        {{ $portafoliosArray[0]->operations_number }} </h2>
+                                        @php
+                                        $monedas = 'eurusd,gbpusd,audusd,nzdusd,usdcad,usdchf,usdjpy,eurgbp,euraud,eurnzd,gbpaud,gbpnzd,audnzd,eurcad,eurchf,eurjpy,gbpcad,gbpchf,gbpjpy,audcad,audchf,audjpy,nzdcad,nzdchf,nzdjpy,cadchf,cadjpy,chfjpy';
+                                    @endphp
+                                    @foreach (explode(',', $monedas) as $moneda)
+                                        @if ($portafoliosArray[0]->$moneda != 0)
+                                        <h2 class="d-flex align-items-center justify-content-center mb-0 cant-trader">
+                                      
+                                            <div class="dropdown ">
+                                                <button class="btn btn-info dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    Mostrar
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a class="dropdown-item"
+                                                            href="#"><b>{{ strtoupper($moneda) }}: </b>$
+                                                            {{ $portafoliosArray[0]->$moneda }}</a></li>
+                                        @endif
+                                    @endforeach
+                                    </ul>
+                                </h2>
 
+                                 
                                 </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                @php
+                    $status = $portafoliosArray[0]->status;
+                @endphp
+
+                <div class="col-xl-3">
+                    <div class="card l-bg-status shadow">
+                        <div class="card-statistic-3 p-3">
+                            @if (0 == 0)
+                                <div class="card-icon card-icon-large">
+                                    <i class="fas fa-arrow-right-arrow-left"></i>
+                                </div>
+                            @elseif(0 < 0)
+                                <div class="card-icon card-icon-large">
+                                    <i class="fas fa-arrow-trend-down"></i>
+                                </div>
+                            @elseif(0 > 0)
+                                <div class="card-icon card-icon-large">
+                                    <i class="fas fa-arrow-trend-up"></i>
+                                </div>
+                            @endif
+                            <div class="title-stats text-center">
+                                <h5 class="card-title text-light pt-0 pb-0">Status</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h2 class="d-flex align-items-center justify-content-center mb-0 cant-trader">
+                                        @if ($status == '')
+                                            Sin status
+                                        @else
+                                            {{ $portafoliosArray[0]->status }}
+
+                                    </h2>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
     @endif
+
+
+    </div>
+    </div>
+    </div>
+@endif
 @endforeach

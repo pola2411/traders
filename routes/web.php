@@ -255,6 +255,7 @@ Route::post('/admin/addPortafolioGraph', [App\Http\Controllers\PortafolioControl
 //Gráfico portafolios rectangulares
 Route::get('/admin/portafolioGraph', [App\Http\Controllers\PortafoliosGraphController::class, 'index'])->middleware('auth');
 Route::get('/admin/getPortafolioGraph', [App\Http\Controllers\PortafoliosGraphController::class, 'getPortafolioGraph'])->middleware('auth');
+Route::get('/admin/getDataGraph', [App\Http\Controllers\PortafoliosGraphController::class, 'getDataGraph'])->middleware('auth');
 
 //Gráfico clave inversores
 Route::get('/admin/claveInversor', [App\Http\Controllers\ClaveInversorController::class, 'index'])->middleware('auth');

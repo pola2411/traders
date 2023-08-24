@@ -19,12 +19,22 @@ class PortafoliosGraphController extends Controller
 
     public function getPortafolioGraph(Request $request)
     {
-        
         $chartData = DB::table('portafolios')
             ->where('value', $request->portafolioGraph)
-            // ->whereBetween('time', [$request->inicio, $request->fin])
             ->get();
+         
+          return response(['chartData' => $chartData]);
 
-        return response(['chartData' => $chartData]);
     }
+
+    public function getDataGraph(Request $request)
+    {
+        $chartData2 = DB::table('comportamiento_portafolio')
+        ->where('value', $request->portafolioGraph)
+        ->get();
+
+        return response(['chartData2' => $chartData2]);
+
+    }
+
 }

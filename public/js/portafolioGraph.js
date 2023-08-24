@@ -62,7 +62,7 @@ am5.ready(function () {
             highValueYGrouped: "high",
             openValueYGrouped: "open",
             valueYGrouped: "close",
-          
+
             tooltip: am5.Tooltip.new(root, {
                 pointerOrientation: "horizontal",
                 labelText:
@@ -70,8 +70,6 @@ am5.ready(function () {
             }),
         })
     );
-
- 
 
     // Add cursor
     // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
@@ -189,10 +187,12 @@ am5.ready(function () {
 
     $("#fechaDesdeInput").val(inicio_semana);
     $("#fechaHastaInput").val(fin_semana);
+    $("#card-data").hide();
+    $("#card-money").hide();
 
     function setData(portafolioGraph) {
         $.get({
-            url: "/admin/getPortafolioGraph", 
+            url: "/admin/getPortafolioGraph",
             data: {
                 // inicio: inicio,
                 // fin: fin,
@@ -229,6 +229,82 @@ am5.ready(function () {
         });
     }
 
+    function setDataGraph(portafolioGraph) {
+        $.get({
+            url: "/admin/getDataGraph",
+            data: {
+                // inicio: inicio,
+                // fin: fin,
+                portafolioGraph: portafolioGraph,
+            },
+            success: function (response) {
+                var chartData2 = [];
+
+                response.chartData2.map(function (item) {
+                    chartData2.push({
+                        risk: item.risk,
+                        profit: item.profit,
+                        ratio: item.ratio,
+                        margin: item.margin,
+                        profit_wanted: item.profit_wanted,
+                        capitalized_moment: item.capitalized_moment,
+                        capitalized_total: item.capitalized_total,
+                        status : item.status,
+                    });
+                });
+
+                if (response.chartData2.length == 0) {
+                    $("#card-data").hide();
+                    $("#card-money").hide();
+                }
+
+                if (response.chartData2.length != 0) {
+                    $("#card-data").show();
+                    $("#card-money").show();
+                    $(".risk").text(
+                        "$ " +
+                            chartData2[0].risk.toLocaleString("en-US", {
+                                maximumFractionDigits: 2,
+                            })
+                    );
+                    $(".profit").text("$ " + chartData2[0].profit.toLocaleString("en-US", {
+                        maximumFractionDigits: 2,
+                    }));
+                    $(".ratio").text("$ " + chartData2[0].ratio.toLocaleString("en-US", {
+                        maximumFractionDigits: 2,
+                    }));
+                    $(".margin").text("$ " + chartData2[0].margin.toLocaleString("en-US", {
+                        maximumFractionDigits: 2,
+                    }));
+
+                    $(".profit_wanted").text(
+                        "$ " + chartData2[0].profit_wanted.toLocaleString("en-US", {
+                            maximumFractionDigits: 2,
+                        })
+                    );
+                    $(".capitalized_moment").text(
+                        "$ " + chartData2[0].capitalized_moment.toLocaleString("en-US", {
+                            maximumFractionDigits: 2,
+                        })
+                    );
+                    $(".capitalized_total").text(
+                        "$ " + chartData2[0].capitalized_total.toLocaleString("en-US", {
+                            maximumFractionDigits: 2,
+                        })
+                    );
+                    $(".status").text(
+                        chartData2[0].status
+                    );
+
+
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
     $(document).on("click", "#obtenerRegistros", () => {
         // let fecha_inicio = $("#fechaDesdeInput").val();
         // let fecha_fin = $("#fechaHastaInput").val();
@@ -248,7 +324,9 @@ am5.ready(function () {
         //             confirmButtonColor: "#01bbcc",
         //         });
         //     } else {
-                setData(portafolioGraph);
+        setData(portafolioGraph);
+        setDataGraph(portafolioGraph);
+
         //     }
         // } else {
         //     Swal.fire({
