@@ -318,6 +318,7 @@ $(document).ready(function () {
                     $("#tbody").append(`
                         <tr>
                             <td>${item.asset}</td>
+                            <td>${item.pair}</td>
                             <td>${buy_sell}</td>
                             <td>${item.lotaje}</td>
                             <td>${item.swap}</td>

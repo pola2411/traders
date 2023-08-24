@@ -63,6 +63,7 @@
                         <thead class="text-center">
                             <tr>
                                 <th data-priority="0" scope="col">Activo</th>
+                                <th data-priority="0" scope="col">Pair</th>
                                 <th data-priority="0" scope="col">Buy/Sell</th>
                                 <th data-priority="0" scope="col">Lotaje</th>
                                 <th data-priority="0" scope="col">Swap</th>
