@@ -15,7 +15,9 @@
     </style>
 @endsection
 
-@section('title') Logs @endsection
+@section('title')
+    Logs
+@endsection
 
 @section('content')
     <div class="pagetitle">
@@ -46,9 +48,26 @@
                                     <label for="fechaFinInput">Hasta:</label>
                                 </div>
                             </div>
+                            <div class="col-md-4 col-12">
+                                <div class="form-floating mb-3 me-3">
+                                    <select class="form-select" aria-label="Default select example" id="cuentaInput">
+                                        <option value="0">Todas</option>
+                                        @php
+                                            $cuentas = DB::table('logs')->get();
+                                           
+                                            foreach ($cuentas as $cuenta) {
+                                                echo '<option value="' . $cuenta->cuenta . '">' . $cuenta->cuenta . '</option>';
+                                            }
+                                        @endphp
+                                    </select>
+                                    <label for="cuentaInput">No. de cuenta:</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="mt-4">
-                            <table class="table table-striped table-bordered nowrap text-center" style="width: 100%; font-size: 14px !important; vertical-align: middle !important;" id="logs">
+                            <table class="table table-striped table-bordered nowrap text-center"
+                                style="width: 100%; font-size: 14px !important; vertical-align: middle !important;"
+                                id="logs">
                                 <thead style="vertical-align: middle !important;">
                                     <tr>
                                         <th data-priority="0" scope="col">Fecha</th>
@@ -84,7 +103,7 @@
         <div class="copyright" id="copyright">
         </div>
         <div class="credits">
-            Todos los derechos reservados            
+            Todos los derechos reservados
         </div>
     </footer>
 @endsection

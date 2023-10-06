@@ -8,9 +8,10 @@ $(document).ready(function () {
     const tablaResumen = (url) => {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
+        let cuenta = $("#cuentaInput").val();
 
         table = $("#logs").DataTable({
-            ajax: `${url}?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`,
+            ajax: `${url}?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&cuenta=${cuenta}`,
             data: {
                 fecha_inicio: fecha_inicio,
                 fecha_fin: fecha_fin,
@@ -235,7 +236,7 @@ $(document).ready(function () {
 
     tablaResumen(url);
 
-    $(document).on("change", "#fechaInicioInput, #fechaFinInput", function (e) {
+    $(document).on("change", "#fechaInicioInput, #fechaFinInput, #cuentaInput",  function (e) {
         e.preventDefault();
         let url = "/admin/logsShowFiltro";
         table.destroy();
