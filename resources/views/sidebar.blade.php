@@ -147,6 +147,15 @@
                 @endforeach
             </ul>
         </li>
+
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/liveData')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/liveData') }}">
+                <i class="bi bi-activity"></i>
+                <span>Live Data</span>
+            </a>
+        </li>
+
         
          <li class="nav-item">
             <a class="@if (request()->is('/admin/statusRobot')) nav-link @else nav-link collapsed @endif"
