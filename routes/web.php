@@ -273,3 +273,53 @@ Route::get('/admin/analisis-portafolios', [App\Http\Controllers\AnalisisPortafol
 Route::get('/admin/showAnalisisPortafolio', [App\Http\Controllers\AnalisisPortafolioController::class, 'getAnalisisPortafolio'])->middleware('auth');
 Route::get('/admin/showAnalisis', [App\Http\Controllers\AnalisisPortafolioController::class, 'getAnalisis'])->middleware('auth');
 Route::get('/admin/showAnalisisGrafica', [App\Http\Controllers\AnalisisPortafolioController::class, 'getAnalisisGrafica'])->middleware('auth');
+
+//Money route
+Route::get('/admin/moneyRoute', [App\Http\Controllers\MoneyRouteController::class, 'index'])->middleware('auth');
+Route::get('/admin/getMoney', [App\Http\Controllers\MoneyRouteController::class, 'getMoney'])->middleware('auth');
+Route::get('/admin/getMoneyRoute', [App\Http\Controllers\MoneyRouteController::class, 'getMoneyRoute'])->middleware('auth');
+Route::get('/admin/getMoneyLast', [App\Http\Controllers\MoneyRouteController::class, 'getMoneyLast'])->middleware('auth');
+
+//Robots status
+Route::get('/admin/statusRobot', [App\Http\Controllers\RobotsController::class, 'index'])->name('statusRobot')->middleware('auth');
+Route::get('/admin/showStatusRobot', [App\Http\Controllers\RobotsController::class, 'getDatosRobot']);
+Route::get('/admin/botonGral', [App\Http\Controllers\RobotsController::class, 'botonGral'])->middleware('auth');
+Route::get('/admin/botonTime', [App\Http\Controllers\RobotsController::class, 'botonTime'])->middleware('auth');
+Route::get('/admin/eurusd', [App\Http\Controllers\RobotsController::class, 'eurusd'])->middleware('auth');
+Route::get('/admin/gbpusd', [App\Http\Controllers\RobotsController::class, 'gbpusd'])->middleware('auth');
+Route::get('/admin/audusd', [App\Http\Controllers\RobotsController::class, 'audusd'])->middleware('auth');
+Route::get('/admin/nzdusd', [App\Http\Controllers\RobotsController::class, 'nzdusd'])->middleware('auth');
+Route::get('/admin/usdcad', [App\Http\Controllers\RobotsController::class, 'usdcad'])->middleware('auth');
+Route::get('/admin/usdchf', [App\Http\Controllers\RobotsController::class, 'usdchf'])->middleware('auth');
+Route::get('/admin/usdjpy', [App\Http\Controllers\RobotsController::class, 'usdjpy'])->middleware('auth');
+Route::get('/admin/eurgbp', [App\Http\Controllers\RobotsController::class, 'eurgbp'])->middleware('auth');
+Route::get('/admin/euraud', [App\Http\Controllers\RobotsController::class, 'euraud'])->middleware('auth');
+Route::get('/admin/eurnzd', [App\Http\Controllers\RobotsController::class, 'eurnzd'])->middleware('auth');
+Route::get('/admin/gbpaud', [App\Http\Controllers\RobotsController::class, 'gbpaud'])->middleware('auth');
+Route::get('/admin/gbpnzd', [App\Http\Controllers\RobotsController::class, 'gbpnzd'])->middleware('auth');
+Route::get('/admin/audnzd', [App\Http\Controllers\RobotsController::class, 'audnzd'])->middleware('auth');
+Route::get('/admin/eurcad', [App\Http\Controllers\RobotsController::class, 'eurcad'])->middleware('auth');
+Route::get('/admin/eurchf', [App\Http\Controllers\RobotsController::class, 'eurchf'])->middleware('auth');
+Route::get('/admin/eurjpy', [App\Http\Controllers\RobotsController::class, 'eurjpy'])->middleware('auth');
+Route::get('/admin/gbpcad', [App\Http\Controllers\RobotsController::class, 'gbpcad'])->middleware('auth');
+Route::get('/admin/gbpchf', [App\Http\Controllers\RobotsController::class, 'gbpchf'])->middleware('auth');
+Route::get('/admin/audcad', [App\Http\Controllers\RobotsController::class, 'audcad'])->middleware('auth');
+Route::get('/admin/audchf', [App\Http\Controllers\RobotsController::class, 'audchf'])->middleware('auth');
+Route::get('/admin/audjpy', [App\Http\Controllers\RobotsController::class, 'audjpy'])->middleware('auth');
+Route::get('/admin/nzdcad', [App\Http\Controllers\RobotsController::class, 'nzdcad'])->middleware('auth');
+Route::get('/admin/nzdchf', [App\Http\Controllers\RobotsController::class, 'nzdchf'])->middleware('auth');
+Route::get('/admin/nzdjpy', [App\Http\Controllers\RobotsController::class, 'nzdjpy'])->middleware('auth');
+Route::get('/admin/cadchf', [App\Http\Controllers\RobotsController::class, 'cadchf'])->middleware('auth');
+Route::get('/admin/cadjpy', [App\Http\Controllers\RobotsController::class, 'cadjpy'])->middleware('auth');
+Route::get('/admin/chfjpy', [App\Http\Controllers\RobotsController::class, 'chfjpy'])->middleware('auth');
+Route::get('/admin/offusd', [App\Http\Controllers\RobotsController::class, 'offusd'])->middleware('auth');
+Route::get('/admin/offeur', [App\Http\Controllers\RobotsController::class, 'offeur'])->middleware('auth');
+Route::get('/admin/offgbp', [App\Http\Controllers\RobotsController::class, 'offgbp'])->middleware('auth');
+Route::get('/admin/offaud', [App\Http\Controllers\RobotsController::class, 'offaud'])->middleware('auth');
+Route::get('/admin/offnzd', [App\Http\Controllers\RobotsController::class, 'offnzd'])->middleware('auth');
+Route::get('/admin/offcad', [App\Http\Controllers\RobotsController::class, 'offcad'])->middleware('auth');
+Route::get('/admin/offchf', [App\Http\Controllers\RobotsController::class, 'offchf'])->middleware('auth');
+Route::get('/admin/offjpy', [App\Http\Controllers\RobotsController::class, 'offjpy'])->middleware('auth');
+
+//Zig-Zag
+Route::get('/admin/analysis/{id}', [App\Http\Controllers\ZigZagController::class, 'index'])->name('zigzag')->middleware('auth');

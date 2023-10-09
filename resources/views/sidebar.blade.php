@@ -126,6 +126,21 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#analysis-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-card-image"></i><span>Analysis</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="analysis-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @foreach ($valores_moneda as $moneda)
+                    <li>
+                        <a class="ps-2" href="/admin/analysis/{{ $moneda }}">
+                            <i class="bi bi-circle"></i><span>{{ $moneda }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#equitybalance-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-bar-chart-line"></i><span>Equity/Balance</span><i
                     class="bi bi-chevron-down ms-auto"></i>
