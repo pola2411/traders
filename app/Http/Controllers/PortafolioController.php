@@ -27,7 +27,7 @@ class PortafolioController extends Controller
     {
         
         $portafolio = DB::table('grafica_portafolios')
-            ->select('valor', 'rendimiento')
+            ->select('valor', 'rendimiento', 'time')
             ->where('portafolio', $request->portafolio)
             // ->whereBetween('time', [$request->inicio, $request->fin])
             ->get();

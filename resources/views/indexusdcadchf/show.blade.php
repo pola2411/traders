@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3 col-12">
-                                <button class="btn btn-primary mb-3">Generar informaci贸n</button>
+                                <button class="btn btn-primary mb-3">Generar información</button>
                             </div>
                         </form>
                         <div id="indexUSDCADCHF"></div>

@@ -90,7 +90,7 @@
                             </div>
                             <div class="card border-danger mb-3" style="max-width: 10rem;">
                                 <div class="card-header text-info">Status</div>
-                                <div class="card-body ">
+                                <div class="card-body">
 
                                     <p class="card-text status"></p>
                                 </div>
@@ -122,14 +122,14 @@
                                 </div>
                             </div>
 
-                   
 
+
+
+                        </div>
 
                     </div>
-
                 </div>
             </div>
-        </div>
         </div>
         </div>
     </section>

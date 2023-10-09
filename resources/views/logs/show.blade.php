@@ -53,7 +53,7 @@
                                     <select class="form-select" aria-label="Default select example" id="cuentaInput">
                                         <option value="0">Todas</option>
                                         @php
-                                            $cuentas = DB::table('logs')->get();
+                                            $cuentas = DB::table('logs')->select('cuenta')->groupBy('cuenta')->distinct('cuenta')->get();
                                            
                                             foreach ($cuentas as $cuenta) {
                                                 echo '<option value="' . $cuenta->cuenta . '">' . $cuenta->cuenta . '</option>';
