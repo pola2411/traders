@@ -23,7 +23,7 @@ class LiveDataController extends Controller
     public function showLiveData()
     {
 
-        $liveData = DB::table('live')->select()->where('spectrum','!=', 0)->orderBy('time', 'DESC')->get();
+        $liveData = DB::table('live')->select()->where('spectrum','!=', 0)->orderBy('id', 'ASC')->get();
 
 
         return datatables()->of($liveData)

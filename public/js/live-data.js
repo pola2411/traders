@@ -55,6 +55,7 @@ $(document).ready(function () {
                     next: ">",
                     previous: "<",
                 },
+
                 aria: {
                     sortAscending:
                         ": Activar para ordenar la columna de manera ascendente",
@@ -224,11 +225,16 @@ $(document).ready(function () {
                 [28, 30, "Todo"],
             ],
             pageLength: 28,
-            order: [[0, "asc"]],
+            aaSorting: [],
         });
     };
 
     tablaResumen(url);
+
+    setInterval(function () {
+        table.destroy(); 
+        tablaResumen(url); 
+    }, 60000);
 
     // $(document).on("change", "#fechaInicioInput, #fechaFinInput",  function (e) {
     //     e.preventDefault();
