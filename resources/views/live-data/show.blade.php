@@ -36,6 +36,12 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <div class="row">
+
+                            <div class="text-center" id="prueba">
+
+                            </div>
+                            
+
                             {{-- <div class="col-md-4 col-12">
                                 <div class="form-floating mb-3 me-3">
                                     <input type="datetime-local" class="form-control" id="fechaInicioInput" required>

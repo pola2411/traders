@@ -232,9 +232,35 @@ $(document).ready(function () {
     tablaResumen(url);
 
     setInterval(function () {
-        table.destroy(); 
-        tablaResumen(url); 
+      
     }, 60000);
+
+    // $.ajax({
+    //     type: "GET",
+    //     url: "/admin/getVidaData",
+    //     success: function (response) {
+    //         $("#live-data").empty();
+    //         $("#live-data").html(response);
+    //     },
+    //     error: function (response) {
+    //         console.log(response);
+    //     },
+    // });
+
+    setInterval(function () {
+        $.ajax({
+            type: "GET",
+            url: "/admin/getVidaData",
+            success: function (response) {
+                $("#prueba").empty();
+                $("#prueba").html(response);
+                
+            },
+            error: function (response) {
+                console.log(response);
+            },
+        });
+    }, 1000);
 
     // $(document).on("change", "#fechaInicioInput, #fechaFinInput",  function (e) {
     //     e.preventDefault();

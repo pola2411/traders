@@ -329,3 +329,4 @@ Route::get('/admin/showLive', [App\Http\Controllers\ZigZagController::class, 'ge
 Route::get('/admin/liveData', [App\Http\Controllers\LiveDataController::class, 'index'])->name('livedata')->middleware('auth');
 Route::get('/admin/showliveData', [App\Http\Controllers\LiveDataController::class, 'showLiveData'])->name('livedata')->middleware('auth');
 Route::get('/admin/showLiveDataFiltro', [App\Http\Controllers\LiveDataController::class, 'showLiveDataFiltro'])->name('livedata')->middleware('auth');
+Route::get('/admin/getVidaData', [App\Http\Controllers\LiveDataController::class, 'getVidaData'])->name('livedata')->middleware('auth');

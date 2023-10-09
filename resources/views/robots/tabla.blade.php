@@ -35,6 +35,8 @@ $lastid = DB::table('robots')->latest('id')->first();
 
             <tr>
                 <th>No. de Cuenta</th>
+                <th>Magic No. Start</th>
+                <th>Magic No. Finish</th>
                 <th>Encendido General</th>
                 <th>Encendido en Tiempo</th>
                 <th>EURUSD</th>
@@ -70,6 +72,8 @@ $lastid = DB::table('robots')->latest('id')->first();
         <tbody>
             <tr>
                 <td>{{ $robots_status[0]->no_account }}</td>
+                <td>{{ $robots_status[0]->magicnumber_start }}</td>
+                <td>{{ $robots_status[0]->magicnumber_finish }}</td>
                 <td>
                     @if ($robots_status[0]->on_general == 0)
                     <button type="button" class="btn btn-danger" id="Ongral" data-id="{{$robots_status[0]->id}}">{{ $robots_status[0]->on_general }}</button>

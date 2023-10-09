@@ -32,6 +32,17 @@ class LiveDataController extends Controller
             ->rawColumns(['strategybuy','strategysell'])->toJson();
     }
 
+    public function getVidaData()
+    {
+        $liveData = DB::table('live')->select()->where('spectrum','!=', 0)->orderBy('id', 'ASC')->get();
+
+        $data = array(
+            "liveData" => $liveData,
+        );
+
+        return response()->view('live-data.pruebavida', $data, 200);
+    }
+
     // public function showLiveDataFiltro(Request $request)
     // {
     //     $fechaInicio = $request->fecha_inicio;
