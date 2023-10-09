@@ -1,5 +1,4 @@
 $(document).ready(function () {
-   
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -64,7 +63,11 @@ $(document).ready(function () {
             success: function (response) {
                 var dps = [];
                 response.portafolio.map(function (port) {
-                    dps.push({ x: port.valor, y: port.rendimiento });
+                    dps.push({
+                        x: port.valor,
+                        y: port.rendimiento,
+                       time: port.time
+                    });
                 });
 
                 if (dps.length == 0) {
@@ -83,6 +86,14 @@ $(document).ready(function () {
                         title: {
                             text: "",
                         },
+                        legend: {
+                            horizontalAlign: "center",
+                            verticalAlign: "top",
+                        },
+                        tooltip: {
+                            enabled: true,
+                          
+                        },
                         axisX: {
                             labelFontSize: 14,
                         },
@@ -93,10 +104,13 @@ $(document).ready(function () {
                             {
                                 type: "spline", //change it to line, area, bar, pie, etc
                                 dataPoints: dps,
+                                toolTipContent: "<b>Mi Leyenda Personalizada:</b> Time {time} <br> X: {x} <br> Y: {y}  " // Leyenda personalizada para el tooltip
+
                             },
                         ],
                     };
-                    $("#chartContainer").CanvasJSChart(options);
+                    var chart = new CanvasJS.Chart("chartContainer", options);
+                    chart.render();
                 }
             },
             error: function (error) {
@@ -124,9 +138,9 @@ $(document).ready(function () {
         //             confirmButtonColor: "#01bbcc",
         //         });
         //     } else {
-                // setData(fecha_inicio, fecha_fin, portafolio);
-                setData(portafolio);
-            // }
+        // setData(fecha_inicio, fecha_fin, portafolio);
+        setData(portafolio);
+        // }
         // } else {
         //     Swal.fire({
         //         icon: "warning",
@@ -187,14 +201,12 @@ $(document).ready(function () {
     //     });
     // });
 
-
     // $(document).on("click", ".new", function (e) {
     //     $("#alertMessage").text("");
     //     acc = "new";
     //     $("#portafolioGraphForm")[0].reset();
     //     $("#portafolioGraphForm").attr("action", "/admin/addPortafolioGraph");
     //     $("#idInput").val("");
-
 
     //     $("#modalTitle").text("Solicitud de clave inversor");
     //     $("#btnSubmit").text("Enviar Solicitud");
@@ -206,7 +218,7 @@ $(document).ready(function () {
     // var table = $("#portafolioDots").DataTable({
     //     ajax: "/admin/getPortafolioDots",
     //     columns: [
-        
+
     //         { data: "valor" },
     //         { data: "rendimiento" },
     //         { data: "time" },

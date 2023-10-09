@@ -324,3 +324,8 @@ Route::get('/admin/offjpy', [App\Http\Controllers\RobotsController::class, 'offj
 //Zig-Zag
 Route::get('/admin/analysis/{id}', [App\Http\Controllers\ZigZagController::class, 'index'])->name('zigzag')->middleware('auth');
 Route::get('/admin/showLive', [App\Http\Controllers\ZigZagController::class, 'getLive'])->middleware('auth');
+
+//Live
+Route::get('/admin/liveData', [App\Http\Controllers\LiveDataController::class, 'index'])->name('livedata')->middleware('auth');
+Route::get('/admin/showliveData', [App\Http\Controllers\LiveDataController::class, 'showLiveData'])->name('livedata')->middleware('auth');
+Route::get('/admin/showLiveDataFiltro', [App\Http\Controllers\LiveDataController::class, 'showLiveDataFiltro'])->name('livedata')->middleware('auth');

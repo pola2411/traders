@@ -27,8 +27,13 @@ class LogsController extends Controller
     {
         $fechaInicio = $request->fecha_inicio;
         $fechaFin = $request->fecha_fin;
+        $cuenta = $request->cuenta;
 
-        $logs = DB::table('logs')->select()->whereBetween('fecha', [$fechaInicio, $fechaFin])->orderBy('fecha', 'DESC')->get();
+        if ($cuenta == 0) {
+            $logs = DB::table('logs')->select()->whereBetween('fecha', [$fechaInicio, $fechaFin])->orderBy('fecha', 'DESC')->get();
+        } else
+        $logs = DB::table('logs')->select()->where('cuenta', $cuenta)->whereBetween('fecha', [$fechaInicio, $fechaFin])->orderBy('fecha', 'DESC')->get();
+    
 
         return datatables()->of($logs)->addColumn('fecha', 'logs.fecha')->rawColumns(['hora'])->toJson();
     }

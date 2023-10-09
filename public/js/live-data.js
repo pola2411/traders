@@ -3,47 +3,41 @@ $(document).ready(function () {
     let hoy = moment().format("YYYY-MM-DD");
     $("#fechaInicioInput").val(`${hoy_temprano} 00:00:00`);
     $("#fechaFinInput").val(`${hoy} 23:59:59`);
-    let url = "/admin/logsShow";
+    let url = "/admin/showliveData";
 
     const tablaResumen = (url) => {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
         let cuenta = $("#cuentaInput").val();
 
-        table = $("#logs").DataTable({
-            ajax: `${url}?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&cuenta=${cuenta}`,
+        table = $("#live-data").DataTable({
+            ajax: `${url}?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`,
             data: {
                 fecha_inicio: fecha_inicio,
                 fecha_fin: fecha_fin,
             },
             columns: [
-                { data: "fecha" },
-                { data: "terminal" },
-                { data: "cuenta" },
-                { data: "robot" },
-                { data: "clave" },
-                { data: "mensaje" },
+                { data: "pair" },
+                { data: "spectrum" },
+                { data: "conditionbuy" },
+                { data: "strategybuy" },
+                { data: "actionbuy" },
+                { data: "operationsbuy" },
+                { data: "checksitebuy" },
+                { data: "slbuy" },
+                { data: "tpbuy" },
+                { data: "slbuyprice" },
+                { data: "tpbuyprice" },
+                { data: "conditionsell" },
+                { data: "strategysell" },
+                { data: "actionsell" },
+                { data: "operationssell" },
+                { data: "checksitesell" },
+                { data: "slsell" },
+                { data: "tpsell" },
+                { data: "slsellprice" },
+                { data: "tpsellprice" },
             ],
-            responsive: {
-                breakpoints: [
-                    {
-                        name: "desktop",
-                        width: Infinity,
-                    },
-                    {
-                        name: "tablet",
-                        width: 1024,
-                    },
-                    {
-                        name: "fablet",
-                        width: 768,
-                    },
-                    {
-                        name: "phone",
-                        width: 480,
-                    },
-                ],
-            },
             language: {
                 processing: "Procesando...",
                 lengthMenu: "Mostrar _MENU_ cambios",
@@ -61,6 +55,7 @@ $(document).ready(function () {
                     next: ">",
                     previous: "<",
                 },
+
                 aria: {
                     sortAscending:
                         ": Activar para ordenar la columna de manera ascendente",
@@ -226,20 +221,25 @@ $(document).ready(function () {
                 info: "Mostrando de _START_ a _END_ de _TOTAL_ cambios",
             },
             lengthMenu: [
-                [5, 10, 15, 20, 25, 30, -1],
-                [5, 10, 15, 20, 25, 30, "Todo"],
+                [28, 30, -1],
+                [28, 30, "Todo"],
             ],
-            pageLength: 5,
-            order: [[0, "asc"]],
+            pageLength: 28,
+            aaSorting: [],
         });
     };
 
     tablaResumen(url);
 
-    $(document).on("change", "#fechaInicioInput, #fechaFinInput, #cuentaInput",  function (e) {
-        e.preventDefault();
-        let url = "/admin/logsShowFiltro";
-        table.destroy();
-        tablaResumen(url);
-    });
+    setInterval(function () {
+        table.destroy(); 
+        tablaResumen(url); 
+    }, 60000);
+
+    // $(document).on("change", "#fechaInicioInput, #fechaFinInput",  function (e) {
+    //     e.preventDefault();
+    //     let url = "/admin/showLiveDataFiltro";
+    //     table.destroy();
+    //     tablaResumen(url);
+    // });
 });

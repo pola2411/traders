@@ -116,6 +116,14 @@
             </a>
         </li>
         
+             <li>
+            <a class="@if (request()->is('/admin/moneyRoute')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/moneyRoute') }}">
+                 <i class="bi bi-coin"></i>
+                <span>Ruta de Monedas</span>
+            </a>
+        </li>
+
         
         <li class="nav-item">
             <a class="@if (request()->is('/admin/fundamentales')) nav-link @else nav-link collapsed @endif"
@@ -124,7 +132,7 @@
                 <span>Fundamentales</span>
             </a>
         </li>
-
+        
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#analysis-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-card-image"></i><span>Analysis</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -138,6 +146,23 @@
                     </li>
                 @endforeach
             </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="@if (request()->is('/admin/liveData')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/liveData') }}">
+                <i class="bi bi-activity"></i>
+                <span>Live Data</span>
+            </a>
+        </li>
+
+        
+         <li class="nav-item">
+            <a class="@if (request()->is('/admin/statusRobot')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/statusRobot') }}">
+                <i class="bi bi-robot"></i>
+                <span>Status Robots</span>
+            </a>
         </li>
 
         <li class="nav-item">
