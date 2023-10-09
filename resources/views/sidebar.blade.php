@@ -103,7 +103,7 @@
         <li>
             <a class="@if (request()->is('/admin/portafolioGraph')) nav-link @else nav-link collapsed @endif"
                 href="{{ url('/admin/portafolioGraph') }}">
-                <i class="bi bi-distribute-horizontal"></i>
+               <i class="bi bi-distribute-horizontal"></i>
                 <span>Gráfica Portafolios</span>
             </a>
         </li>
@@ -115,16 +115,16 @@
                 <span>Análisis de portafolios</span>
             </a>
         </li>
-
-        <li>
+        
+             <li>
             <a class="@if (request()->is('/admin/moneyRoute')) nav-link @else nav-link collapsed @endif"
                 href="{{ url('/admin/moneyRoute') }}">
-                <i class="bi bi-coin"></i>
+                 <i class="bi bi-coin"></i>
                 <span>Ruta de Monedas</span>
             </a>
         </li>
 
-
+        
         <li class="nav-item">
             <a class="@if (request()->is('/admin/fundamentales')) nav-link @else nav-link collapsed @endif"
                 href="{{ url('/admin/fundamentales') }}">
@@ -132,8 +132,23 @@
                 <span>Fundamentales</span>
             </a>
         </li>
-
+        
         <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#analysis-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-card-image"></i><span>Analysis</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="analysis-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @foreach ($valores_moneda as $moneda)
+                    <li>
+                        <a class="ps-2" href="/admin/analysis/{{ $moneda }}">
+                            <i class="bi bi-circle"></i><span>{{ $moneda }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </li>
+        
+         <li class="nav-item">
             <a class="@if (request()->is('/admin/statusRobot')) nav-link @else nav-link collapsed @endif"
                 href="{{ url('/admin/statusRobot') }}">
                 <i class="bi bi-robot"></i>
@@ -156,8 +171,8 @@
                 @endforeach
             </ul>
         </li>
-
-
+        
+        
 
         <li class="nav-item">
 
@@ -244,11 +259,11 @@
             </a>
         </li> --}}
 
+      
 
+         
 
-
-
-
+             
         <li class="nav-item">
 
             <a class="nav-link collapsed" data-bs-target="#botones" data-bs-toggle="collapse" href="#">
@@ -256,17 +271,17 @@
             </a>
 
             <ul id="botones" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
-                    <a class="@if (request()->is('/admin/botones')) nav-link @else nav-link collapsed @endif"
-                        href="{{ url('/admin/botones') }}">
-                        <i class="bi bi-circle"></i>
-                        <span>Equity</span>
-                    </a>
-
-                </li>
+            <li>
+                <a class="@if (request()->is('/admin/botones')) nav-link @else nav-link collapsed @endif"
+                    href="{{ url('/admin/botones') }}">
+                    <i class="bi bi-circle"></i>
+                    <span>Equity</span>
+                </a>
+          
+            </li>
             </ul>
 
-
+          
         </li>
 
         <li class="nav-item">
@@ -280,7 +295,7 @@
         <li class="nav-item">
             <a class="@if (request()->is('/admin/indexUSD')) nav-link @else nav-link collapsed @endif"
                 href="{{ url('/admin/indexUSD') }}">
-                <i class="bi bi-cone-striped"></i>
+            <i class="bi bi-cone-striped"></i>
                 <span>Index USD BETA</span>
             </a>
         </li>
@@ -303,7 +318,7 @@
 
 
 
-
+      
         {{-- }}
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
@@ -325,8 +340,7 @@
 
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse"
-                href="#">
+            <a class="nav-link collapsed" data-bs-target="#tradersdata-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-table"></i><span>Traders Data Cierre</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="tradersdata-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
@@ -335,8 +349,7 @@
                         <li>
                             <a class="ps-2" href="/admin/traders-data/{{ $trader->id }}">
                                 <i class="bi bi-circle"></i><span>Trader {{ $trader->id }}
-                                    ({{ $trader->Signal }})
-                                </span>
+                                    ({{ $trader->Signal }})</span>
                             </a>
                         </li>
                     @endif
@@ -345,7 +358,7 @@
         </li>
 
 
-
+   
 
         <li class="nav-item">
             <a class="@if (request()->is('/admin/market')) nav-link @else nav-link collapsed @endif"
@@ -353,11 +366,11 @@
                 <i class="bi bi-graph-down"></i>
                 <span>Gráfica Market</span>
             </a>
-        </li>
+        </li>  
+             
+    
 
-
-
-
+     
 
         {{--
         <li class="nav-item">
