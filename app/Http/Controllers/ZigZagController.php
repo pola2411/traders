@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Zigzag;
+use App\Models\Live;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,5 +24,16 @@ class ZigZagController extends Controller
         }else{
             return view('zigzag.show', compact('zigzag', 'par'));
         }
+    }
+
+    public function getLive(Request $request)
+    {
+        $live = Live::select()->where('pair', $request->par)->first();
+
+        $data = array(
+            "live" => $live,
+        );
+
+        return response()->view('zigzag.tabla', $data, 200);
     }
 }
