@@ -330,3 +330,10 @@ Route::get('/admin/liveData', [App\Http\Controllers\LiveDataController::class, '
 Route::get('/admin/showliveData', [App\Http\Controllers\LiveDataController::class, 'showLiveData'])->name('livedata')->middleware('auth');
 Route::get('/admin/showLiveDataFiltro', [App\Http\Controllers\LiveDataController::class, 'showLiveDataFiltro'])->name('livedata')->middleware('auth');
 Route::get('/admin/getVidaData', [App\Http\Controllers\LiveDataController::class, 'getVidaData'])->name('livedata')->middleware('auth');
+Route::get('/admin/botonStatusBuy', [App\Http\Controllers\LiveDataController::class, 'statusBuy'])->middleware('auth');
+Route::get('/admin/botonStatusSell', [App\Http\Controllers\LiveDataController::class, 'statusSell'])->middleware('auth');
+Route::get('/admin/showClaveLive', [App\Http\Controllers\LiveDataController::class, 'getClave']);
+
+//Payment
+Route::post('/admin/procesar-pago', [App\Http\Controllers\PaymentController::class, 'processPayment'])->name('procesar-pago')->middleware('auth');
+Route::get('/admin/paySquare', [App\Http\Controllers\PaymentController::class, 'index'])->name('paySquare')->middleware('auth');

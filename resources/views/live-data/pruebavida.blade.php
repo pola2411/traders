@@ -1,3 +1,4 @@
+
 @php
     $last_general = DB::table('live')
         ->where('id', '=', 101)

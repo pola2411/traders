@@ -17,6 +17,8 @@ $(document).ready(function () {
                 fecha_fin: fecha_fin,
             },
             columns: [
+                // { data: "time" },
+                { data: "status_buy" },
                 { data: "pair" },
                 { data: "spectrum" },
                 { data: "conditionbuy" },
@@ -37,6 +39,7 @@ $(document).ready(function () {
                 { data: "tpsell" },
                 { data: "slsellprice" },
                 { data: "tpsellprice" },
+                { data: "status_sell" },
             ],
             language: {
                 processing: "Procesando...",
@@ -232,40 +235,183 @@ $(document).ready(function () {
     tablaResumen(url);
 
     setInterval(function () {
-      
+        table.destroy(); 
+        tablaResumen(url); 
     }, 60000);
 
-    // $.ajax({
-    //     type: "GET",
-    //     url: "/admin/getVidaData",
-    //     success: function (response) {
-    //         $("#live-data").empty();
-    //         $("#live-data").html(response);
-    //     },
-    //     error: function (response) {
-    //         console.log(response);
-    //     },
-    // });
 
-    setInterval(function () {
-        $.ajax({
-            type: "GET",
-            url: "/admin/getVidaData",
-            success: function (response) {
-                $("#prueba").empty();
-                $("#prueba").html(response);
-                
-            },
-            error: function (response) {
-                console.log(response);
+    $(document).on("click", "#status_buy", function (e) {
+        e.preventDefault();
+    
+        let input = this;
+        let id = $(this).data("id");
+    
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
             },
         });
-    }, 1000);
+        Swal.fire({
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus</p>',
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+            cancelButtonColor: "#01bbcc",
+            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+            confirmButtonColor: "#198754",
+            input: "password",
+            showLoaderOnConfirm: true,
+            preConfirm: (clave) => {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/showClaveLive",
+                    data: {
+                        clave: clave,
+                        id: id,
+                        campo: "status_buy",
+                    },
+                    success: function (result) {
+                        if (result == "success") {
+                            $.get(
+                                "/admin/botonStatusBuy",
+                                {
+                                    id: id,
+                                    campo: "status_buy",
+                                },
+                                function (response) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Estatus actualizado",
+                                    });
+                                    table.destroy(); 
+                                    tablaResumen(url);
+                                }
+                            );
+                        } else {
+                            estatusClaveIncorrecta(input);
+                            Toast.fire({
+                                icon: "error",
+                                title: "Clave incorrecta",
+                            });
+                        }
+                    },
+                    error: function () {
+                        estatusClaveIncorrecta(input);
+                        Toast.fire({
+                            icon: "error",
+                            title: "Clave incorrecta",
+                        });
+                    },
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                estatusClaveIncorrecta();
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                    html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            }
+        });
+    });
 
-    // $(document).on("change", "#fechaInicioInput, #fechaFinInput",  function (e) {
-    //     e.preventDefault();
-    //     let url = "/admin/showLiveDataFiltro";
-    //     table.destroy();
-    //     tablaResumen(url);
-    // });
+    $(document).on("click", "#status_sell", function (e) {
+        e.preventDefault();
+    
+        let input = this;
+        let id = $(this).data("id");
+    
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+        });
+        Swal.fire({
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus</p>',
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+            cancelButtonColor: "#01bbcc",
+            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+            confirmButtonColor: "#198754",
+            input: "password",
+            showLoaderOnConfirm: true,
+            preConfirm: (clave) => {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/showClaveLive",
+                    data: {
+                        clave: clave,
+                        id: id,
+                        campo: "status_sell",
+                    },
+                    success: function (result) {
+                        if (result == "success") {
+                            $.get(
+                                "/admin/botonStatusSell",
+                                {
+                                    id: id,
+                                    campo: "status_sell",
+                                },
+                                function (response) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Estatus actualizado",
+                                    });
+                                    table.destroy(); 
+                                    tablaResumen(url);
+                                }
+                            );
+                        } else {
+                            estatusClaveIncorrecta(input);
+                            Toast.fire({
+                                icon: "error",
+                                title: "Clave incorrecta",
+                            });
+                        }
+                    },
+                    error: function () {
+                        estatusClaveIncorrecta(input);
+                        Toast.fire({
+                            icon: "error",
+                            title: "Clave incorrecta",
+                        });
+                    },
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                estatusClaveIncorrecta();
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                    html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            }
+        });
+    });
+    
 });

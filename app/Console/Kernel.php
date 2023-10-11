@@ -15,7 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+         //Tareas para Backups de archivos y base de datos y enviar correos.
+         $schedule->command("backup:run")->dailyAt("20:00")->timezone('America/Mexico_City');
+         $schedule->command("backup:clean")->dailyAt("21:00")->timezone('America/Mexico_City');
     }
 
     /**

@@ -76,6 +76,8 @@
                                 id="live-data">
                                 <thead style="vertical-align: middle !important;">
                                     <tr>
+                                        {{-- <th data-priority="0" scope="col">Time</th> --}}
+                                        <th data-priority="0" scope="col">Status Buy</th>
                                         <th data-priority="0" scope="col">Pair</th>
                                         <th data-priority="0" scope="col">Spectrum</th>
                                         <th data-priority="0" scope="col">Condition Buy</th>
@@ -96,6 +98,7 @@
                                         <th data-priority="0" scope="col">TP Sell</th>
                                         <th data-priority="0" scope="col">SL Sell Price</th>
                                         <th data-priority="0" scope="col">TP Sell Price</th>
+                                        <th data-priority="0" scope="col">Status Sell</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -135,5 +138,6 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/es.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('/js/live-data.js') }}"></script>
 @endsection

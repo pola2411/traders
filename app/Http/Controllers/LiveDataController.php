@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Live;
+use App\Models\TablaLog;
 
 
 class LiveDataController extends Controller
@@ -27,9 +29,13 @@ class LiveDataController extends Controller
 
 
         return datatables()->of($liveData)
+            ->addColumn('time', 'live-data.fecha')
             ->addColumn('strategybuy', 'live-data.strategybuy')
             ->addColumn('strategysell', 'live-data.strategysell')
-            ->rawColumns(['strategybuy','strategysell'])->toJson();
+            ->addColumn('status_buy', 'live-data.statusbuy')
+            ->addColumn('status_sell', 'live-data.statussell')
+            ->rawColumns(['time','strategybuy','strategysell', 'status_buy', 'status_sell'])->toJson();
+
     }
 
     public function getVidaData()
@@ -40,7 +46,77 @@ class LiveDataController extends Controller
             "liveData" => $liveData,
         );
 
-        return response()->view('live-data.pruebavida', $data, 200);
+        return response()->view('live-data.fecha', $data, 200);
+    }
+
+    public function statusBuy(Request $request)
+    {
+        $live = Live::find($request->id);
+        
+        if ($request->campo == "status_buy") {
+            if ($live->status_buy == 1) {
+                $live->status_buy = 0;
+               
+            }else{
+                $live->status_buy = 1;
+             
+            }
+         
+        }
+
+        $live->save();
+        
+
+        $live_id = $live->id;
+        $bitacora_id = session('bitacora_id');
+        
+        $log = new TablaLog;
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Live";
+        $log->id_tabla = $live_id;
+        $log->bitacora_id = $bitacora_id;
+        $log->save();
+       
+    }
+
+    public function statusSell(Request $request)
+    {
+        $live = Live::find($request->id);
+        
+        if ($request->campo == "status_sell") {
+            if ($live->status_sell == 1) {
+                $live->status_sell = 0;
+               
+            }else{
+                $live->status_sell = 1;
+             
+            }
+         
+        }
+
+        $live->save();
+        
+
+        $live_id = $live->id;
+        $bitacora_id = session('bitacora_id');
+        
+        $log = new TablaLog;
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Live";
+        $log->id_tabla = $live_id;
+        $log->bitacora_id = $bitacora_id;
+        $log->save();
+       
+    }
+
+    public function getClave(Request $request)
+    {
+        $clave = DB::table('users')->where("id", "=", auth()->user()->id)->first();
+        if (\Hash::check($request->clave, $clave->password)) {                
+            return response("success");
+        }else{
+            return response("error");
+        }
     }
 
     // public function showLiveDataFiltro(Request $request)

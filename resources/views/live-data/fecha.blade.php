@@ -1,1 +1,1 @@
-{{ ucfirst(Carbon\Carbon::parse($time)->formatLocalized('%x %T')) }}
+{{ Carbon\Carbon::parse($time)->diffForHumans() }}

@@ -10,4 +10,6 @@ class Live extends Model
     use HasFactory;
 
     protected $table = "live";
+    public $timestamps = false;
+
 }
