@@ -337,3 +337,31 @@ Route::get('/admin/showClaveLive', [App\Http\Controllers\LiveDataController::cla
 //Payment
 Route::post('/admin/procesar-pago', [App\Http\Controllers\PaymentController::class, 'processPayment'])->name('procesar-pago')->middleware('auth');
 Route::get('/admin/paySquare', [App\Http\Controllers\PaymentController::class, 'index'])->name('paySquare')->middleware('auth');
+
+//Limits
+Route::get('/admin/limits', [App\Http\Controllers\LimitsController::class, 'index'])->name('limits')->middleware('auth');
+Route::get('/admin/showlimitsData', [App\Http\Controllers\LimitsController::class, 'showLimitsData'])->name('livedata')->middleware('auth');
+
+//Vista de prueba
+Route::get('/admin/data', [App\Http\Controllers\DataController::class, 'index'])->name('data')->middleware('auth');
+Route::get('/admin/showData', [App\Http\Controllers\DataController::class, 'showData'])->name('showData')->middleware('auth');
+
+//Vista de Monitor Price
+Route::get('/admin/monitorPrice', [App\Http\Controllers\MonitorPriceController::class, 'index'])->middleware('auth');
+Route::get('/admin/showMonitorPrice', [App\Http\Controllers\MonitorPriceController::class, 'getMonitor'])->middleware('auth');
+Route::get('/admin/showClaveMonitor', [App\Http\Controllers\MonitorPriceController::class, 'getClave']);
+Route::get('/admin/botonStatusMonitor', [App\Http\Controllers\MonitorPriceController::class, 'status'])->middleware('auth');
+Route::get('/admin/botonStatusGralMonitor', [App\Http\Controllers\MonitorPriceController::class, 'statusGral'])->middleware('auth');
+
+//Vista de Dashboard Type
+Route::get('/admin/dashboardType', [App\Http\Controllers\DashboardTypeController::class, 'index'])->middleware('auth');
+Route::get('/admin/showDashboardType', [App\Http\Controllers\DashboardTypeController::class, 'getDashboard'])->middleware('auth');
+Route::get('/admin/showClaveDashboard', [App\Http\Controllers\DashboardTypeController::class, 'getClave']);
+Route::get('/admin/botonStatusDashboard', [App\Http\Controllers\DashboardTypeController::class, 'status'])->middleware('auth');
+Route::get('/admin/botonStatusGralDashboard', [App\Http\Controllers\DashboardTypeController::class, 'statusGral'])->middleware('auth');
+
+//Horarios
+Route::get('/admin/horarios/{id}', [App\Http\Controllers\HorariosController::class, 'index'])->name('horarios')->middleware('auth');
+Route::get('/admin/showHorarios', [App\Http\Controllers\HorariosController::class, 'getLive'])->middleware('auth');
+Route::get('/admin/showClaveHorarios', [App\Http\Controllers\HorariosController::class, 'getClave']);
+Route::get('/admin/botonStatusHorario', [App\Http\Controllers\HorariosController::class, 'status'])->middleware('auth');

@@ -83,6 +83,60 @@
             </a>
         </li>
 
+        <li>
+            <a class="@if (request()->is('/admin/data')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/data') }}">
+                <i class="bi bi-bug"></i>
+                <span>Vista Prueba</span>
+            </a>
+        </li>
+
+        
+        <li>
+            <a class="@if (request()->is('/admin/monitorPrice')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/monitorPrice') }}">
+                <i class="bi bi-display"></i>
+                <span>Monitor</span>
+            </a>
+        </li>
+
+
+        <li>
+            <a class="@if (request()->is('/admin/dashboardType')) nav-link @else nav-link collapsed @endif"
+                href="{{ url('/admin/dashboardType') }}">
+                <i class="bi bi-card-list"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#dashboardType-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-calendar-week"></i><span>Horarios</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="dashboardType-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="ps-2" href="/admin/horarios/general">
+                        <i class="bi bi-circle"></i><span>GENERAL</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ps-2" href="/admin/horarios/fundamentales">
+                        <i class="bi bi-circle"></i><span>FUNDAMENTALES</span>
+                    </a>
+                </li>
+                @foreach ($valores_moneda as $moneda)
+                    <li>
+                        <a class="ps-2" href="/admin/horarios/{{ $moneda }}">
+                            <i class="bi bi-circle"></i><span>{{ $moneda }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </li>
+
+
 
         <li class="nav-item">
             <a class="@if (request()->is('/admin/dashboard')) nav-link @else nav-link collapsed @endif"
@@ -99,6 +153,7 @@
                 <span>Portafolios Activos</span>
             </a>
         </li>
+
 
         <li>
             <a class="@if (request()->is('/admin/portafolioGraph')) nav-link @else nav-link collapsed @endif"
