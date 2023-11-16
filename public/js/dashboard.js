@@ -30,4 +30,29 @@ $(document).ready(function () {
             },
         });
     }, 1000);
+
+    $.ajax({
+        type: "GET",
+        url: "/admin/activity",
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (response) {
+            console.log(response);
+        },
+    });
+
+    setInterval(function () {
+        $.ajax({
+            type: "GET",
+            url: "/admin/activity",
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (response) {
+                console.log(response);
+            },
+        });
+    }, 60000);
+    
 });

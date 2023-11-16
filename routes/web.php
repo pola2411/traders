@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware('auth');
 Route::get('/showTraders', [App\Http\Controllers\DashboardController::class, 'getTraders'])->middleware('auth');
 Route::get('/admin/getPruebasVida', [App\Http\Controllers\DashboardController::class, 'getPruebasVida'])->middleware('auth');
+Route::get('/admin/activity', [App\Http\Controllers\DashboardController::class, 'updatedActivity'])->middleware('auth');
+
 
 // Rutas para portafolios activos
 Route::get('/admin/portafoliosActivos', [App\Http\Controllers\PortafoliosActivosController::class, 'index'])->middleware('auth');

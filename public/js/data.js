@@ -1,17 +1,13 @@
 $(document).ready(function () {
-    var tabla = $("#monitor").DataTable({
-        ajax: "/admin/showDataMonitor",
+   
+    let acc = "";
+    var table = $("#dataTable").DataTable({
+        ajax: "/admin/showData",
         columns: [
             { data: "id" },
-            { data: "moneda" },
-            { data: "type" },
-            { data: "valor" },
-            { data: "sl" },
-            { data: "tp" },
-            { data: "profit" },
-            { data: "risk" },
-            { data: "ratio" },
-            { data: "hora" },
+            { data: "nombre" },
+            { data: "redaccion" },
+            { data: "btn" },
         ],
         responsive: {
             breakpoints: [
@@ -35,12 +31,12 @@ $(document).ready(function () {
         },
         language: {
             processing: "Procesando...",
-            lengthMenu: "Mostrar _MENU_ monitores",
+            lengthMenu: "Mostrar _MENU_ datos",
             zeroRecords: "No se encontraron resultados",
-            emptyTable: "No se ha registrado ningún operación",
+            emptyTable: "No se ha registrado ningún dato",
             infoEmpty:
-                "Mostrando monitores del 0 al 0 de un total de 0 monitores",
-            infoFiltered: "(filtrado de un total de _MAX_ monitores)",
+                "Mostrando dato del 0 al 0 de un total de 0 datos",
+            infoFiltered: "(filtrado de un total de _MAX_ dato)",
             search: "Buscar:",
             infoThousands: ",",
             loadingRecords: "Cargando...",
@@ -148,7 +144,7 @@ $(document).ready(function () {
             },
             searchPanes: {
                 clearMessage: "Borrar todo",
-                collaoperacione: {
+                collapse: {
                     0: "Paneles de búsqueda",
                     _: "Paneles de búsqueda (%d)",
                 },
@@ -212,7 +208,7 @@ $(document).ready(function () {
                         "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
                 },
             },
-            info: "Mostrando de _START_ a _END_ de _TOTAL_ monitores",
+            info: "Mostrando de _START_ a _END_ de _TOTAL_ dato",
         },
     });
 
@@ -222,94 +218,32 @@ $(document).ready(function () {
         },
     });
 
-    $(document).on("click", ".apertura", function (e) {
-        e.preventDefault();
-        let moneda = $(this).data("moneda");
-        let valor = $(this).data("valor");
-        let type = $(this).data("type");
-        let sl = $(this).data("sl");
-        let tp = $(this).data("tp");
-        let profit = $(this).data("profit");
-        let risk = $(this).data("risk");
-
-        Swal.fire({
-            title: "Solicitar apertura",
-            text: "¿Estás seguro que quieres solicitar una apertura? esta opción no se puede deshacer",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Aceptar",
-            // confirmButtonColor: "#01bbcc",
-            cancelButtonText: "Cancelar",
-            cancelButtonColor: "#dc3545",
-        }).then((result) => {
-            if (result.value) {
-                $.ajax({
-                    type: "POST",
-                    url: "/admin/solicitarApertura",
-                    data: {
-                        moneda: moneda,
-                        valor: valor,
-                        type: type,
-                        sl: sl,
-                        tp: tp,
-                        profit: profit,
-                        risk: risk,
-                    },
-                    cache: false,
-                    success: function () {
-                        tabla.ajax.reload(null, false);
-                        Swal.fire({
-                            icon: "success",
-                            title: "Solicitud enviada",
-                            text: "La solicitud se ha enviado correctamente",
-                            confirmButtonText:
-                                '<a style="font-family: Poppins">Aceptar</a>',
-                            confirmButtonColor: "#01bbcc",
-                        });
-                    },
-                });
-            }
-        });
+    $(document).on("click", "#modificarButton", function (e) {
+       //Acción al momento de hacer clic en el botón
     });
 
-    // $(document).on("change", ".colorInput", function (e) {
-    //     e.preventDefault();
-    //     let id = $(this).data("id");
-    //     let color = $(this).val();
+    $(document).on("click", "#prueba", function (e) {
+        e.preventDefault();
 
-    //     console.log(id);
+        //Cambiar color de botón al hacer clic según su clase	
 
-    //     // $.ajax({
-    //     //     type: "POST",
-    //     //     url: "/admin/editarColor",
-    //     //     data: { id: id, color: color },
-    //     //     dataType: "json",
-    //     //     contentType: false,
-    //     //     cache: false,
-    //     //     processData: false,
-    //     //     success: function (result) {
-    //     //         const Toast = Swal.mixin({
-    //     //             toast: true,
-    //     //             position: "top-end",
-    //     //             showConfirmButton: false,
-    //     //             timer: 2000,
-    //     //             timerProgressBar: true,
-    //     //             didOpen: (toast) => {
-    //     //                 toast.addEventListener("mouseenter", Swal.stopTimer);
-    //     //                 toast.addEventListener("mouseleave", Swal.resumeTimer);
-    //     //             },
-    //     //         });
+        // let verde = $(this).hasClass("btn-success");
+        // let negro = $(this).hasClass("btn-dark");
 
-    //     //         Toast.fire({
-    //     //             icon: "success",
-    //     //             title: "Color guardado",
-    //     //         });
-    //     //     },
-    //     // });
-    // });
+        // if (verde==true){
+        //     $(this).removeClass("btn-success");
+        //     $(this).addClass("btn-dark");
+        // }else{
+        //     $(this).removeClass("btn-dark");
+        //     $(this).addClass("btn-success");
+        // }
 
-    setInterval(function () {
-        tabla.ajax.reload(null, false);
-    }, 10000);
+
+       
+     
+     });
+
+
 });
+
 $(".table").addClass("compact nowrap w-100");
