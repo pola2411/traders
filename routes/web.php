@@ -82,6 +82,13 @@ Route::get('/admin/showMonitor', [App\Http\Controllers\MonitorController::class,
 Route::post('/admin/editarColor', [App\Http\Controllers\MonitorController::class, 'editarColor'])->middleware('auth');
 Route::post('/admin/solicitarApertura', [App\Http\Controllers\MonitorController::class, 'solicitarApertura'])->middleware('auth');
 
+//monitor status
+Route::get('/admin/monitor-status', [App\Http\Controllers\MonitorStatusController::class, 'index'])->middleware('auth');
+Route::get('/admin/showMonitorStatusBuy', [App\Http\Controllers\MonitorStatusController::class, 'getMonitorBuy'])->middleware('auth');
+Route::get('/admin/showMonitorStatusSell', [App\Http\Controllers\MonitorStatusController::class, 'getMonitorSell'])->middleware('auth');
+Route::get('/admin/showMonitorStatusDinamic', [App\Http\Controllers\MonitorStatusController::class, 'getMonitorDinamic'])->middleware('auth');
+Route::get('/admin/showMonitorStatusDinamic2', [App\Http\Controllers\MonitorStatusController::class, 'getMonitorDinamic2'])->middleware('auth');
+
 //DataMonitor
 Route::get('/admin/datamonitor', [App\Http\Controllers\DataMonitorController::class, 'index'])->middleware('auth');
 Route::get('/admin/showDataMonitor', [App\Http\Controllers\DataMonitorController::class, 'getMonitor'])->middleware('auth');
