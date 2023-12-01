@@ -374,3 +374,13 @@ Route::get('/admin/horarios/{id}', [App\Http\Controllers\HorariosController::cla
 Route::get('/admin/showHorarios', [App\Http\Controllers\HorariosController::class, 'getLive'])->middleware('auth');
 Route::get('/admin/showClaveHorarios', [App\Http\Controllers\HorariosController::class, 'getClave']);
 Route::get('/admin/botonStatusHorario', [App\Http\Controllers\HorariosController::class, 'status'])->middleware('auth');
+
+
+//Gráficos de jornadas
+Route::get('/admin/jornadas/{id}', [App\Http\Controllers\JornadasController::class, 'index'])->middleware('auth');
+Route::get('/admin/getJornadas', [App\Http\Controllers\JornadasController::class, 'getJornadas'])->middleware('auth');
+Route::get('/admin/getSessionJornadas', [App\Http\Controllers\JornadasController::class, 'getSessionJornadas'])->middleware('auth');
+Route::get('/admin/getSessionPortfolio', [App\Http\Controllers\JornadasController::class, 'getSessionPortfolio'])->middleware('auth');
+Route::get('/admin/getJornadasSP', [App\Http\Controllers\JornadasController::class, 'getJornadasSP'])->middleware('auth');
+Route::get('/admin/getJornadasAll', [App\Http\Controllers\JornadasController::class, 'getJornadasAll'])->middleware('auth');
+
