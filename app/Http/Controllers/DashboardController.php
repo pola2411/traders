@@ -80,7 +80,7 @@ class DashboardController extends Controller
                 \Telegram::sendMessage([
                     'chat_id' => '-1002041069139',
                     'parse_mode' => 'HTML',
-                    'text' => $message
+                    'text' => "<a href='#'>$message</a>"
                 ]);
             }
         }   

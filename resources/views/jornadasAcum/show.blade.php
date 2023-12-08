@@ -7,7 +7,7 @@
 @section('css')
     <script src="https://kit.fontawesome.com/ab4fa16bfb.js" crossorigin="anonymous"></script>
     <style>
-        #jornadasData {
+        #chartContainer {
             width: 100%;
             height: 500px;
         }
@@ -96,7 +96,7 @@
                                             <option value="{{ $item->portfolio }}">{{ $item->portfolio }}</option>
                                         @endforeach
                                     </select>
-                                    <label for="sessionSelect">Filtrar por portafolio</label>
+                                    <label for="portfolioSelect">Filtrar por portafolio</label>
                                 </div>
                             </div>
 
@@ -122,10 +122,10 @@
 
                             </div>
 
-                            <div class="row justify-content-center mt-2 mb-4 text-center">
+                            <div class="row justify-content-ceter mt-2 mb-4 text-center">
                                 {{-- <div class="col-md-12 col-12 mt-2"><button class="btn btn-dark" id="mostrarTodo">Mostrar todo</button></div> --}}
                             </div>
-                            <div id="jornadasData"></div>
+                            <div id="chartContainer"></div>
                         </div>
                     </div>
                 </div>
@@ -154,10 +154,11 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        {{-- <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script> --}}
+        <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
-    <script src="{{ asset('js/jornadas.js') }}"></script>
+    <script src="{{ asset('js/jornadas2.js') }}"></script>
 @endsection

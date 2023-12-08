@@ -39,6 +39,7 @@ class JornadasController extends Controller
         $jornadas = OperacionesTrader::select()
             ->where('trader', $request->id)
             ->where('session', $request->session)
+            ->whereBetween('time_1', [$request->inicio, $request->fin])
             ->orderBy('time_1', 'asc')
             ->get();
         $jornadasNombre = Trader::select()->where('id', $request->id)->get();
@@ -50,6 +51,7 @@ class JornadasController extends Controller
         $jornadas = OperacionesTrader::select()
             ->where('trader', $request->id)
             ->where('portfolio', $request->portfolio)
+            ->whereBetween('time_1', [$request->inicio, $request->fin])
             ->orderBy('time_1', 'asc')
             ->get();
         $jornadasNombre = Trader::select()->where('id', $request->id)->get();
@@ -62,6 +64,48 @@ class JornadasController extends Controller
             ->where('trader', $request->id)
             ->where('session', $request->session)
             ->where('portfolio', $request->portfolio)
+            ->whereBetween('time_1', [$request->inicio, $request->fin])
+            ->orderBy('time_1', 'asc')
+            ->get();
+        $jornadasNombre = Trader::select()->where('id', $request->id)->get();
+        return response(['jornadas' => $jornadas, 'jornadasNombre' => $jornadasNombre]);
+    }
+
+    public function getJornadasSPM(Request $request)
+    {
+        $jornadas = OperacionesTrader::select()
+            ->where('trader', $request->id)
+            ->where('session', $request->session)
+            ->where('portfolio', $request->portfolio)
+            ->where('symbol', $request->symbol)
+            ->whereBetween('time_1', [$request->inicio, $request->fin])
+            ->orderBy('time_1', 'asc')
+            ->get();
+        $jornadasNombre = Trader::select()->where('id', $request->id)->get();
+        return response(['jornadas' => $jornadas, 'jornadasNombre' => $jornadasNombre]);
+    }
+
+
+    public function getSessionMonedas(Request $request)
+    {
+        $jornadas = OperacionesTrader::select()
+            ->where('trader', $request->id)
+            ->where('symbol', $request->symbol)
+            ->whereBetween('time_1', [$request->inicio, $request->fin])
+            ->orderBy('time_1', 'asc')
+            ->get();
+        $jornadasNombre = Trader::select()->where('id', $request->id)->get();
+        return response(['jornadas' => $jornadas, 'jornadasNombre' => $jornadasNombre]);
+    }
+
+    public function getJornadasAll(Request $request)
+    {
+        $jornadas = OperacionesTrader::select()
+            ->where('trader', $request->id)
+            ->where('session', $request->session)
+            ->where('portfolio', $request->portfolio)
+            ->where('symbol', $request->symbol)
+            ->whereBetween('time_1', [$request->inicio, $request->fin])
             ->orderBy('time_1', 'asc')
             ->get();
         $jornadasNombre = Trader::select()->where('id', $request->id)->get();

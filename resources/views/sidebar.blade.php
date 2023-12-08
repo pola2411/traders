@@ -251,6 +251,23 @@
                 @endforeach
             </ul>
         </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#jornadasAcum-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-plus-slash-minus"></i><span>Jornadas Acumulado</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="jornadasAcum-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @foreach ($traders as $trader)
+                    <li>
+                        <a class="ps-2" href="/admin/jornadasAcum/{{ $trader->id }}">
+                            <i class="bi bi-circle"></i><span>{{ $trader->nombre }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </li>
         
         
         

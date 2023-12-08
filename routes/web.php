@@ -383,4 +383,17 @@ Route::get('/admin/getSessionJornadas', [App\Http\Controllers\JornadasController
 Route::get('/admin/getSessionPortfolio', [App\Http\Controllers\JornadasController::class, 'getSessionPortfolio'])->middleware('auth');
 Route::get('/admin/getJornadasSP', [App\Http\Controllers\JornadasController::class, 'getJornadasSP'])->middleware('auth');
 Route::get('/admin/getJornadasAll', [App\Http\Controllers\JornadasController::class, 'getJornadasAll'])->middleware('auth');
+Route::get('/admin/getSessionMonedas', [App\Http\Controllers\JornadasController::class, 'getSessionMonedas'])->middleware('auth');
+Route::get('/admin/getJornadasSPM', [App\Http\Controllers\JornadasController::class, 'getJornadasSPM'])->middleware('auth');
+
+//Gráficos de jornadas con suma acumulada
+Route::get('/admin/jornadasAcum/{id}', [App\Http\Controllers\SumaAcumController::class, 'index'])->middleware('auth');
+Route::get('/admin/getJornadasAcum', [App\Http\Controllers\SumaAcumController::class, 'getJornadasAcum'])->middleware('auth');
+Route::get('/admin/getSessionJornadasAcum', [App\Http\Controllers\SumaAcumController::class, 'getSessionJornadasAcum'])->middleware('auth');
+Route::get('/admin/getSessionPortfolioAcum', [App\Http\Controllers\SumaAcumController::class, 'getSessionPortfolioAcum'])->middleware('auth');
+Route::get('/admin/getJornadasSPAcum', [App\Http\Controllers\SumaAcumController::class, 'getJornadasSPAcum'])->middleware('auth');
+Route::get('/admin/getJornadasAllAcum', [App\Http\Controllers\SumaAcumController::class, 'getJornadasAllAcum'])->middleware('auth');
+Route::get('/admin/getSessionMonedasAcum', [App\Http\Controllers\SumaAcumController::class, 'getSessionMonedasAcum'])->middleware('auth');
+Route::get('/admin/getJornadasSPMAcum', [App\Http\Controllers\SumaAcumController::class, 'getJornadasSPMAcum'])->middleware('auth');
+
 
