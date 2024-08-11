@@ -165,7 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Tarikhagustia\LaravelMt5\LaravelMt5Provider::class,
+        JulioOrtaHdz\LaravelMt5\LaravelMt5Provider::class,
         /*
          * Application Service Providers...
          */
@@ -180,7 +180,7 @@ return [
 
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
 
-       
+
     ],
 
     /*

@@ -15,6 +15,7 @@
         "illuminate/support": "*",
         "irazasyed/telegram-bot-sdk": "^3.9",
         "jenssegers/agent": "^2.6",
+        "julioortahdz/laravel-mt5": "*",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
@@ -25,7 +26,6 @@
         "spatie/laravel-backup": "^7.8",
         "square/connect": "^3.20200528",
         "square/square": "31.0.0.20230925",
-        "tarikhagustia/laravel-mt5": "^1.4",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {
