@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         JulioOrtaHdz\LaravelMt5\LaravelMt5Provider::class,
+
         /*
          * Application Service Providers...
          */
